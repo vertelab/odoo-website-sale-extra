@@ -19,6 +19,9 @@
 #
 ##############################################################################
 
+from openerp import models, fields, api, _
+
+
 class PublicCategory(models.Model):
 	_inherit = "product.public.category"
 	website_description = fields.Html(string = "Website Description")
