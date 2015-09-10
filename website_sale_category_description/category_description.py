@@ -18,15 +18,7 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-'name': 'Shop Category Descriptions',
-'version': '0.1',
-'summary': 'Adds a HTML field to categories',
-'category': 'Hidden',
-'description': """Adds a HTML field to categories""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['website_sale'],
-'data': ['category_description.xml'],
-'installable': True,
-}
+
+class PublicCategory(models.Model):
+	_inherit = "product.public.category"
+	website_description = fields.Html(string = "Website Description")
