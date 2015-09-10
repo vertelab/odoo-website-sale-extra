@@ -8,11 +8,16 @@
 				</t>
 			</xpath>
 		</template>
-		<record id="category_description" inherit="website_sale.product_public_category_form_view" model="ir.ui.view">
-			<div position="after">
-				<label for="website_description"/>
-				<field name="website_description"/>
-			</div>
+		<record id="category_description" model="ir.ui.view">
+			<field name="name">product.public.category.form.inherit</field>
+			<field name="model">product.public.category</field>
+			<field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
+			<field name="arch" type="xml">
+				<div position="after">
+					<label for="website_description"/>
+					<field name="website_description"/>
+				</div>
+			</field>
 		</record>
 	</data>
 </openerp>
