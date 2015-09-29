@@ -31,20 +31,22 @@ import re
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class website_product_category(http.Controller):
 
-    @http.route(['category/<model("product.category"):category>', ], type='http', auth="public", website=True)
-    def get_products(self, category=False,**post):
+    @http.route(['/category/<model("product.category"):category>', ], type='http', auth="public", website=True)
+    def get_products(self, category=False, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        if cateogry and not category.website_published:
+        if category and not category.website_published:
             return request.render('website.page_404', {})
         else:
-            return request.render('website_product_category.page', {'products': request.env['product.templates'].search(['&',('categ_id','=',category.id),('state','=','sellable')]), 'category': category})
+            return request.render('website_product_category.page_behandling', {'products': request.env['product.template'].sudo().search(['&', ('categ_id', '=', category.id), ('state', '=', 'sellable')], order='website_sequence'), 'category': category})
+
 
 class product_category(models.Model):
     _inherit = "product.category"
     
-    website_description = fields.Html('Description for the website', translate=True)
+    website_description = fields.Html('Description for the website', translate=True, sanitize=False)
     website_published = fields.Boolean('Available in the website', copy=False)
 
 

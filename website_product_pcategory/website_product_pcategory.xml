@@ -6,11 +6,11 @@
         <div id="wrap">
           <t t-raw="0" />
           <div class="oe_structure oe_empty" />
-          <t t-raw="category.website_description" />
+          <t t-field="category.website_description" />
           <table>
             <tr t-foreach="products" t-as="p">
               <td>
-                <span t-field="p.name" />
+                <span t-field="p.name"/>
               </td>
             </tr>
           </table>
@@ -23,8 +23,8 @@
       <field name="inherit_id" ref="product.product_category_form_view" />
       <field name="arch" type="xml">
         <field name="type" position="after">
-            <field name="website_published" />
-          <field name="website_description" />
+            <field name="website_published"/>
+          <field name="website_description"/>
         </field>
       </field>
     </record>

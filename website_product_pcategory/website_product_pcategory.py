@@ -31,15 +31,17 @@ import re
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class website_product_category(http.Controller):
 
-    @http.route(['pcategory/<model("product.public.category"):category>', ], type='http', auth="public", website=True)
+    @http.route(['/pcategory/<model("product.public.category"):category>', ], type='http', auth="public", website=True)
     def get_products(self, category=False,**post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        if cateogry and not category.website_published:
+        if category and not category.website_published:
             return request.render('website.page_404', {})
         else:
-            return request.render('website_product_pcategory.page', {'products': request.env['product.templates'].search(['&',(category.id,'in','public_categ_ids'),('state','=','sellable')]), 'category': category})
+            return request.render('website_product_pcategory.page', {'products': request.env['product.template'].sudo().search(['&', (category.id, 'in', 'public_categ_ids'), ('state', '=', 'sellable')]), 'category': category})
+
 
 class product_public_category(models.Model):
     _inherit = "product.public.category"

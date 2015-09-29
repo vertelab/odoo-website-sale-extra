@@ -29,7 +29,7 @@ Add simple category pages for products
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['website','product'],
+    'depends': ['website', 'product'],
     'data': ['website_product_category.xml',
     ],
     'application': False,
