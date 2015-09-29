@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="page" name="Category Page">
+      <t t-call="website.layout">
+        <div id="wrap">
+          <t t-raw="0" />
+          <div class="oe_structure oe_empty" />
+          <t t-raw="category.website_description" />
+          <table>
+            <tr t-foreach="products" t-as="p">
+              <td>
+                <span t-field="p.name" />
+              </td>
+            </tr>
+          </table>
+        </div>
+      </t>
+    </template>
+    <record id="product_category_form_view" model="ir.ui.view">
+      <field name="name">product.category.inherit.form</field>
+      <field name="model">product.category</field>
+      <field name="inherit_id" ref="product.product_category_form_view" />
+      <field name="arch" type="xml">
+        <field name="type" position="after">
+            <field name="website_published" />
+          <field name="website_description" />
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>
