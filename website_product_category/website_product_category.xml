@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <template id="page_behandling" name="Category Page">
+      <t t-call="website.layout">
+        <div id="wrap">
+          <t t-raw="0" />
+          <div class="oe_structure oe_empty"/>
+          <t t-raw="category.website_description"/>
+          <div class="container">
+            <div class="col-md-12">
+              <table class="table table-bordered table-responsive" style="border: none;">
+                <thead>
+
+                </thead>
+                <tbody>
+                  <t t-foreach="products" t-as="p">
+                    <tr>
+                      <td style="border: 1px solid;">
+                        <h3 class="text-center"><t t-esc="p.name"/></h3>
+                        <t t-esc="p.description"/>
+                      </td>
+                      <td style="border: 1px solid;"><p/><t t-esc="p.list_price"/>:-</td>
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+    <record id="product_category_form_view" model="ir.ui.view">
+      <field name="name">product.category.inherit.form</field>
+      <field name="model">product.category</field>
+      <field name="inherit_id" ref="product.product_category_form_view" />
+      <field name="arch" type="xml">
+        <field name="type" position="after">
+          <field name="website_published" />
+          <field name="website_description" />
+        </field>
+      </field>
+    </record>
+  </data>
+</openerp>
