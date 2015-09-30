@@ -152,7 +152,7 @@
 </data>
 <!-- Activate noupdate once templates are ready -->
 <data noupdate="0">
-    <template id="monthly_offer_and_recommended" name="Monthly Offer and Recommended Products" inherit_id="website_sale.product_item" customize_show="True" active="False">
+    <template id="monthly_offer_and_recommended" name="Monthly Offer and Recommended Products" inherit_id="website_sale.products_item" customize_show="True" active="False">
         <xpath expr="//div[@class='ribbon-wrapper']" position="after">
             <div class="monthly-offer col-xs-12 col-sm-12 col-md-12 col-lg-12">Monthly Offer</div>
             <div class="recommended-product col-xs-12 col-sm-12 col-md-12 col-lg-12">Recommended</div>
