@@ -76,49 +76,29 @@
         <xpath expr="//table" position="before">
             <t t-if="not category and not search">
                 <div class="oe_structure"/>
-                <t t-if="front_page_styles">
-                    <t t-foreach="front_page_styles" t-as="style_name">
-                        <t t-set="style" t-value="categories.env['product.style'].search([('name', '=', style_name)])"/>
-                        <t t-if="style" t-set="style_products" t-value="categories.env['product.template'].search([('website_style_ids', '=', style.id)])"/>
-                            <div t-if="style_products" t-class="'oe_styles_container oe_style_container_for_%s' % style.html_class">
-                            <div class="oe_styles_header col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <t t-esc="style.name"/>
-                            </div>
-                            <div class="oe_styles_body col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <t t-foreach="style_products" t-as="product">
-                                    <div class="oe_style_cell col-md-3">
-                                        <form action="/shop/cart/update" method="post">
-                                            <div itemscope="itemscope" itemtype="http://schema.org/Product">
-                                              <div class="oe_product_image">
-                                                <a itemprop="url" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
-                                                  <img itemprop="image" class="img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')"/>
-                                                </a>
-                                              </div>
-                                              <section style="height: 77px;">
-                                                <h5>
-                                                  <strong>
-                                                    <a itemprop="name" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))" t-field="product.name"/>
-                                                  </strong>
-                                                </h5>
-                                                <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
-                                                  <b>
-                                                    <t t-if="(compute_currency(product.lst_price) - product.price) &gt; 0.1"><del class="text-danger" style="white-space: nowrap;" t-field="product.lst_price" t-field-options="{                   &quot;widget&quot;: &quot;monetary&quot;,                   &quot;from_currency&quot;: &quot;product.company_id.currency_id&quot;,                   &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                 }"/>&amp;nbsp;
-                                                      </t>
-                                                    <span t-field="product.price" style="white-space: nowrap;" t-field-options="{                    &quot;widget&quot;: &quot;monetary&quot;,                    &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                }">
-                                                      </span>
-                                                    <span itemprop="price" style="display:none;" t-esc="product.price"/>
-                                                    <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name"/>
-                                                  </b>
-                                                </div>
-                                              </section>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </t>
-                            </div>
-                        </div>
-                    </t>
-                </t>
+                <t t-set="style" t-value="categories.env['product.style'].search([('name', '=', 'Månadens produkt')])"/>
+                <t t-if="style" t-set="product" t-value="categories.env['product.template'].search([('website_style_ids', '=', style.id)])"/>
+                <div t-if="product" class="oe_styles_container col-md-3">
+                    <div class="oe_styles_header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        Månadens produkt
+                    </div>
+                    <div class="oe_styles_body col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <t t-call="website_sale_alt_templates.show_product"/>
+                    </div>
+                </div>
+                
+                <t t-set="style" t-value="categories.env['product.style'].search([('name', '=', 'Vi rekommenderar')])"/>
+                <t t-if="style" t-set="products" t-value="categories.env['product.template'].search([('website_style_ids', '=', style.id)])"/>
+                <div t-if="products" class="oe_styles_container col-md-9">
+                    <div class="oe_styles_header col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        Vi rekommenderar
+                    </div>
+                    <div class="oe_styles_body col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <t t-foreach="products" t-as="product">
+                            <t t-call="website_sale_alt_templates.show_product"><t t-set="col" t-value="4"/></t>
+                        </t>
+                    </div>
+                </div>
             </t>
         </xpath>
         
@@ -126,5 +106,59 @@
             <attribute name="t-if">category or search</attribute>
         </xpath>
     </template>
+    
+    <template id="show_product" name="Show Product">
+        <div t-att-class="'oe-height-4 oe_product col-md-%s' % col or 12">
+            <form action="/shop/cart/update" method="post">
+                <div itemscope="itemscope" itemtype="http://schema.org/Product">
+                  <div class="oe_product_image">
+                    <a itemprop="url" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))">
+                      <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')"/>
+                    </a>
+                  </div>
+                  <section style="height: 77px;">
+                    <h5>
+                      <strong>
+                        <a itemprop="name" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))" t-field="product.name"/>
+                      </strong>
+                    </h5>
+                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                      <b>
+                        <t t-if="(compute_currency(product.lst_price) - product.price) &gt; 0.1"><del class="text-danger" style="white-space: nowrap;" t-field="product.lst_price" t-field-options="{                   &quot;widget&quot;: &quot;monetary&quot;,                   &quot;from_currency&quot;: &quot;product.company_id.currency_id&quot;,                   &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                 }"/>&amp;nbsp;
+                          </t>
+                        <span t-field="product.price" style="white-space: nowrap;" t-field-options="{                    &quot;widget&quot;: &quot;monetary&quot;,                    &quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;                }">
+                          </span>
+                        <span itemprop="price" style="display:none;" t-esc="product.price"/>
+                        <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name"/>
+                      </b>
+                    </div>
+                  </section>
+                </div>
+            </form>
+        </div>
+    </template>
+    
+    <template inherit_id="website_sale_alt_templates.show_product" active="False" customize_show="True" name="Add to Cart Alt">
+        <xpath expr="//div[@class='product_price']" position="inside">
+            <input name="product_id" t-att-value="product.product_variant_ids[0].id" type="hidden"/>
+            <t t-if="len(product.product_variant_ids) == 1">
+                <a class="btn btn-default btn-xs fa fa-shopping-cart a-submit"/>
+            </t>
+            <t t-if="len(product.product_variant_ids) &gt; 1">
+                <a class="btn btn-default btn-xs fa fa-shopping-cart" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']&gt;1 else None))"/>
+            </t>
+        </xpath>
+    </template>
+</data>
+<!-- Activate noupdate once templates are ready -->
+<data noupdate="0">
+<!--
+    <template id="monthly_offer_and_recommended" name="Monthly Offer and Recommended Products" inherit_id="website_sale.product_item" customize_show="True" active="False">
+        <xpath expr="//div[@class='ribbon-wrapper']" position="after">
+            <div class="monthly-offer col-xs-12 col-sm-12 col-md-12 col-lg-12">Monthly Offer</div>
+            <div class="recommended-product col-xs-12 col-sm-12 col-md-12 col-lg-12">Recommended</div>
+        </xpath>
+    </template>
+-->
 </data>
 </openerp>
