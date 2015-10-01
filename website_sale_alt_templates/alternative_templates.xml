@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding= "utf-8"?>
 <openerp>
 <data>
+    
     <template id="product_area" inherit_id="website_sale.product" name="Product Area Division">
         <xpath expr="//div[@class='row'][2]" position="replace">
             <div class="row">
@@ -44,6 +45,7 @@
             </div>
         </xpath>
     </template>
+    
     <template id="product_categories" inherit_id="product_area" customize_show="True" name="Product Categories" active="False">
         <xpath expr="//div[@id='products_grid_before']" position="inside">
             <t t-set="categories" t-value="request.env['product.public.category'].search([('parent_id', '=', False)])" />
@@ -103,6 +105,14 @@
         </xpath>
         
         <xpath expr="//table" position="attributes">
+            <attribute name="t-if">category or search</attribute>
+        </xpath>
+        
+        <xpath expr="//t[@t-call='website.pager']" position="attributes">
+            <attribute name="t-if">category or search</attribute>
+        </xpath>
+        
+        <xpath expr="//t[@t-call='website.pager']" position="attributes">
             <attribute name="t-if">category or search</attribute>
         </xpath>
     </template>
