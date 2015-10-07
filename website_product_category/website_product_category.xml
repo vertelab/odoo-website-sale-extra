@@ -30,6 +30,35 @@
         </div>
       </t>
     </template>
+    
+    <template id="page_allcategories" name="All Category Page">
+      <t t-call="website.layout">
+        <div id="wrap">
+          <t t-raw="0" />
+          <div class="oe_structure oe_empty"/>
+          <div class="container">
+            <div class="col-md-12">
+              <table class="table table-bordered table-responsive" style="border: none;">
+                <thead>
+
+                </thead>
+                <tbody>
+                  <t t-foreach="categories" t-as="c">
+                    <tr>
+                      <td style="border: 1px solid;">
+                        <h3 class="text-center"><t t-esc="c.name"/></h3>
+                        <p><t t-raw="c.website_description"/></p>
+                      </td>
+                    </tr>
+                  </t>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+    
     <record id="product_category_form_view" model="ir.ui.view">
       <field name="name">product.category.inherit.form</field>
       <field name="model">product.category</field>
@@ -37,7 +66,9 @@
       <field name="arch" type="xml">
         <field name="type" position="after">
           <field name="website_published" />
-          <field name="website_description" />
+          <field name="website_image"/>
+          <field colspan="4" style="max-width: 600px;" name="website_small_description"/>
+          <field colspan="4" style="max-width: 600px;" name="website_description" />
         </field>
       </field>
     </record>

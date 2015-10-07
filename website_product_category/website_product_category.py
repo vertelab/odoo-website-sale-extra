@@ -41,12 +41,19 @@ class website_product_category(http.Controller):
             return request.render('website.page_404', {})
         else:
             return request.render('website_product_category.page_behandling', {'products': request.env['product.template'].sudo().search(['&', ('categ_id', '=', category.id), ('state', '=', 'sellable')], order='website_sequence'), 'category': category})
+    
+    @http.route(['/allcategory/<model("product.category"):category>', ], type='http', auth="public", website=True)
+    def get_category(self, parent_id=1, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('website_product_category.page_allcategories', {'categories': request.env['product.category'].sudo().search([('parent_id', '=', parent_id)], order='id')})
 
 
 class product_category(models.Model):
     _inherit = "product.category"
     
     website_description = fields.Html('Description for the website', translate=True, sanitize=False)
+    website_small_description = fields.Html('Short description', translate=True, sanitize=False)
     website_published = fields.Boolean('Available in the website', copy=False)
+    website_image = fields.Binary('Category Image')
 
 
