@@ -1,0 +1,253 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <report
+                id="website_quote_pdf.quote_to_pdf"
+                model="sale.order"
+                string="Transform to PDF"
+                report_type="qweb-pdf"
+                name="website_quote_pdf.quote_to_pdf_report"
+                file="website_quote_pdf.quote_to_pdf_report"
+                attachment_use="True"
+                attachment="('Sale_Order'+(object.name or ''))+'.pdf'"
+                />
+
+        <template id="quote_to_pdf_report">
+            <t t-call="report.html_container">
+                <t t-foreach="doc_ids" t-as="doc_id">
+                    <t t-raw="translate_doc(doc_id, doc_model, 'partner_id.lang', 'website_quote_pdf.so_quotation')"/>
+                </t>
+            </t>
+        </template>
+
+        <template id="website_quote_pdf.so_quotation">
+            <t t-call="report.external_layout">
+                <t t-set="quotation" t-value="o"/>
+                <body data-spy="scroll" data-target=".navspy" data-offset="50">
+                    <div class="container o_website_quote">
+                      <div class="row mt16">
+                          <div class="col-md-3">
+                              <div class="bs-sidebar">
+                                  <div class="text-center hidden-print" t-if="o.state in ('draft', 'sent', 'waiting_date')" style="padding: 10px">
+                                      <a t-if="order_valid" class="btn btn-primary btn-block fa fa-check" data-toggle="modal" data-target="#modelaccept">
+                                          Accept Order
+                                      </a>
+                                      <a t-if="not order_valid" href="#discussion" class="btn btn-info btn-block">
+                                          <strong>This offer expired!</strong><br/>
+                                          Contact us for new quote.
+                                      </a>
+                                      <div class="mt8" t-if="order_valid">
+                                          <a type="submit" href="#discussion">
+                                              Ask Changes
+                                          </a> or
+                                          <a data-toggle="modal" data-target="#modeldecline">
+                                              Reject
+                                          </a>
+                                      </div>
+                                  </div>
+                                  <hr class="mt0 mb0"/>
+                                  <t t-call="website_quote.navigation_menu"/>
+                                  <hr class="mt0 mb0"/>
+                                  <div t-if="order_valid" class="text-center hidden-print">
+                                      <input type="hidden" t-att-value="o.validity_date" id="validity_date"/>
+                                      <div class="mt8" t-if="days_valid &gt; 0">
+                                          <strong>This offer expires in</strong>
+                                          <div class="fa fa-clock-o fa-2x day_counter mt8 mb16">
+                                              <t t-esc="days_valid"/>
+                                              <t t-if="days_valid &gt; 1">
+                                                  days
+                                              </t>
+                                              <t t-if="days_valid &lt;= 1">
+                                                  day
+                                              </t>
+                                          </div>
+                                      </div>
+
+
+                                      <div class="text-center mb16" t-if="o.amount_undiscounted &gt; o.amount_untaxed">
+                                          <p class="text-muted mb8">Your advantage:</p>
+                                          <t t-if="o.amount_untaxed == o.amount_total">
+                                              <strong t-field="o.amount_total"
+                                                  t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'/>
+                                              <strong t-field="o.amount_undiscounted"
+                                                  t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'
+                                                  style="text-decoration: line-through"
+                                                  class="text-danger"/>
+                                          </t>
+                                          <t t-if="o.amount_untaxed != o.amount_total">
+                                              <strong t-field="o.amount_untaxed"
+                                                  t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'/>
+                                              <strong t-field="o.amount_undiscounted"
+                                                  t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'
+                                                  style="text-decoration: line-through"
+                                                  class="text-danger"/>
+                                              <br />
+                                              (<span t-field="o.amount_total"
+                                                  t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'/> Incl. tax)
+                                          </t>
+                                      </div>
+                                 </div>
+                              </div>
+                          </div>
+                          <div class="col-md-9">
+                              <div class="alert alert-success alert-dismissable" t-if="message==1">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                                  Your message has been successfully sent!
+                              </div>
+                              <div class="alert alert-warning alert-dismissable" t-if="message==2">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                                  This quotation has been rejected. <a href="#discussion">Contact us</a> if you want a new one.
+                              </div>
+                              <div class="alert alert-warning alert-dismissable" t-if="message==3">
+                                  <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                                  This order has been validated. Thanks for your trust
+                                  and do not hesitate to <a href="#discussion">contact us</a> for
+                                  any question.
+                              </div>
+                              <a id="introduction"/>
+                              <h1 class="page-header mt16">
+                                  <span t-if="o.state in ('draft','sent','cancel')">Your Quotation</span>
+                                  <span t-if="o.state not in ('draft','sent','cancel')">Your Order</span>
+                                  <em t-esc="o.name"/>
+                                  <small t-field="o.state"/>
+                                  <div groups="base.group_website_publisher" t-ignore="true" class="pull-right css_editable_mode_hidden">
+                                      <a class="btn btn-info hidden-print" t-att-href="'/web#return_label=Website&amp;model=%s&amp;id=%s' % (o._name, o.id)">Update Quote</a>
+                                  </div>
+                              </h1>
+
+                              <div class="modal fade" id="modelaccept" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <form id="accept" method="POST" t-attf-action="/quote/accept/#{o.id}/?token=#{o.access_token}" class="js_accept_json modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+                                      <h4 class="modal-title">Validate Order</h4>
+                                    </div>
+                                    <div class="modal-body" id="sign-dialog">
+                                      <p>
+                                          I agree that by signing this proposal, I
+                                          accept it on the behalf of <b t-field="o.company_id"/>,
+                                          for an amount of
+                                          <b data-id="total_amount" t-field="o.amount_total"
+                                            t-field-options='{"widget": "monetary", "display_currency": "o.pricelist_id.currency_id"}'/>
+                                          with payment terms: <b t-field="o.payment_term"/>.
+                                      </p>
+                                      <div id="signer" class="form-group">
+                                          <label class="control-label" for="name">Your Name:</label>
+                                          <input type="text" name="signer" id="name" class="form-control"/>
+                                      </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" t-attf-class="btn btn-primary">Sign Order</button> or
+                                        <button type="button" class="btn btn-link" data-dismiss="modal" style="padding: 0">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+
+                              <div class="alert alert-warning alert-dismissable" t-if="o.state == 'cancel'">
+                                  <button type="button" class="close hidden-print" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                                  <strong>This quotation has been canceled.</strong> Contact us to get a new quote.
+                              </div>
+
+                              <div class="modal fade" id="modeldecline" role="dialog" aria-hidden="true">
+                                <div class="modal-dialog">
+                                  <form id="decline" method="POST" t-attf-action="/quote/#{o.id}/#{o.access_token}/decline" class="modal-content">
+                                    <div class="modal-header">
+                                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+                                      <h4 class="modal-title">Reject This Quote</h4>
+                                    </div>
+                                    <div class="modal-body">
+                                      <p>
+                                          Tell us why you are refusing this quotation, this will help us improve our services.
+                                      </p>
+                                      <textarea rows="4" name="decline_message" placeholder="Your feedback....." class="form-control"/>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="submit" t-att-id="o.id" class="btn btn-primary">Reject</button> or
+                                        <button type="button" class="btn btn-link" data-dismiss="modal" style="padding: 0">Cancel</button>
+                                    </div>
+                                  </form>
+                                </div>
+                              </div>
+
+                              <div class="row mt32">
+                                  <div class="col-md-6">
+                                      <div class="row">
+                                          <label class="col-sm-4 text-right">Customer:</label>
+                                          <div class="col-sm-8">
+                                              <div t-field="o.partner_id"/>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <label class="col-sm-4 text-right">Bill To:</label>
+                                          <div class="col-sm-8">
+                                              <div t-field="o.partner_invoice_id" t-field-options='{
+                                                  "widget": "contact",
+                                                  "fields": ["address", "name", "phone", "email"]
+                                                  }'/>
+                                          </div>
+                                      </div>
+                                      <div t-if="o.partner_shipping_id.id != o.partner_invoice_id.id" class="row">
+                                          <label class="col-sm-4 text-right">Ship To:</label>
+                                          <div class="col-sm-8">
+                                              <div t-field="o.partner_shipping_id" t-field-options='{
+                                                "widget": "contact",
+                                                "fields": ["address", "name", "phone"]
+                                                }'/>
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="col-md-6">
+                                      <div class="row">
+                                          <label class="col-sm-5 text-right">Your Contact:</label>
+                                          <div class="col-sm-7">
+                                              <div t-field="o.user_id" t-field-options='{
+                                                  "widget": "contact",
+                                                  "fields": ["name", "phone", "email"]
+                                                  }'/>
+                                          </div>
+                                      </div>
+                                      <div class="row">
+                                          <label class="col-sm-5 text-right">Quote Date:</label>
+                                          <div class="col-sm-7">
+                                              <span t-field="o.date_order"/>
+                                          </div>
+                                          <div class="clearfix"/>
+                                          <div t-if="o.client_order_ref">
+                                              <label class="col-sm-5 text-right">Your Reference:</label>
+                                              <div class="col-sm-7">
+                                                  <span t-field="o.client_order_ref"/>
+                                              </div>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <a id="offer"/>
+                              <div t-field="o.website_description"/>
+
+                              <t t-foreach="o.order_line" t-as="line">
+                                  <a t-att-id="line.id"/>
+                                  <div t-field="line.website_description"/>
+                              </t>
+
+                              <div class="oe_structure"/>
+
+                              <a id="pricing"/>
+                              <t t-call="website_quote.pricing"/>
+
+                              <a id="options"/>
+                              <t t-call="website_quote.optional_products"/>
+
+                              <!--<a id="discussion"/>-->
+                              <!--<t t-call="website_quote.chatter"/>-->
+                          </div>
+                      </div>
+                    </div>
+                </body>
+            </t>
+        </template>
+
+
+    </data>
+</openerp>

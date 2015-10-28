@@ -4,29 +4,28 @@
     <template id="page_behandling" name="Category Page">
       <t t-call="website.layout">
         <div id="wrap">
-          <t t-raw="0" />
-          <div class="oe_structure oe_empty"/>
-          <t t-raw="category.website_description"/>
-          <div class="container">
-            <div class="col-md-12">
-              <table class="table table-bordered table-responsive" style="border: none;">
-                <thead>
-
-                </thead>
-                <tbody>
+          <section>
+            <div t-field="category.website_description"/>
+            <div class="container mt16 mb64" style="width: 100%;">
+              <div class="col-md-12" style="padding: 0px; margin: auto;">
+                <table id="pro_table" class="table table-bordered table-responsive" style="border: none;">
                   <t t-foreach="products" t-as="p">
-                    <tr>
-                      <td style="border: 1px solid;">
-                        <h3 class="text-center"><t t-esc="p.name"/></h3>
-                        <t t-esc="p.description"/>
-                      </td>
-                      <td style="border: 1px solid;"><p/><t t-esc="p.list_price"/>:-</td>
-                    </tr>
+                    <tbody>
+                      <tr>
+                        <td><h3 style="color: #B9A55A;"><tspan t-field="p.name"/></h3><span t-field="p.description"/></td>
+                        <td>​<p/>
+                          <span t-field="p.list_price" style="white-space: nowrap;" t-field-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;: &quot;user_id.partner_id.property_product_pricelist.currency_id&quot;}">
+                          </span>
+                        </td>
+                      </tr>
+                    </tbody>
                   </t>
-                </tbody>
-              </table>
+                </table>
+              </div>
             </div>
-          </div>
+          </section>
+          <t t-raw="0" />
+          <div class="oe_structure oe_empty"></div>
         </div>
       </t>
     </template>
@@ -46,8 +45,8 @@
                   <t t-foreach="categories" t-as="c">
                     <tr>
                       <td style="border: 1px solid;">
-                        <h3 class="text-center"><t t-esc="c.name"/></h3>
-                        <p><t t-raw="c.website_description"/></p>
+                        <h3 class="text-center" t-field="c.name"/>
+                        <span t-field="c.website_description"/>
                       </td>
                     </tr>
                   </t>
