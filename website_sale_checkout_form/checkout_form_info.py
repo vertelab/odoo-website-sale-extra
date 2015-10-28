@@ -13,7 +13,7 @@ class event_type(models.Model):
 
 class website_gokart_form(http.Controller):
 
-    @http.route(['/gokart/<model("event.type"):event>/register'], type='http', auth="public", website=True)
+    @http.route(['/gokart/<model("event.event"):event>/register'], type='http', auth="public", website=True)
     def gokart_event(self, event, **post):
         pricelist_id = int(get_pricelist())
         values = {
@@ -21,7 +21,7 @@ class website_gokart_form(http.Controller):
             'main_object': event.with_context(pricelist=pricelist_id),
             'range': range,
         }
-        return request.render('website_sale_checkout_form.checkout_form', values)
+        return request.render('website_event.event_description_full', values)
 
     #~ @http.route(['/gokartserie/<model("event.event"):event>/register'], type='http', auth="public", website=True)
     #~ def gokartserie_event_register(self, event, **post):

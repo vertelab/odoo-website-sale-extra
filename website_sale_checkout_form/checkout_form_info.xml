@@ -37,8 +37,7 @@
             </xpath>
 -->
         
-        <template id="checkout_form_info" name="Check Out Form">
-<!--
+        <template id="checkout_form_info" inherit_id="website_event_sale.event_description_full" name="Check Out Form">
             <xpath expr="//table[@itemprop='offers']/thead/tr/th[3]" position="after">
                 <th style="min-width: 100px">Christelle</th>
                 <th style="min-width: 100px">Price</th>
@@ -51,9 +50,12 @@
                 <td>
                     <input type="text" placeholder="För omyndiga" name="parent" required="True" class="form-control"/>
                 </td>
+                <t t-foreach="event" t-as="e">
+                    <t t-esc="e.name"/>
+                </t>
             </xpath>
--->
             
+<!--
             <table>
                 <tr>
                     <th style="min-width: 100px">Christelle</th>
@@ -68,6 +70,7 @@
                     </td>
                 </tr>
             </table>
+-->
             
         </template>
         
