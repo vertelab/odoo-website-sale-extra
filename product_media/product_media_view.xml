@@ -1,0 +1,108 @@
+<openerp>
+<data>
+
+<record model="ir.ui.view" id="product_media_form">
+    <field name="inherit_id" ref="product.product_template_form_view"/>
+    <field name="name">product.media.form.view</field>
+    <field name="model">product.template</field>
+    <field name="arch" type="xml">
+        <field name="list_price" position="after">
+            <field name="attachment_id"/>
+            <field name="is_product_template" invisible="1"/>
+        </field>
+        <xpath expr="//div[@name='buttons']" position="inside">
+            <button type="action" class="oe_stat_button" id="media_sale_button" icon="fa-strikethrough" name="%(product_media.action_sales)d" attrs="{'invisible': ['|', ('attachment_id', '=', False), ('is_product_template', '=', False)]}" context="{'search_default_product_tmpl_id': active_id}">
+                <field name="media_sale_count_tmpl" widget="statinfo"/>
+            </button>
+            <button type="action" class="oe_stat_button" id="media_sale_button" icon="fa-strikethrough" name="%(product_media.action_sales)d" attrs="{'invisible': ['|', ('attachment_id', '=', False), ('is_product_template', '=', True)]}" context="{'search_default_product_id': active_id}">
+                <field name="media_sale_count" widget="statinfo"/>
+            </button>
+        </xpath>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="product_media_sale_form">
+    <field name="name">product.media.sale.form.view</field>
+    <field name="model">product.media.sale</field>
+    <field name="arch" type="xml">
+        <form string="Media Sale">
+            <sheet>
+                <h1>
+                    <label string="sale of "/>
+                    <field name="name" class="oe_inline"/>
+                </h1>
+                <field name="image" widget="image" class="oe_left oe_avatar"/>
+                <group>
+                    <field name="partner_id"/>
+                    <field name="product_id"/>
+                    <field name="token"/>
+                    <field name="attachment_id"/>
+                    <field name="order_line_id"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="view_media_sale_tree" model="ir.ui.view">
+    <field name="name">product.media.sale.tree</field>
+    <field name="model">product.media.sale</field>
+    <field name="arch" type="xml">
+        <tree string="Media Sales" create="false">
+            <field name="partner_id"/>
+            <field name="product_id"/>
+            <field name="token"/>
+            <field name="attachment_id"/>
+            <field name="order_line_id"/>
+        </tree>
+    </field>
+</record>
+
+<record id="view_media_sale_filter" model="ir.ui.view">
+    <field name="name">product.media.sale.list.select</field>
+    <field name="model">product.media.sale</field>
+    <field name="arch" type="xml">
+        <search string="Search Media Sales">
+            <field name="partner_id"/>
+            <field name="product_id"/>
+            <field name="product_tmpl_id"/>
+            <field name="token"/>
+            <group expand="0" string="Group By">
+                <filter string="Customer" domain="[]" context="{'group_by':'partner_id'}"/>
+                <filter string="Product" domain="[]" context="{'group_by':'product_id'}"/>
+            </group>
+       </search>
+    </field>
+</record>
+
+
+<record id="action_sales" model="ir.actions.act_window">
+    <field name="name">Media Sales</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="target">current</field>
+    <field name="res_model">product.media.sale</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="context">{}</field>
+    <field name="search_view_id" ref="view_media_sale_filter"/>
+</record>
+
+<record id="view_partner_form" model="ir.ui.view">
+    <field name="inherit_id" ref="base.view_partner_form"/>
+    <field name="name">product.media.partner.form</field>
+    <field name="model">res.partner</field>
+    <field name="arch" type="xml">
+        <xpath expr="//div[@name='buttons']" position="inside">
+            <button type="action" class="oe_stat_button" id="media_sale_button" icon="fa-strikethrough" name="%(product_media.action_sales)d" attrs="{'invisible': [('customer', '=', False)]}" context="{'search_default_partner_id': active_id}">
+                <field name="media_sale_count" widget="statinfo"/>
+            </button>
+        </xpath>
+    </field>
+</record>
+
+<menuitem action="action_sales" id="menu_media_sales" parent="base.menu_sales" sequence="7" groups="base.group_sale_salesman,base.group_sale_manager"/>
+
+<!--Move to data tag with noupdate="1" -->
+<function model="product.media.install" name="install_module"/>
+</data>
+</openerp>

@@ -1,0 +1,5 @@
+id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
+product_media_purchase_manager,Sales Manager,model_product_media_purchase,base.group_sale_manager,1,1,1,1
+product_media_purchase_salesman,Salesman,model_product_media_purchase,base.group_sale_salesman,1,1,1,0
+product_media_purchase_accountant,Accountant,model_product_media_purchase,account.group_account_user,1,1,0,0
+
