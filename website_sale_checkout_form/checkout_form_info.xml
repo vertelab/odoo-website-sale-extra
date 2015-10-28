@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="checkout_form" name="Check Out">
+            <t t-call="website_sale_checkout_form.checkout_form_info"/>
+        </template>
+        
+<!--
+                <t t-foreach="request.env['event.type'].search([])" t-as="e">
+                    <t t-if="e.name =='school'">
+                    <div>
+                        <div class="col-lg-6">
+                            <label class="control-label" for="birth_date">Date of Birth</label>
+                            <input type="date" name="birth" placeholder="YYYY-MM-DD" required="True" class="form-control"/>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="col-lg-6">
+                            <label class="control-label" for="parent">Parent</label>
+                            <input type="text" name="parent" required="True" class="form-control"/>
+                            <span class="text-muted">Omföraren är omyndig</span>
+                        </div>
+                    </div>
+                    </t>
+                </t> 
+-->
+            
+            
+<!--
+            <xpath expr="//div[@class='col-md-8 oe_cart']/div[@class='row']/div[@class='form-group col-lg-12']" position="after">
+                <div>
+                    <div class="col-lg-12 mb16">
+                        <label class="control-label" for="other_information">Other Information</label>
+                        <textarea type="text" name="information" class="form-control"/>
+                    </div>
+                </div>
+            </xpath>
+-->
+        
+        <template id="checkout_form_info" inherit_id="website_event_sale.event_description_full" name="Check Out Form">
+            <xpath expr="//table[@itemprop='offers']/thead/tr/th[3]" position="after">
+                <th style="min-width: 100px">Christelle</th>
+                <th style="min-width: 100px">Price</th>
+            </xpath>
+
+            <xpath expr="//tr[@itemscope='itemscope']/td[3]">
+                <td>
+                    <input type="date" name="birth" placeholder="YYYY-MM-DD" required="True" class="form-control"/>
+                </td>
+                <td>
+                    <input type="text" placeholder="För omyndiga" name="parent" required="True" class="form-control"/>
+                </td>
+                <t t-foreach="event" t-as="e">
+                    <t t-esc="e.name"/>
+                </t>
+            </xpath>
+            
+<!--
+            <table>
+                <tr>
+                    <th style="min-width: 100px">Christelle</th>
+                    <th style="min-width: 100px">Price</th>
+                </tr>
+                <tr>
+                    <td>
+                    <input type="date" name="birth" placeholder="YYYY-MM-DD" required="True" class="form-control"/>
+                    </td>
+                    <td>
+                        <input type="text" placeholder="För omyndiga" name="parent" required="True" class="form-control"/>
+                    </td>
+                </tr>
+            </table>
+-->
+            
+        </template>
+        
+        
+        
+        <record id="event_type_description_form_view" model="ir.ui.view">
+            <field name="name">Event type new</field>
+            <field name="model">event.type</field>
+            <field name="inherit_id" ref="event.view_event_type_form" />
+            <field name="arch" type="xml">
+                <field name="default_registration_max" position="after">
+                    <field name="link"/>
+                </field>
+            </field>
+        </record>
+        
+    </data>
+</openerp>
+
