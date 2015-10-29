@@ -9,6 +9,24 @@ class event_type(models.Model):
     _inherit = "event.type"
     
     link = fields.Char(string="URL")
+    
+class sale_order(models.Model):
+    _inherit = "sale.order"
+    
+    driver_name = fields.Char(string = "Driver Name")
+    parent_name = fields.Char(string = "Parent Name")
+    birth_date = fields.Char(string = "Birth Date")
+    length = fields.Char(string = "Length")
+    other_info = fields.Char(string = "Other Info")
+    
+class event_registration(models.Model):
+    _inherit = "event.registration"
+    
+    driver_name = fields.Char(string = "Driver Name")
+    parent_name = fields.Char(string = "Parent Name")
+    birth_date = fields.Char(string = "Birth Date")
+    length = fields.Char(string = "Length")
+    other_info = fields.Char(string = "Other Info")
 
 
 class website_gokart_form(http.Controller):
