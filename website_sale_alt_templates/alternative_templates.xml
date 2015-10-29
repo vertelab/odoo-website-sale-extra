@@ -112,7 +112,7 @@
             <attribute name="t-if">category or search</attribute>
         </xpath>
         
-        <xpath expr="//t[@t-call='website.pager']" position="attributes">
+        <xpath expr="//div[@class='products_pager']/t[@t-call='website.pager']" position="attributes">
             <attribute name="t-if">category or search</attribute>
         </xpath>
     </template>
