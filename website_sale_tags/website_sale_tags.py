@@ -33,19 +33,20 @@ import re
 import logging
 _logger = logging.getLogger(__name__)
 
-class product_template(models.Model):
-    _inherit = "product.template"
-    
-    image_tags = fields.Many2many(comodel_name='img.tag', string='Tags', translate=True)
-    
-    
-class img_tags(models.Model):
-    _name = "img.tag"
-    
-    name = fields.Char(string='Tag', translate=True)
+#~ class product_template(models.Model):
+    #~ _inherit = "product.template"
+    #~ 
+    #~ image_tags = fields.Many2many(comodel_name='img.tag', string='Tags', translate=True)
+    #~ 
+    #~ 
+#~ class img_tags(models.Model):
+    #~ _name = "img.tag"
+    #~ 
+    #~ name = fields.Char(string='Tag', translate=True)
 
 
 class product_tags(http.Controller):
+    _inherit = "website_product_tags.product_template"
 
     @http.route(['/shop/<model("img.tag"):tags>'], type='http', auth='public', website='True')
     def tagged_products(self, **post):
