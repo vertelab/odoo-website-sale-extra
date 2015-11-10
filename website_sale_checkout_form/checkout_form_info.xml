@@ -157,44 +157,6 @@
             </xpath>
         </template>
         
-        
-<!--
-        <template id="checkout_form_info" name="Check Out Form">
-            <xpath expr="//table[@itemprop='offers']" position="after">
-                <table class="mb32">
-                    <thead>
-                        <tr>
-                            <th style="min-width: 100px">Förarens namn</th>
-                            <th style="min-width: 100px">Födelsedatum</th>
-                            <th style="min-width: 100px">Målsman</th>
-                            <th style="min-width: 100px">Längd</th>
-                        </tr>
-                    </thead>
-                    <thead>
-                        <tr>
-                            <td>
-                                <input type="text" name="name" placeholder="Peter Petersson" required="True" class="form-control"/>
-                            </td>
-                            <td>
-                                <input type="date" name="birth" placeholder="YYYY-MM-DD" required="True" class="form-control"/>
-                            </td>
-                            <td>
-                                <input type="text" placeholder="För omyndiga" name="parent" required="True" class="form-control"/>
-                            </td>
-                            <td>
-                                <input type="text" placeholder="160cm" name="length" required="True" class="form-control"/>
-                            </td>
-                        </tr>
-                    </thead>
-                </table>
-            </xpath>
-            
-            
-        </template>
--->
-        
-        
-        
         <record id="event_type_description_form_view" model="ir.ui.view">
             <field name="name">Event type new</field>
             <field name="model">event.type</field>

@@ -60,4 +60,5 @@ class product_category(models.Model):
 
     def is_translated(self,lang):
         return len(self.env['ir.translation'].search(['&',('name','=','product.category,website_small_description'),('lang','=',lang)])) == 1
+        #~ logging.warning('<<<<<<<<<<<<<< length: %s' % (len(self.env['ir.translation'].search(['&',('name','=','product.category,website_small_description'),('lang','=',lang)]))))
 
