@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <template id="product_tags" inherit_id="website_sale.product">
+            <xpath expr="//p[@t-field='product.description_sale']" position="after">
+                <t t-if="product.image_tags">
+                    <t t-foreach="product.image_tags" t-as="tag">
+                        <a t-att-href="'/shop?search=%s' % tag.name"><t t-esc="tag.name"/></a>
+                    </t>
+                </t>
+            </xpath>
+        </template>
+    </data>
+</openerp>

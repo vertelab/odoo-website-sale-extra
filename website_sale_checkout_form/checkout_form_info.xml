@@ -4,7 +4,10 @@
 
         <template id="event_description_full" inherit_id="website_event.event_details" customize_show="True" name="Event's Ticket form">
             <xpath expr="//div[@itemscope='itemscope']" position="replace">
+<!--
                 <form t-attf-action="/shop/checkout?event_id=#{ event.id }" method="post" t-if="event.event_ticket_ids">
+-->
+                <form t-attf-action="/gokart/#{event.id}/register" method="post" t-if="event.event_ticket_ids">
 <!--
                     <table itemprop="offers" class="table table-striped">
                         <thead>
@@ -19,7 +22,7 @@
                         <tbody>
                             <t t-foreach="event.event_ticket_ids" t-as="ticket">
                               <tr itemscope="itemscope" itemtype="http://data-vocabulary.org/Offer" t-if="not ticket.is_expired">
-                                <td itemscope="itemscope" itemtype="http://data-vocabulary.org/Product">                  
+                                <td itemscope="itemscope" itemtype="http://data-vocabulary.org/Product">
                                     <div itemprop="name" t-field="ticket.name"/>
                                     <div><small itemprop="description" t-field="ticket.product_id.description_sale"/></div>
                                 </td>
@@ -65,22 +68,22 @@
                         <t t-foreach="event.event_ticket_ids" t-as="ticket">
                             <tr itemscope="itemscope" itemtype="http://data-vocabulary.org/Offer" t-if="not ticket.is_expired">
                                 <div class="col-md-8 col-xs-12 form-group">
-                                    <label class="col-md-2 col-xs-12 control-label" for="ticket_type">Ticket Type</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="ticket_type">Ticket Type</label>
                                     <div class="col-md-4 col-xs-12">
-                                        <td itemscope="itemscope" itemtype="http://data-vocabulary.org/Product">                  
+                                        <td itemscope="itemscope" itemtype="http://data-vocabulary.org/Product">
                                             <div itemprop="name" t-field="ticket.name"/>
                                             <div><small itemprop="description" t-field="ticket.product_id.description_sale"/></div>
                                         </td>
                                     </div>
                                     <t t-if="ticket.deadline">
-                                        <label class="col-md-2 col-xs-12 control-label" for="sale_end">Sale End</label>  
+                                        <label class="col-md-2 col-xs-12 control-label" for="sale_end">Sale End</label>
                                         <div class="col-md-4 col-xs-12">
                                             <td><span itemprop="priceValidUntil" t-field="ticket.deadline"/></td>
                                         </div>
                                     </t>
                                 </div>
                                 <div class="col-md-8 col-xs-12 form-group">
-                                    <label class="col-md-2 col-xs-12 control-label" for="price">Price</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="price">Price</label>
                                     <div class="col-md-4 col-xs-12">
                                         <t t-if="ticket.price or editable">
                                             <t t-if="(ticket.price-ticket.price_reduce) &gt; 1">
@@ -101,7 +104,7 @@
                                             <span>Free</span>
                                         </t>
                                     </div>
-                                    <label class="col-md-2 col-xs-12 control-label" for="quantity">Quantity</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="quantity">Quantity</label>
                                     <div class="col-md-4 col-xs-12">
                                         <td class="">
                                             <select t-if="ticket.seats_available or not ticket.seats_max" t-attf-name="ticket-#{ ticket.id }" class="form-control">
@@ -111,38 +114,38 @@
                                         </td>
                                     </div>
                                 </div>
-                                
+
                                 <!-- Text input-->
                                 <div class="col-md-8 col-xs-12 form-group">
-                                    <label class="col-md-2 col-xs-12 control-label" for="name">Förarens namn</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="name">Förarens namn</label>
                                     <div class="col-md-4 col-xs-12">
-                                        <input id="name" name="name" placeholder="" class="form-control input-md" required="" type="text"/>
+                                        <input id="name" name="driver_name" placeholder="" class="form-control input-md" required="" type="text"/>
                                     </div>
-                                    
-                                    <label class="col-md-2 col-xs-12 control-label" for="birthdate">Födelsedatum</label>  
+
+                                    <label class="col-md-2 col-xs-12 control-label" for="birthdate">Födelsedatum</label>
                                     <div class="col-md-4 col-xs-12">
-                                        <input id="birthdate" name="birthdate" placeholder="YYYY-MM-DD" class="form-control input-md" required="" type="date"/>
+                                        <input id="birthdate" name="birth_date" placeholder="YYYY-MM-DD" class="form-control input-md" required="" type="date"/>
                                     </div>
                                 </div>
 
                                 <div class="col-md-8 col-xs-12 form-group">
-                                    <label class="col-md-2 col-xs-12 control-label" for="parent">Målsmans namn</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="parent">Målsmans namn</label>
                                     <div class="col-md-4 col-xs-12">
-                                        <input id="parent" name="parent" placeholder="" class="form-control input-md" required="" type="text"/>
-                                        <span class="help-block">Om föraren är omyndig</span>  
+                                        <input id="parent" name="parent_name" placeholder="" class="form-control input-md" required="" type="text"/>
+                                        <span class="help-block">Om föraren är omyndig</span>
                                     </div>
 
-                                    <label class="col-md-2 col-xs-12 control-label" for="length">Längd</label>  
+                                    <label class="col-md-2 col-xs-12 control-label" for="length">Längd</label>
                                     <div class="col-md-4 col-xs-12">
                                         <input id="length" name="length" placeholder="160" class="form-control input-md" required="" type="number"/>
-                                        <span class="help-block">Ska skrivas in i cm</span>  
+                                        <span class="help-block">Ska skrivas in i cm</span>
                                     </div>
                                 </div>
 
                                 <div class="col-md-8 col-xs-12 form-group">
                                     <label class="col-md-2 col-xs-12 control-label" for="info">Övrig information</label>
-                                    <div class="col-md-10 col-xs-12">                     
-                                        <textarea class="form-control" id="info" rows="5" name="info"></textarea>
+                                    <div class="col-md-10 col-xs-12">
+                                        <textarea class="form-control" id="info" rows="5" name="other_info"></textarea>
                                     </div>
                                 </div>
                             </tr>
@@ -156,7 +159,42 @@
                 </form>
             </xpath>
         </template>
-        
+
+
+<!--
+        <template id="checkout_form_info" name="Check Out Form">
+            <xpath expr="//table[@itemprop='offers']" position="after">
+                <table class="mb32">
+                    <thead>
+                        <tr>
+                            <th style="min-width: 100px">Förarens namn</th>
+                            <th style="min-width: 100px">Födelsedatum</th>
+                            <th style="min-width: 100px">Målsman</th>
+                            <th style="min-width: 100px">Längd</th>
+                        </tr>
+                    </thead>
+                    <thead>
+                        <tr>
+                            <td>
+                                <input type="text" name="name" placeholder="Peter Petersson" required="True" class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="date" name="birth" placeholder="YYYY-MM-DD" required="True" class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="För omyndiga" name="parent" required="True" class="form-control"/>
+                            </td>
+                            <td>
+                                <input type="text" placeholder="160cm" name="length" required="True" class="form-control"/>
+                            </td>
+                        </tr>
+                    </thead>
+                </table>
+            </xpath>
+
+
+        </template>
+-->
         <record id="event_type_description_form_view" model="ir.ui.view">
             <field name="name">Event type new</field>
             <field name="model">event.type</field>
@@ -167,7 +205,7 @@
                 </field>
             </field>
         </record>
-        
+
         <record id="sale_order_extra_info" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
@@ -184,7 +222,7 @@
                 </field>
             </field>
         </record>
-        
+
         <record id="event_registration_extra_info" model="ir.ui.view">
             <field name="name">event.registration.form</field>
             <field name="model">event.registration</field>
@@ -206,7 +244,7 @@
                 </sheet>
             </field>
         </record>
-        
+
     </data>
 </openerp>
 
