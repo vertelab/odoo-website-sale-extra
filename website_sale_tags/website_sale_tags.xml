@@ -10,5 +10,15 @@
                 </t>
             </xpath>
         </template>
+        
+        <template id="product_view_tags" inherit_id="website_sale.products_item">
+            <xpath expr="//div[@itemprop='offers']" position="after">
+                <t t-if="product.image_tags">
+                    <t t-foreach="product.image_tags" t-as="tag">
+                        <div itemprop="image_tags" t-field="tag.name"/>
+                    </t>
+                </t>
+            </xpath>
+        </template>
     </data>
 </openerp>
