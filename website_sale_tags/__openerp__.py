@@ -29,7 +29,7 @@ Add Tags for Website Sale
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['website', 'product', 'website_sale'],
+    'depends': ['website', 'product', 'website_sale', 'product_tags'],
     'data': ['website_sale_tags.xml',
     ],
     'application': False,

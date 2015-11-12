@@ -49,7 +49,7 @@ class website_sale(website_sale):
         if search:
             for srch in search.split(" "):
                 domain += [
-                    '|', '|', '|', ('name', 'ilike', srch), ('description', 'ilike', srch),
+                    '|', '|', '|','|', ('name', 'ilike', srch), ('description', 'ilike', srch),
                     ('description_sale', 'ilike', srch), ('product_variant_ids.default_code', 'ilike', srch),
                     ('image_tags', 'ilike', srch)]
         

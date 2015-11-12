@@ -15,7 +15,9 @@
             <xpath expr="//div[@itemprop='offers']" position="after">
                 <t t-if="product.image_tags">
                     <t t-foreach="product.image_tags" t-as="tag">
-                        <div itemprop="image_tags" t-field="tag.name"/>
+                        <div class="text-info oe_subdescription" contenteditable="false">
+                            <div class="hidden" itemprop="image_tags" t-field="tag.name"/>
+                        </div>
                     </t>
                 </t>
             </xpath>
