@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="product_product_form_view" model="ir.ui.view">
+            <field name="name">product.template.product.form</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
+            <field name="arch" type="xml">
+                <field name="default_code" position="after">
+                  <field name="image_tags" widget="many2many_tags"/>
+                </field>
+            </field>
+        </record>
+        
+        <record id="product_tag_form" model="ir.ui.view">
+            <field name="name">img.tag.form</field>
+            <field name="model">img.tag</field>
+            <field name="arch" type="xml">
+                <form string="Tags">
+                    <sheet string="Tags">
+                        <h1>
+                            <field name="name" placeholder="Tag Name..." class="oe_inline"/>
+                        </h1>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+        
+        <record id="product_tag_tree" model="ir.ui.view">
+            <field name="name">img.tag.form</field>
+            <field name="model">img.tag</field>
+            <field name="arch" type="xml">
+                <tree string="Tags">
+                    <field name="name"/>
+                </tree>
+            </field>
+        </record>
+        
+        <record id="product_tag_action" model="ir.actions.act_window">
+            <field name="name">Tags</field>
+            <field name="res_model">img.tag</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_type">form</field>
+            <field name="view_id" ref="product_tag_form"/>
+            <field name="context">{"search_default_current": 1}</field>
+        </record>
+        
+        <menuitem action="product_tag_action" id="menu_product_tag_action" parent="base.menu_base_config" sequence="30"/>
+        
+    </data>
+</openerp>
