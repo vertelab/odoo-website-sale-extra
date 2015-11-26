@@ -30,7 +30,7 @@ class res_partner(models.Model):
     _inherit = "res.partner"
 
     @api.one
-    def copy_company_info(self):
+    def get_company_info(self):
 
         if self.is_company and (len(self.vat) > 0):
             api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api_profile')
