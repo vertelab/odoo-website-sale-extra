@@ -33,37 +33,47 @@ class res_partner(models.Model):
     def get_company_info(self):
 
         if self.is_company and (len(self.vat) > 0):
+
             api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api_profile')
             api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api_key')
             if not (api_key or api_profile):
                 raise Warning('Please configurate Eniro api account')
+
             res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
             (true,false,null) = (True,False,None)
+            _logger.error('api.eniro error: %s %s' % (e.errno, e.strerror))
+
+            try:
+                res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
+                (true,false,null) = (True,False,None)
+            except Exception as e:
+                _logger.error('api.eniro error: %s %s' % (e.errno, e.strerror))
+                return False
+
             json = eval(res)
-            if not json and json['totalHits'] == 0:
-                pass
+            _logger.error('<<<<<< API Eniro Result: %s >>>>>' % json)
 
-            else:
-                for advert in json['adverts']:
-                    #~ print advert['companyInfo']['companyName']
-                    pass
+            if not json and not len(json['adverts']) > 0 and json['totalHits'] == 0:
+                return False
 
-                companyInfo = json['adverts'][0]['companyInfo']
-                address = json['adverts'][0]['address']
-                phoneNumbers = json['adverts'][0]['phoneNumbers']
-                location = json['adverts'][0]['location']
-                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urllib2.urlopen(json['adverts'][0]['homepage']).read())[1]
+            adverts = json['adverts'][json['totalHits']-1]
+            _logger.debug('<<<<<< Adverts: %s >>>>>' % adverts)
+            companyInfo = adverts['companyInfo']
+            address = adverts['address']
+            phoneNumbers = adverts['phoneNumbers']
+            location = adverts['location']
+            homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urllib2.urlopen(adverts['homepage']).read())[1]
 
-                self.write({
-                    'name': companyInfo['companyName'],
-                    'street': address['streetName'],
-                    # 'street2': address['postBox'],
-                    'zip': address['postCode'],
-                    'city': address['postArea'],
-                    'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0],
-                    'latitude': location['coordinates'][0]['latitude'],
-                    'longitude': location['coordinates'][0]['longitude'],
-                    'website': homepage,
-                })
+            self.write({
+                'name': companyInfo['companyName'],
+                'street': address['streetName'],
+                # 'street2': address['postBox'],
+                'zip': address['postCode'],
+                'city': address['postArea'],
+                'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0],
+                'latitude': location['coordinates'][0]['latitude'],
+                'longitude': location['coordinates'][0]['longitude'],
+                'website': homepage,
+            })
 
         return True
