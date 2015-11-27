@@ -29,7 +29,7 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit = "res.partner"
 
-    @api.one
+    @api.model
     def get_company_info(self):
 
         if self.is_company and self.vat and (len(self.vat) > 0):
@@ -55,7 +55,7 @@ class res_partner(models.Model):
             json = eval(res)
             _logger.info('<<<<<< API Eniro Result: %s >>>>>' % json)
 
-            if not json and not len(json['adverts']) > 0 and json['totalHits'] == 0:
+            if not json or len(json['adverts']) == 0 or json['totalHits'] == 0:
                 return False
 
             adverts = json['adverts'][json['totalHits']-1]

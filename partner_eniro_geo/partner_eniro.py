@@ -31,8 +31,9 @@ class res_partner(models.Model):
 
     @api.one
     def get_company_info(self):
-        res = super('res_partner',self).get_company_info()
-        if res:                
+        res = super(res_partner,self).get_company_info()
+        if res:
+            raise Warning(res)
             adverts = res['adverts'][res['totalHits']-1]
             location = adverts['location']
             self.write({
