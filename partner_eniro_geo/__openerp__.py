@@ -20,19 +20,20 @@
 ##############################################################################
 
 {
-    'name': 'Partner Eniro',
-    'version': '0.2',
+    'name': 'Partner Eniro Geo',
+    'version': '0.1',
     'category': 'other',
     'license': 'AGPL-3',
-    'summary': 'Retrieve partner info from Eniro',
+    'summary': 'Retrieve geoinfo for partner from Eniro',
     'description': """
-This module adds a button to the res.partner form to retrieve
-and update company information using company registration number.
+This module retrieve longitude and latitude for a partner using api.eniro.com 
+
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['l10n_se',],
-    'data': ['partner_eniro_view.xml','res_config_view.xml'],
+    'depends': ['partner_eniro','base_geolocalize'],
+    'data': [],
     'installable': True,
+    'auto_install': True,
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

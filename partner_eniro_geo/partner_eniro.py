@@ -19,20 +19,24 @@
 #
 ##############################################################################
 
-{
-    'name': 'Partner Eniro',
-    'version': '0.2',
-    'category': 'other',
-    'license': 'AGPL-3',
-    'summary': 'Retrieve partner info from Eniro',
-    'description': """
-This module adds a button to the res.partner form to retrieve
-and update company information using company registration number.
-""",
-    'author': 'Vertel AB',
-    'website': 'http://www.vertel.se',
-    'depends': ['l10n_se',],
-    'data': ['partner_eniro_view.xml','res_config_view.xml'],
-    'installable': True,
-}
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+from openerp import models, fields, api, _
+import urllib2
+import logging
+import re
+_logger = logging.getLogger(__name__)
+
+
+class res_partner(models.Model):
+    _inherit = "res.partner"
+
+    @api.one
+    def get_company_info(self):
+        res = super('res_partner',self).get_company_info()
+        if res:                
+            adverts = res['adverts'][res['totalHits']-1]
+            location = adverts['location']
+            self.write({
+                'partner_latitude': location['coordinates'][0]['latitude'],
+                'partner_longitude': location['coordinates'][0]['longitude'],
+            })
+        return res

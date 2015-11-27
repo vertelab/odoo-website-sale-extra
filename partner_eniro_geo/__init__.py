@@ -1,2 +1,1 @@
-import res_config
 import partner_eniro
