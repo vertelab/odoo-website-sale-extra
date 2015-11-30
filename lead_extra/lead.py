@@ -20,24 +20,13 @@
 ##############################################################################
 
 from openerp import models, fields, api, _
-import urllib2
 import logging
-import re
 _logger = logging.getLogger(__name__)
 
+class crm_lead(models.Model):
+    _inherit = "crm.lead"
 
-class res_partner(models.Model):
-    _inherit = "res.partner"
-
-    @api.one
-    def get_company_info(self):
-        res = super(res_partner,self).get_company_info()
-        if res:
-            #raise Warning(res)
-            adverts = res['adverts'][res['totalHits']-1]
-            location = adverts['location']
-            self.write({
-                'partner_latitude': location['coordinates'][0]['latitude'],
-                'partner_longitude': location['coordinates'][0]['longitude'],
-            })
-        return res
+    vat = fields.Char('Vat')
+    revenue = fields.Float('Revenue')
+    employed = fields.Integer('Employees')
+    

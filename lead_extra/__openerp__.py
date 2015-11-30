@@ -19,25 +19,17 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
-import urllib2
-import logging
-import re
-_logger = logging.getLogger(__name__)
-
-
-class res_partner(models.Model):
-    _inherit = "res.partner"
-
-    @api.one
-    def get_company_info(self):
-        res = super(res_partner,self).get_company_info()
-        if res:
-            #raise Warning(res)
-            adverts = res['adverts'][res['totalHits']-1]
-            location = adverts['location']
-            self.write({
-                'partner_latitude': location['coordinates'][0]['latitude'],
-                'partner_longitude': location['coordinates'][0]['longitude'],
-            })
-        return res
+{
+    'name': 'Lead Extra',
+    'version': '0.2',
+    'category': 'other',
+    'license': 'AGPL-3',
+    'summary': 'Extra fields for lead ',
+    'description': "",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['crm',],
+    'data': ['lead_view.xml',],
+    'installable': True,
+}
+# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
