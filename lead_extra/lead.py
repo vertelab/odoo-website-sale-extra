@@ -26,7 +26,7 @@ _logger = logging.getLogger(__name__)
 class crm_lead(models.Model):
     _inherit = "crm.lead"
 
-    vat = fields.Char('Vat')
-    revenue = fields.Float('Revenue')
+    vat = fields.Char('Vat',help="SE + orgnummer - '-' + 01")
+    revenue = fields.Float('Revenue',help="Revenue in TSEK")
     employed = fields.Integer('Employees')
     
