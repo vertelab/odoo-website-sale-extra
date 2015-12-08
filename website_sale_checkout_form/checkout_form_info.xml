@@ -195,9 +195,6 @@
 
         </template>
 -->
-
-
-
         <record id="event_type_description_form_view" model="ir.ui.view">
             <field name="name">Event type new</field>
             <field name="model">event.type</field>

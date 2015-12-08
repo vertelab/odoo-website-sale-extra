@@ -59,17 +59,17 @@
     </template>
     
     <record id="product_category_form_view" model="ir.ui.view">
-      <field name="name">product.category.inherit.form</field>
-      <field name="model">product.category</field>
-      <field name="inherit_id" ref="product.product_category_form_view" />
-      <field name="arch" type="xml">
-        <field name="type" position="after">
-          <field name="website_published" />
-          <field name="website_image"/>
-          <field colspan="4" style="max-width: 600px;" name="website_small_description"/>
-          <field colspan="4" style="max-width: 600px;" name="website_description" />
+        <field name="name">product.category.inherit.form</field>
+        <field name="model">product.category</field>
+        <field name="inherit_id" ref="product.product_category_form_view" />
+        <field name="arch" type="xml">
+            <field name="type" position="after">
+              <field name="website_published" />
+              <field name="website_image"/>
+              <field colspan="4" style="max-width: 600px;" name="website_small_description"/>
+              <field colspan="4" style="max-width: 600px;" name="website_description" />
+            </field>
         </field>
-      </field>
     </record>
   </data>
 </openerp>
