@@ -31,13 +31,16 @@ class sale_order(models.Model):
     @api.one
     def sell_media_products(self):
         for line in self.order_line:
-            if line.product_id and line.product_id.media_type != 'none':
-                self.env['product.media.sale'].create({
+            if line.product_id and line.product_id.media_type:
+                values = {
                     'partner_id': self.partner_id.id,
                     'product_id': line.product_id.id,
-                    'attachment_id': line.product_id.get_attachment().id,
+                    'attachment_id': line.product_id.product_tmpl_id.get_attachment().id,
                     'order_line_id': line.id,
-                })
+                }
+                if hasattr(self, 'sell_media_%s_product' % line.product_id.media_type):
+                    values = getattr(self, 'sell_media_%s_product' % line.product_id.media_type)(values, line)
+                self.env['product.media.sale'].create(values)
         return
 
 class product_media_template(models.Model):
@@ -117,7 +120,7 @@ class product_media(models.Model):
     @api.one
     def _media_sale_count(self):
         self.media_sale_count = self.env['product.media.sale'].search_count([('product_id', '=', self.id)])
-
+    
 class res_partner(models.Model):
     _inherit = 'res.partner'
     

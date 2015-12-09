@@ -19,7 +19,8 @@
 #
 ##############################################################################
 
-from openerp import fields, api, models, _
+from openerp import fields, api, models, _, http
+from openerp.http import request
 from uuid import uuid4
 from wand.image import Image
 
@@ -27,9 +28,57 @@ import logging
 
 _logger = logging.getLogger(__name__)
 
+class ProductPhotoDownload(http.Controller):
+    
+    @http.route('/product_photo/download/<int:sale>', type='http', auth="user", website=True)
+    def download(self, sale=0, **post):
+        user = request.env['res.users'].browse(request.uid)
+        sale = request.env['product.media.sale'].sudo().browse(sale)
+        if not (user.partner_id and user.partner_id == sale.partner_id):
+            return "You do not have access rights to this document"
+        recipe = sale.product_id.attribute_value_ids[0].im_recipe_id
+        return recipe.sudo().send_file(http,field='media_file',model='product.product',id=sale.product_id.id)
+
+class product_media_sale(models.Model):
+    _inherit = 'product.media.sale'
+    
+    license = fields.Many2one(comodel_name='product.photo.license', string='License')
+
+class sale_order_line(models.Model):
+    _inherit = 'sale.order.line'
+    
+    license = fields.Many2one(comodel_name='product.photo.license', string='License')
+    
+    @api.multi
+    def product_id_change(self, pricelist, product, qty=0,
+            uom=False, qty_uos=0, uos=False, name='', partner_id=False,
+            lang=False, update_tax=True, date_order=False, packaging=False, fiscal_position=False, flag=False):
+        res = super(sale_order_line, self).product_id_change(pricelist, product, qty,
+            uom, qty_uos, uos, name, partner_id,
+            lang, update_tax, date_order, packaging, fiscal_position, flag)
+        if product:
+            product = self.env['product.product'].browse(product)
+            if product.media_type == 'photo' and product.license:
+                res['value']['license'] = product.license.id
+        return res
+        
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+    
+    @api.multi
+    def sell_media_photo_product(self, values, line):
+        values.update({
+            'license': line.license.id,
+        })
+        return values
+
 class product_media_template(models.Model):
     _inherit = 'product.template'
-
+    
+    author = fields.Many2one(comodel_name='res.partner', string='Photographer')
+    license = fields.Many2one(comodel_name='product.photo.license', string='License')
+    model = fields.Char('Model')
+    
     @api.onchange('media_type')
     def _onchange_media_type(self):
         if self.media_type == 'photo':
@@ -76,3 +125,9 @@ class product_attribute_value(models.Model):
     _inherit = 'product.attribute.value'
     
     im_recipe_id = fields.Many2one(string="Imagemagick Recipe", comodel_name="image.recipe")
+
+class product_license(models.Model):
+    _name = 'product.photo.license'
+    
+    name                = fields.Char('Name')
+    website_description = fields.Html('Description')
