@@ -28,7 +28,7 @@
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [
-
+'custom_num_view.xml',
 ],
 'installable': True,
 }

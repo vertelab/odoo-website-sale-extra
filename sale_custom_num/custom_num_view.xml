@@ -1,0 +1,52 @@
+<openerp>
+<data>
+ 
+    <record id="view_order_customer_number_tree" model="ir.ui.view">
+        <field name="name">sale.order.customer.number.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="ref"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_sales_order_customer_number_filter" model="ir.ui.view">
+            <field name="name">sale.order.customer.number.list.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="ref"/>
+                </field>
+            </field>
+    </record>
+    
+    
+    
+    <record id="view_quotation_customer_number_tree" model="ir.ui.view">
+        <field name="name">sale.quotations.customer.number.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="ref"/>
+            </field>
+        </field>
+    </record>
+    
+<!--
+    <record id="view_partner_customer_number_form" model="ir.ui.view">
+        <field name="name">res.partner.customer.number.form</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <field name="website" position="after">
+                <field name="ref"/>
+            </field>
+        </field>
+    </record>
+-->
+</data>
+</openerp>
