@@ -23,8 +23,6 @@
             </field>
     </record>
     
-    
-    
     <record id="view_quotation_customer_number_tree" model="ir.ui.view">
         <field name="name">sale.quotations.customer.number.tree</field>
         <field name="model">sale.order</field>
@@ -36,17 +34,5 @@
         </field>
     </record>
     
-<!--
-    <record id="view_partner_customer_number_form" model="ir.ui.view">
-        <field name="name">res.partner.customer.number.form</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="base.view_partner_form"/>
-        <field name="arch" type="xml">
-            <field name="website" position="after">
-                <field name="ref"/>
-            </field>
-        </field>
-    </record>
--->
 </data>
 </openerp>
