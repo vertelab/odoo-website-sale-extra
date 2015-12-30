@@ -23,7 +23,19 @@ from openerp import api, models, fields, _
 import logging
 _logger = logging.getLogger(__name__)
 
+class res_partner(models.Model):
+    _inherit ='res.partner'
+    
+    customer_no = fields.Char('Customer Number', compute='_get_customer_no')
+    
+    @api.one
+    def _get_customer_no(self):
+        if self.parent_id:
+            self.customer_no = self.parent_id.customer_no
+        else:
+            self.customer_no = self.ref
+
 class sale_order(models.Model):
     _inherit = 'sale.order'
     
-    ref = fields.Char('Customer Reference', related="partner_id.ref", store=True)
+    customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)

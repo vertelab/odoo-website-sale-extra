@@ -1,5 +1,16 @@
 <openerp>
 <data>
+    
+    <record id="view_order_customer_number_form" model="ir.ui.view">
+        <field name="name">sale.order.customer.no.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="project_id" position="after">
+                <field name="customer_no"/>
+            </field>
+        </field>
+    </record>
  
     <record id="view_order_customer_number_tree" model="ir.ui.view">
         <field name="name">sale.order.customer.number.tree</field>
@@ -7,7 +18,7 @@
         <field name="inherit_id" ref="sale.view_order_tree"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="ref"/>
+                <field name="customer_no"/>
             </field>
         </field>
     </record>
@@ -18,7 +29,7 @@
             <field name="inherit_id" ref="sale.view_sales_order_filter"/>
             <field name="arch" type="xml">
                 <field name="user_id" position="after">
-                    <field name="ref"/>
+                    <field name="customer_no"/>
                 </field>
             </field>
     </record>
@@ -29,7 +40,7 @@
         <field name="inherit_id" ref="sale.view_quotation_tree"/>
         <field name="arch" type="xml">
             <field name="partner_id" position="after">
-                <field name="ref"/>
+                <field name="customer_no"/>
             </field>
         </field>
     </record>
