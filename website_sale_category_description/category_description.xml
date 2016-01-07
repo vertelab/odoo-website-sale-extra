@@ -14,12 +14,10 @@
 			<field name="model">product.public.category</field>
 			<field name="inherit_id" ref="website_sale.product_public_category_form_view"/>
 			<field name="arch" type="xml">
-				<div position="after">
-					<field name="website_description"/>
-				</div>
-				<group position="inside">
-					<label for="website_description"/>
-				</group>
+		                <group position="after">
+		                    <label for="website_description"/>
+		                    <field name="website_description"/>
+		                </group>
 			</field>
 		</record>
 	</data>
