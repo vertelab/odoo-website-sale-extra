@@ -27,7 +27,7 @@ class res_partner(models.Model):
     _inherit = "res.partner"
 
     @api.v7
-    def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
+    def xname_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
         return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', 'ilike', name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
 
 
