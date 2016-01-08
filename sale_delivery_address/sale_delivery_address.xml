@@ -7,10 +7,12 @@
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
                 <field name="partner_invoice_id" position="after">
-                    <field name="invoice_address" nolabel="1" colspan="2"/>
+                    <span colspan="1"/>
+                    <field name="invoice_address" class="oe_read_only" attrs="{'invisible': [('invoice_address', '=', False)]}" nolabel="1" colspan="1"/>
                 </field>
                 <field name="partner_shipping_id" position="after">
-                    <field name="shipping_address" nolabel="1" colspan="2"/>
+                    <span colspan="1"/>
+                    <field name="shipping_address" class="oe_read_only" attrs="{'invisible': [('shipping_address', '=', False)]}" nolabel="1" colspan="1"/>
                 </field>
             </field>
         </record>
