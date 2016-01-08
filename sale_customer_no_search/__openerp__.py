@@ -18,30 +18,20 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, _
 
-import logging
-_logger = logging.getLogger(__name__)
-
-class sale_order(models.Model):
-    _inherit = "sale.order"
-
-    @api.one
-    def _get_address(self):
-        address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
-
-        self.invoice_address = address_format % {
-            'street': self.partner_invoice_id.street or '',
-            'street2': self.partner_invoice_id.street2 or '',
-            'zip': self.partner_invoice_id.zip or '',
-            'city': self.partner_invoice_id.city or '',}
-
-        self.shipping_address = address_format % {
-            'street': self.partner_shipping_id.street or '',
-            'street2': self.partner_shipping_id.street2 or '',
-            'zip': self.partner_shipping_id.zip or '',
-            'city': self.partner_shipping_id.city or '',}
-
-
-    invoice_address = fields.Char(compute='_get_address', string='')
-    shipping_address = fields.Char(compute='_get_address', string='')
+{
+    'name': 'Sale Customer Number Search',
+    'version': '0.1',
+    'category': 'Sales',
+    'description': """
+Search in ref field
+======================================
+""",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['sale'],
+    'data': [],
+    'application': False,
+    'installable': True,
+}
+# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
