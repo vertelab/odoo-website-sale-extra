@@ -30,7 +30,7 @@ Search in ref field
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['sale'],
-    'data': [],
+    'data': ['sale_view.xml'],
     'application': False,
     'installable': True,
 }
