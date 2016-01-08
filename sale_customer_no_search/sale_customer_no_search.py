@@ -23,26 +23,9 @@ from openerp import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+class res_partner(models.Model):
+    _inherit = "res.partner"
 
-class sale_order(models.Model):
-    _inherit = "sale.order"
-
-    @api.one
-    def _get_address(self):
-        address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
-
-        self.invoice_address = address_format % {
-            'street': self.partner_invoice_id.street or '',
-            'street2': self.partner_invoice_id.street2 or '',
-            'zip': self.partner_invoice_id.zip or '',
-            'city': self.partner_invoice_id.city or '',}
-
-        self.shipping_address = address_format % {
-            'street': self.partner_shipping_id.street or '',
-            'street2': self.partner_shipping_id.street2 or '',
-            'zip': self.partner_shipping_id.zip or '',
-            'city': self.partner_shipping_id.city or '',}
-
-
-    invoice_address = fields.Char(compute='_get_address', string='')
-    shipping_address = fields.Char(compute='_get_address', string='')
+    @api.v7
+    def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
+        return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', 'ilike', name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
