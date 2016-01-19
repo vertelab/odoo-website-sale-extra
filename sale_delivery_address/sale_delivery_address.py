@@ -28,7 +28,8 @@ class sale_order(models.Model):
 
     @api.one
     def _get_address(self):
-        address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
+        address_format = "%(street)s,%(city)s"
+        #address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
 
         self.invoice_address = address_format % {
             'street': self.partner_invoice_id.street or '',
@@ -45,3 +46,8 @@ class sale_order(models.Model):
 
     invoice_address = fields.Char(compute='_get_address', string='')
     shipping_address = fields.Char(compute='_get_address', string='')
+    
+    
+                                #~ <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            #~ <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+
