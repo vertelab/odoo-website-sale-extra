@@ -25,17 +25,17 @@ _logger = logging.getLogger(__name__)
 
 class res_partner(models.Model):
     _inherit ='res.partner'
-    
-    customer_no = fields.Char('Customer Number', compute='_get_customer_no')
-    
-    @api.one
+
+    customer_no = fields.Char('Customer Number', compute='_get_customer_no', store=True)
+
+    @api.on
     def _get_customer_no(self):
         if self.parent_id:
-            self.customer_no = self.parent_id.customer_no
+            self.customer_no = self.parent_id.ref
         else:
             self.customer_no = self.ref
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
-    
+
     customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
