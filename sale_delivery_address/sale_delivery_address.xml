@@ -15,10 +15,10 @@
                     <field name="shipping_address" class="oe_read_only" attrs="{'invisible': [('shipping_address', '=', False)]}" nolabel="1" colspan="1"/>
                 </field>
                 <field name="partner_invoice_id" position="replace">
-                    <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=',partner_id), ('type', 'in', ('invoice', 'shipping'))]" context="{'default_type':'invoice', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
+                    <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=', partner_id), ('type', '!=', 'contact')]" context="{'default_type':'invoice', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
                 </field>
                 <field name="partner_shipping_id" position="replace">
-                    <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=',partner_id), ('type', 'in', ('invoice', 'shipping'))]" context="{'default_type':'delivery', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
+                    <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=', partner_id), ('type', '!=', 'contact')]" context="{'default_type':'invoice', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
                 </field>
             </field>
         </record>
