@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
+
     <data>
         <record id="delivery_address" model="ir.ui.view">
             <field name="name">sale.order.form</field>
@@ -23,4 +24,5 @@
             </field>
         </record>
     </data>
+
 </openerp>
