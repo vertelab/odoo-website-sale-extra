@@ -28,7 +28,7 @@ class res_partner(models.Model):
 
     customer_no = fields.Char('Customer Number', compute='_get_customer_no', store=True)
 
-    @api.on
+    @api.one
     def _get_customer_no(self):
         if self.parent_id:
             self.customer_no = self.parent_id.ref
