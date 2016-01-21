@@ -27,6 +27,6 @@ class crm_lead(models.Model):
     _inherit = "crm.lead"
 
     vat = fields.Char('Vat',help="SE + orgnummer - '-' + 01")
-    revenue = fields.Float('Revenue',help="Revenue in TSEK")
+    revenue = fields.Float('Revenue',help="Revenue in MSEK",digits=(4,1))
     employed = fields.Integer('Employees')
     
