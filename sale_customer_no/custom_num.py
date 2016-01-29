@@ -28,10 +28,11 @@ class res_partner(models.Model):
 
     customer_no = fields.Char('Customer Number', compute='_get_customer_no', store=True)
 
+    @api.depends('ref', 'parent_id.ref')
     @api.one
     def _get_customer_no(self):
         if self.parent_id:
-            self.customer_no = self.parent_id.ref
+            self.customer_no = self.parent_id.customer_no
         else:
             self.customer_no = self.ref
 
