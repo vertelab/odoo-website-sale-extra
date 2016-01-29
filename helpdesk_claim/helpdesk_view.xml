@@ -1,0 +1,19 @@
+<openerp>
+<data>
+
+<record model="ir.ui.view" id="view_form_helpdesk_claim">
+    <field name="name">crm.helpdesk.claim.form.view</field>
+    <field name="model">crm.helpdesk</field>
+    <field name="inherit_id" ref="crm_helpdesk.crm_case_form_view_helpdesk"/>
+    <field name="arch" type="xml">
+        <button name="case_escalate" position="after">
+            <button name="create_claim" type="object" string="Create claim"/>
+        </button>
+        <field name="date_deadline" position="after">
+            <field name="claim_id"/>
+        </field>
+    </field>
+</record>
+
+</data>
+</openerp>
