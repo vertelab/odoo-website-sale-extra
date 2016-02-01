@@ -45,8 +45,8 @@ class sale_order(models.Model):
             'city': self.partner_shipping_id.city or '',}
 
 
-    #~ invoice_address = fields.Char(compute='_get_address', string='')
-    #~ shipping_address = fields.Char(compute='_get_address', string='')
+    invoice_address = fields.Char(compute='_get_address', string='')
+    shipping_address = fields.Char(compute='_get_address', string='')
 
 
 class res_partner(models.Model):
