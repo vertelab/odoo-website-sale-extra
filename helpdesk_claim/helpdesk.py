@@ -40,12 +40,15 @@ class crm_helpdesk(models.Model):
                 'priority': self.priority,
                 'helpdesk_id': self.id
             })
-            self.claim_id = claim_id
-            self.message_new({
-                'body': _("Escalated to new claim with id: %s" % claim_id),
-                'model': 'crm.helpdesk',
+            self.claim_id = claim_id.id
+            partner_id = self.env['res.users'].browse(self._uid).partner_id.id
+            self.env['mail.message'].create({
+                'body': _("Escalated to new claim with id %s" % claim_id.id),
+                'subject': 'Escalated to claim',
+                'author_id': partner_id,
                 'res_id': self.id,
-                'type': 'comment',
+                'model': self._name,
+                'type': 'notification',
             })
 
 class crm_claim(models.Model):
