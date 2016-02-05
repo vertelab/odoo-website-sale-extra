@@ -47,11 +47,11 @@ class sale_order(models.Model):
 
     invoice_address = fields.Char(compute='_get_address', string='')
     shipping_address = fields.Char(compute='_get_address', string='')
-    
+
 
 class res_partner(models.Model):
     _inherit = "res.partner"
-    
+
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
