@@ -29,7 +29,7 @@ class sale_order(models.Model):
 
     @api.one
     def _get_address(self):
-        address_format = "%(street)s,%(city)s"
+        address_format = "%(street)s,%(zip)s %(city)s"
         #address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
 
         self.invoice_address = address_format % {
