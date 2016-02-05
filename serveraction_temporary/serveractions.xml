@@ -1,0 +1,42 @@
+<openerp>
+<data>
+    <record model="ir.actions.server" id="fix_account">
+        <field name="name">Ändra konto</field>
+        <field name="state">code</field>
+        <field name="condition" eval="True"/>
+        <field name="model_id" ref="account.model_product_category"/>
+        <field name="code">
+obj = object.browse(context.get('active_ids', []))
+for o in obj:
+    o.write({'property_account_income_categ': 586})
+        </field>
+    </record>
+    
+    <record model="ir.values" id="fix_account_action_menu">
+        <field name="name">Ändra konto</field>
+        <field name="model">product.category</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.server,%d' % fix_account"/>
+    </record>
+    
+    <record model="ir.actions.server" id="fix_customer_no">
+        <field name="name">Uppdatera kundnummer</field>
+        <field name="state">code</field>
+        <field name="condition" eval="True"/>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="code">
+obj = object.browse(context.get('active_ids', []))
+for o in obj:
+    if o.partner_id.customer_no:
+        o.write({'customer_no': o.partner_id.customer_no})
+        </field>
+    </record>
+    
+    <record model="ir.values" id="fix_customer_no_action_menu">
+        <field name="name">Uppdatera kundnummer</field>
+        <field name="model">sale.order</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.server,%d' % fix_customer_no"/>
+    </record>
+</data>
+</openerp>
