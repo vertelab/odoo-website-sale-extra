@@ -12,17 +12,6 @@
         </field>
     </record>
 
-    <record id="view_order_customer_number_tree" model="ir.ui.view">
-        <field name="name">sale.order.customer.number.tree</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_tree"/>
-        <field name="arch" type="xml">
-            <field name="partner_id" position="after">
-                <field name="customer_no"/>
-            </field>
-        </field>
-    </record>
-
     <record id="view_sales_order_customer_number_filter" model="ir.ui.view">
             <field name="name">sale.order.customer.number.list.select</field>
             <field name="model">sale.order</field>
