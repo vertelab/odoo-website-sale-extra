@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
+
     <data>
         <record id="delivery_address" model="ir.ui.view">
             <field name="name">sale.order.form</field>
             <field name="model">sale.order</field>
             <field name="inherit_id" ref="sale.view_order_form"/>
             <field name="arch" type="xml">
+<!--
                 <field name="partner_invoice_id" position="after">
-                    <field name="invoice_address" nolabel="1" colspan="2"/>
+                    <span colspan="1"/>
+                    <field name="invoice_address" class="oe_read_only" attrs="{'invisible': [('invoice_address', '=', False)]}" nolabel="1" colspan="1"/>
                 </field>
                 <field name="partner_shipping_id" position="after">
-                    <field name="shipping_address" nolabel="1" colspan="2"/>
+                    <span colspan="1"/>
+                    <field name="shipping_address" class="oe_read_only" attrs="{'invisible': [('shipping_address', '=', False)]}" nolabel="1" colspan="1"/>
+                </field>
+-->
+                <field name="partner_invoice_id" position="replace">
+                    <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=', partner_id), ('type', '!=', 'contact')]" context="{'default_type':'invoice', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
+                </field>
+                <field name="partner_shipping_id" position="replace">
+                    <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" domain="[('parent_id','=', partner_id), ('type', '!=', 'contact')]" context="{'default_type':'invoice', 'show_address_only': 1}" options="{&quot;always_reload&quot;: True}"/>
                 </field>
             </field>
         </record>
     </data>
+
 </openerp>

@@ -23,8 +23,46 @@ from openerp import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class sale_order(models.Model):
     _inherit = "sale.order"
 
-    invoice_address = fields.Char(related='partner_id.contact_address', string='')
-    shipping_address = fields.Char(related='partner_id.contact_address', string='')
+    @api.one
+    def _get_address(self):
+        address_format = "%(street)s,%(city)s"
+        #address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
+
+        self.invoice_address = address_format % {
+            'street': self.partner_invoice_id.street or '',
+            'street2': self.partner_invoice_id.street2 or '',
+            'zip': self.partner_invoice_id.zip or '',
+            'city': self.partner_invoice_id.city or '',}
+
+        self.shipping_address = address_format % {
+            'street': self.partner_shipping_id.street or '',
+            'street2': self.partner_shipping_id.street2 or '',
+            'zip': self.partner_shipping_id.zip or '',
+            'city': self.partner_shipping_id.city or '',}
+
+
+    invoice_address = fields.Char(compute='_get_address', string='')
+    shipping_address = fields.Char(compute='_get_address', string='')
+
+
+class res_partner(models.Model):
+    _inherit = "res.partner"
+
+    def name_get(self, cr, uid, ids, context=None):
+        if context is None:
+            context = {}
+        if context.get('show_short_address_only'):
+            if isinstance(ids, (int, long)):
+                ids = [ids]
+            return [(r.id,'%s,%s' % (r.street,r.city)) for r in self.browse(cr, uid, ids, context=context)]
+        else:
+            return super(res_partner, self).name_get(cr, uid, ids, context=context)
+
+
+                                #~ <field name="partner_invoice_id" groups="sale.group_delivery_invoice_address" context="{'default_type':'invoice'}"/>
+                            #~ <field name="partner_shipping_id" on_change="onchange_delivery_id(company_id, partner_id, partner_shipping_id, fiscal_position)" groups="sale.group_delivery_invoice_address" context="{'default_type':'delivery'}"/>
+
