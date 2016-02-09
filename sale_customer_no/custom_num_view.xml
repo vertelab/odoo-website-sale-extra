@@ -12,17 +12,6 @@
         </field>
     </record>
 
-    <record id="view_order_customer_number_tree" model="ir.ui.view">
-        <field name="name">sale.order.customer.number.tree</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_tree"/>
-        <field name="arch" type="xml">
-            <field name="partner_id" position="after">
-                <field name="customer_no"/>
-            </field>
-        </field>
-    </record>
-
     <record id="view_sales_order_customer_number_filter" model="ir.ui.view">
             <field name="name">sale.order.customer.number.list.select</field>
             <field name="model">sale.order</field>
@@ -44,6 +33,28 @@
             </field>
         </field>
     </record>
+
+        <record id="delivery_address" model="ir.ui.view">
+            <field name="name">sale.order.form</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="replace">
+                    <field name="partner_id" on_change="onchange_partner_id(partner_id, context)" domain="[('customer','=',True),('is_company','=',True)]" context="{'search_default_customer':1, 'show_address': 1, 'customer_no_search': 1}" options='{"always_reload": True}'/>
+                </field>
+            </field>
+        </record>
+
+        <record id="view_order_tree" model="ir.ui.view">
+            <field name="name">sale.order.tree</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_tree"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="after">
+                    <field name="customer_no"/>
+                </field>
+            </field>
+        </record>
 
     <!-- res.partner -->
     <record id="view_partner_tree" model="ir.ui.view">

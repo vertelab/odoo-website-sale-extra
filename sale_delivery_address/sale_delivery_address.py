@@ -23,12 +23,13 @@ from openerp import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class sale_order(models.Model):
     _inherit = "sale.order"
 
     @api.one
     def _get_address(self):
-        address_format = "%(street)s,%(city)s"
+        address_format = "%(street)s,%(zip)s %(city)s"
         #address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
 
         self.invoice_address = address_format % {
@@ -46,11 +47,11 @@ class sale_order(models.Model):
 
     invoice_address = fields.Char(compute='_get_address', string='')
     shipping_address = fields.Char(compute='_get_address', string='')
-    
+
 
 class res_partner(models.Model):
     _inherit = "res.partner"
-    
+
     def name_get(self, cr, uid, ids, context=None):
         if context is None:
             context = {}
