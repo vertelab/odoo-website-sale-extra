@@ -23,7 +23,15 @@ class Kodspecialisterna(http.Controller):
         })
 
 class website_product_category(http.Controller):
-
+    _inherit = 'sale.order'
+    
+    @http.route(['/blaffa',], type='http', auth="public", website=True)
+    def index(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.index', {
+            'active_orders': request.env['sale.order'].search([])
+        })
+    
     @http.route(['/category/<model("product.category"):category>', ], type='http', auth="public", website=True)
     def get_products(self, category=False, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry

@@ -4,11 +4,11 @@
       <t t-call="website.layout">
         <title>kodspecialisterna</title>
         <t t-foreach="active_orders" t-as="active_order">
-          <p>
-            <h1 t-esc="active_order.name" />
-            <div t-field='active_order.note' />
-            <div t-field='active_order.partner_id.name' />
-          </p>
+          <div>
+            <h3 t-field='active_order.partner_id.name' />
+            <p t-esc="active_order.name" />
+          
+          </div>
         </t>
       </t>
     </template>
