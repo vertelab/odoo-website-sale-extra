@@ -36,7 +36,7 @@ class website_product_category(http.Controller):
     @http.route(['/order/<model("sale.order"):order>', ], type='http', auth="public", website=True)
     def get_order(self, order=False, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        return request.render('kodspecialisterna.page_order', {'order':order})
+        return request.render('sale_order_block.page_order', {'order':order})
         
     
     @http.route(['/allcategory/<model("product.category"):category>', ], type='http', auth="public", website=True)
