@@ -1,23 +1,75 @@
 <openerp>
   <data>
+<!--
+    <record model="ir.ui.view" id="view_sale_order_form">
+      <field name="name">sale.order.form</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form" />
+      <field name="arch" type="xml">
+          <page string='other_information' position='after' >
+          <group>
+          <field name='Web'>
+          </field>
+          </group>
+          </page>
+-->
+<!--
+        <xpath expr="//field[@name='order_line']/form/field[@name='product_id']" position="after" />
+        <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
+          <field name="Number_Pages" />
+        </xpath>
+-->
+<!--
+      </field>
+    </record>
+-->
     <template id="index">
       <t t-call="website.layout">
         <title>kodspecialisterna</title>
-        <span t-raw="active_orders" />
-        <t t-foreach="active_orders" t-as="active_order">
-          <div>
-            <p>
-              <h3 t-field='active_order.partner_id.name' />
-            </p>
-            <!--
-                 Sale_order.name: <t t-esc="active_order.name" />
-            -->
-            <p>
-              Description:
-              <t t-esc="active_order.order_line.name" />
-            </p>
+        <!--
+             <section>
+        -->
+        <div class="container" id="info-board">
+          <div class="row mt16">
+            <div class="col-md-4">
+              <div class="panel" style="height: 400px;">
+                <div class="panel-heading text-center penta-block">
+                  <h4 style="margin: 0">
+                    <span>Senaste uppdragen</span>
+                  </h4>
+                </div>
+                <div class="panel-body" />
+                <span t-raw="active_orders" />
+                <t t-foreach="active_orders" t-as="active_order">
+                  <div class="list-group">
+                    <a href="#" class="list-group-item active">
+                      <!--
+                           skicka med id på uppdraget lr något i href
+                      -->
+                      <span class="list-group-item-heading">
+                        <t t-esc='active_order.partner_id.name' />
+                        <t t-esc="active_order.create_date" />
+                      </span>
+                      <p class="list-group-item-text" t-esc="active_order.order_line.name" />
+                    </a>
+                  </div>
+                </t>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="panel" style="height: 400px;">
+                <div class="panel-heading text-center penta-block">
+                  <h4 style="margin: 0">
+                    <span style="color:#FFFFFF;">Min sida</span>
+                  </h4>
+                </div>
+              </div>
+            </div>
           </div>
-        </t>
+        </div>
+        <!--
+             </section>
+        -->
       </t>
     </template>
     <template id="page_behandling" name="Category Page">
