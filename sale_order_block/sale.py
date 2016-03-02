@@ -9,27 +9,34 @@ from datetime import datetime
 import werkzeug
 import pytz
 import re
+#~ 
+#~ class kodspecialisterna_sale_order(models.Model):
+    #~ _inherit = 'sale.order'
+    #~ website_published = fields.Boolean()
+    #~ 
+#~ class Kodspecialisterna(http.Controller):
+    #~ @http.route('/kodspecialisterna', auth='public')
+    #~ def index(self, **kw):
+        #~ Active_orders = http.request.env['sale.order']
+        #~ return request.render('kodspecialisterna.index', {
+            #~ 'active_orders': Active_orders.search([('state','=','draft')])
+        #~ })
 
-class kodspecialisterna_sale_order(models.Model):
+
+
+class sale_order(models.Model):
     _inherit = 'sale.order'
     website_published = fields.Boolean()
-    
-class Kodspecialisterna(http.Controller):
-    @http.route('/kodspecialisterna', auth='public')
-    def index(self, **kw):
-        Active_orders = http.request.env['sale.order']
-        return request.render('kodspecialisterna.index', {
-            'active_orders': Active_orders.search([('state','=','draft')])
-        })
 
 class website_product_category(http.Controller):
-    _inherit = 'sale.order'
     
     @http.route(['/blaffa',], type='http', auth="public", website=True)
     def index(self, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        published = request.env['sale.order'].search([('website_published','=',True)]).sorted(key=lambda r: r.partner_id.name)
+        #~ published = published.sorted(key=lambda r: r.partner_id.name)
         return request.render('sale_order_block.index', {
-            'active_orders': request.env['sale.order'].search([])
+            'active_orders': published
         })
     
     @http.route(['/category/<model("product.category"):category>', ], type='http', auth="public", website=True)

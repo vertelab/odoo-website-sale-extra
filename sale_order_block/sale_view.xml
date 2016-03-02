@@ -3,11 +3,19 @@
     <template id="index">
       <t t-call="website.layout">
         <title>kodspecialisterna</title>
+        <span t-raw="active_orders" />
         <t t-foreach="active_orders" t-as="active_order">
           <div>
-            <h3 t-field='active_order.partner_id.name' />
-            <p t-esc="active_order.name" />
-          
+            <p>
+              <h3 t-field='active_order.partner_id.name' />
+            </p>
+            <!--
+                 Sale_order.name: <t t-esc="active_order.name" />
+            -->
+            <p>
+              Description:
+              <t t-esc="active_order.order_line.name" />
+            </p>
           </div>
         </t>
       </t>
