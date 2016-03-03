@@ -29,6 +29,6 @@
         'sale_view.xml',
     ],
     # only loaded in demonstration mode
-    'demo': [
+    'demo': ['sale_demo.xml',
     ],
 }

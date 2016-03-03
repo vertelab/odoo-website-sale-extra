@@ -26,7 +26,14 @@ import re
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
+    
     website_published = fields.Boolean()
+    @api.one
+    def _website_short_description(self):
+        self.website_short_description = re.match(re.compile('(^.*\.)'),self.website_description[:25]) and re.match(re.compile('(^.*\.)'),self.website_description[:25]).group() or self.website_description[:25]
+    website_short_description = fields.Text(compute="_website_short_description")
+    website_description = fields.Text(string="Description",size=100,help="Use this box for describing the quotation.")
+    website_subject = fields.Char(size=25)
 
 class website_product_category(http.Controller):
     

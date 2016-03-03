@@ -1,28 +1,22 @@
 <openerp>
   <data>
-<!--
     <record model="ir.ui.view" id="view_sale_order_form">
-      <field name="name">sale.order.form</field>
+      <field name="name">sale.order.form.inherit</field>
       <field name="model">sale.order</field>
       <field name="inherit_id" ref="sale.view_order_form" />
       <field name="arch" type="xml">
-          <page string='other_information' position='after' >
-          <group>
-          <field name='Web'>
-          </field>
-          </group>
+        <page string='Other Information' position='before'>
+          <page string ="Website Information" groups="base.group_user">
+            <group>
+              <field name='website_published' />
+              <field name='website_subject' />
+              <field name='website_short_description' />
+              <field name='website_description' />
+            </group>
           </page>
--->
-<!--
-        <xpath expr="//field[@name='order_line']/form/field[@name='product_id']" position="after" />
-        <xpath expr="//field[@name='order_line']/tree/field[@name='product_id']" position="after">
-          <field name="Number_Pages" />
-        </xpath>
--->
-<!--
+        </page>
       </field>
     </record>
--->
     <template id="index">
       <t t-call="website.layout">
         <title>kodspecialisterna</title>
@@ -32,37 +26,100 @@
         <div class="container" id="info-board">
           <div class="row mt16">
             <div class="col-md-4">
-              <div class="panel" style="height: 400px;">
-                <div class="panel-heading text-center penta-block">
+              <div class="panel-group" id="accordion">
+                <div class="panel-heading text-center penta-block" style="background: #73AD21;">
                   <h4 style="margin: 0">
                     <span>Senaste uppdragen</span>
                   </h4>
                 </div>
-                <div class="panel-body" />
-                <span t-raw="active_orders" />
-                <t t-foreach="active_orders" t-as="active_order">
-                  <div class="list-group">
-                    <a href="#" class="list-group-item active">
-                      <!--
-                           skicka med id på uppdraget lr något i href
-                      -->
-                      <span class="list-group-item-heading">
-                        <t t-esc='active_order.partner_id.name' />
-                        <t t-esc="active_order.create_date" />
-                      </span>
-                      <p class="list-group-item-text" t-esc="active_order.order_line.name" />
-                    </a>
-                  </div>
-                </t>
+                <div class="panel panel-default">
+                  <t t-foreach="active_orders[:3]" t-as="active_order">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
+                      </h4>
+                    </div>
+                    <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
+                      <div class="panel-body">
+                        <p t-field="active_order.website_description" />
+                      </div>
+                    </div>
+                  </t>
+                </div>
               </div>
             </div>
             <div class="col-md-4">
-              <div class="panel" style="height: 400px;">
-                <div class="panel-heading text-center penta-block">
-                  <h4 style="margin: 0">
-                    <span style="color:#FFFFFF;">Min sida</span>
-                  </h4>
+              <div class="panel panel-login" style="height:400px">
+                <div class="panel-heading text-center penta-block" style="background: #DDDDDD;">
+                  <div class="row">
+                    <div class="col-xs-6">
+                      <a href="#" class="active" id="login-form-link">Logga in</a>
+                    </div>
+                    <div class="col-xs-6">
+                      <a href="#" id="register-form-link">Intresseanmälan</a>
+                    </div>
+                  </div>
                 </div>
+                <!-- BODY LOGIN / INTRESSEANMÄLAN-->
+                <!-- -t-call web.login -->
+                
+                <!-- FIXA ACTIONS -->
+                <div class="panel-body">
+                  <div class="row">
+                    <div class="col-lg-12">
+                      <form id="login-form" action="#PROCESS_LOGIN" method="post" role="form" style="display: block">
+                        <div class="form-group">
+                          <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" />
+                        </div>
+                        <div class="form-group">
+                          <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" />
+                        </div>
+                        <div class="form-group text-center">
+                          <input type="checkbox" tabindex="3" class="" name="remember" id="remember" />
+                          <label for="remember">Remember Me</label>
+                        </div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                              <input type="submit" name="login-submit" id="login-submit" tabindex="4" class="form-control btn btn-login" value="Log In" />
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-lg-12">
+                              <div class="text-center">
+                                <a href="#/RECOVER_PASSWORD" tabindex="5" class="forgot-password">Forgot Password?</a>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                      <form id="register-form" action="#PROCESS_REGISTER" method="post" role="form" style="display: none;">
+                        <div class="form-group">
+                          <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="Username" value="" />
+                        </div>
+                        <div class="form-group">
+                          <input type="email" name="email" id="email" tabindex="1" class="form-control" placeholder="Email Address" value="" />
+                        </div>
+                        <div class="form-group">
+                          <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password" />
+                        </div>
+                        <div class="form-group">
+                          <input type="password" name="confirm-password" id="confirm-password" tabindex="2" class="form-control" placeholder="Confirm Password" />
+                        </div>
+                        <div class="form-group">
+                          <div class="row">
+                            <div class="col-sm-6 col-sm-offset-3">
+                              <input type="submit" name="register-submit" id="register-submit" tabindex="4" class="form-control btn btn-register" value="Register Now" />
+                            </div>
+                          </div>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+                <!-- end of body panel-->
               </div>
             </div>
           </div>
@@ -71,6 +128,26 @@
              </section>
         -->
       </t>
+      <script>
+        $(function() {
+        
+        $('#login-form-link').click(function(e) {
+        $("#login-form").delay(100).fadeIn(100);
+        $("#register-form").fadeOut(100);
+        $('#register-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+        });
+        $('#register-form-link').click(function(e) {
+        $("#register-form").delay(100).fadeIn(100);
+        $("#login-form").fadeOut(100);
+        $('#login-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+        });
+        
+        });
+      </script>
     </template>
     <template id="page_behandling" name="Category Page">
       <t t-call="website.layout">
