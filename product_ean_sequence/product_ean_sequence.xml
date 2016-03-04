@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-    <data>
-<!--    <data noupdate="1">-->
+    <data noupdate="1">
 
         <record id="seq_type_product_ean" model="ir.sequence.type">
             <field name="name">Product EAN</field>

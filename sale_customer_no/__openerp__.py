@@ -29,6 +29,7 @@
 'depends': ['sale'],
 'data': [
 'custom_num_view.xml',
+'custom_num_data.xml',
 ],
 'installable': True,
 }
