@@ -40,10 +40,10 @@ class website_product_category(http.Controller):
     @http.route(['/blaffa',], type='http', auth="public", website=True)
     def index(self, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        published = request.env['sale.order'].search([('website_published','=',True)]).sorted(key=lambda r: r.partner_id.name)
+        #~ published = request.env['sale.order'].sudo().search([('website_published','=',True)]).sorted(key=lambda r: r.partner_id.name)
         #~ published = published.sorted(key=lambda r: r.partner_id.name)
         return request.render('sale_order_block.index', {
-            'active_orders': published
+            #~ 'active_orders': published
         })
     
     @http.route(['/category/<model("product.category"):category>', ], type='http', auth="public", website=True)
