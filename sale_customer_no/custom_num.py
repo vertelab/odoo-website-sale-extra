@@ -43,7 +43,24 @@ class res_partner(models.Model):
         else:
             return super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
 
+    @api.one
+    def generate_new_customer_no(self):
+        if self.is_company:
+            if self.customer:
+                self.ref = self.env['ir.sequence'].get('res.partner.customer.no')
+            elif self.supplier:
+                self.ref = self.env['ir.sequence'].get('res.partner.supplier.no')
 
+    @api.model
+    @api.returns('self', lambda value: value.id)
+    def create(self, vals):
+        if vals.get('is_company', False):
+            if vals.get('customer', False):
+                vals['ref'] = self.env['ir.sequence'].get('res.partner.customer.no')
+            elif vals.get('supplier', False):
+                vals['ref'] = self.env['ir.sequence'].get('res.partner.supplier.no')
+        return super(res_partner, self).create(vals)
+    
 class sale_order(models.Model):
     _inherit = 'sale.order'
 

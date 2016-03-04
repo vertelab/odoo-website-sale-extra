@@ -19,17 +19,16 @@
 #
 ##############################################################################
 {
-'name': 'Customer Number',
+'name': 'Customer fields Company filter',
 'version': '0.1',
-'summary': '',
+'summary': 'Adds a company filter to customer fields',
 'category': 'Hidden',
-'description': """Show customer number on customers and sale orders.""",
+'description': """""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
-'depends': ['sale'],
+'depends': ['sale', 'stock'],
 'data': [
-'custom_num_view.xml',
-'custom_num_data.xml',
+'customer_fields_company_filter.xml',
 ],
 'installable': True,
 }
