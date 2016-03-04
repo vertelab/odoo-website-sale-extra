@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data noupdate="1">
+  <data noupdate="0">
     <record id="sale.sale_order_1" model="sale.order">
       <field name="website_published" eval="True" />
       <field name="website_subject">Demo1</field>
@@ -22,9 +22,9 @@
       <field name="website_description">Description</field>
     </record>
     <record id="sale.sale_order_5" model="sale.order">
-      <field name="website_published" eval="False" />
-      <field name="website_subject">Product/Service</field>
-      <field name="website_description">Description</field>
+      <field name="website_published" eval="True" />
+      <field name="website_subject">Chatfield</field>
+      <field name="website_description">Saker</field>
     </record>
     <record id="sale.sale_order_6" model="sale.order">
       <field name="website_published" eval="True" />

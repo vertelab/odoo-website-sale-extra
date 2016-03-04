@@ -20,112 +20,206 @@
     </record>
     <template id="index">
       <t t-call="website.layout">
-        <div class="container" id="info-board">
-          <div class="row mt16">
-            <div class="col-md-4">
-              <div class="panel-group" id="accordion">
-                <div class="panel-heading text-center penta-block" style="background: #73AD21;">
-                  <h4 style="margin: 0">
-                    <span>Senaste uppdragen</span>
-                  </h4>
-                </div>
-                <div class="panel panel-default" id="panel-test">
-                  <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=2).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
-                    <div class="panel-heading">
-                      <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
-                      </h4>
+        <div class="container" id="info-board" />
+        <div class="row mt16">
+          <div class="col-md-4">
+            <div class="panel-group" id="accordion">
+              <div class="panel-heading text-center penta-block" style="background: #73AD21;">
+                <h4 style="margin: 0">
+                  <span>Senaste uppdragen</span>
+                </h4>
+              </div>
+              <div class="panel panel-default">
+                <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=2).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
+                  <div class="panel-heading">
+                    <h4 class="panel-title">
+                      <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
+                    </h4>
+                  </div>
+                  <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
+                    <div class="panel-body">
+                      <p t-field="active_order.website_description" />
                     </div>
-                    <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
-                      <div class="panel-body">
-                        <p t-field="active_order.website_description" />
-                      </div>
-                    </div>
-                  </t>
-                </div>
+                  </div>
+                </t>
               </div>
             </div>
           </div>
-        </div>
-      </t>
-    </template>
-<!--
-    <template inherit_id="index">
-      <xpath expr="//div[@id='panel-test']" position="after">
-        <t t-extend="website.layout">
           <div class="col-md-4">
             <div class="panel panel-login" style="height:400px">
               <div class="panel-heading text-center penta-block">
                 <div class="row">
                   <div class="col-xs-6">
-                    <a href="#" class="active btn btn-warning" id="login-form-link">Logga in</a>
+                    <a href="#" class="active" id="login-form-link">Logga in</div>
                   </div>
                   <div class="col-xs-6">
-                    <a href="#" class ="btn btn-primary" id="register-form-link">Intresseanmälan</a>
+                    <a href="#" class ="" id="register-form-link">Intresseanmälan</a>
                   </div>
                 </div>
               </div>
               <div class="panel-body">
-                <div class="oe_website_login_container">
-                  <form class="oe_login_form" id="login-form" role="form" action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
-                    <div class="form-group field-login">
-                      <label for="login" class="control-label">Email</label>
-                      <input type="text" name="login" id="login" class="form-control" required="required" autofocus="autofocus" />
-                    </div>
-                    <div class="form-group field-password">
-                      <label for="password" class="control-label">Password</label>
-                      <input type="password" name="password" id="password" class="form-control" required="required" />
-                    </div>
-                    <input type="hidden" name="redirect" value="/web?" />
-                    <div class="clearfix oe_login_buttons">
-                      <button type="submit" class="btn btn-primary">Log in</button>
-                    </div>
-                  </form>
-                  <form class="oe_login_form" role="form" id="register-form" style="display:none">
-                    <div class="form-group field-login">
-                      <label for="name" class="control-label">Namn</label>
-                      <input type="text" name="name" id="name" class="form-control" required="required" autofocus="autofocus" />
-                    </div>
-                    <div class="form-group field-login">
-                      <label for="login" class="control-label">Email</label>
-                      <input type="text" name="login" id="login" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group field-password">
-                      <label for="password" class="control-label">Password</label>
-                      <input type="password" name="password" id="password" class="form-control" required="required" />
-                    </div>
-                    <input type="hidden" name="redirect" value="/web?" />
-                    <div class="clearfix oe_login_buttons">
-                      <button type="submit" class="btn btn-primary">Log in</button>
-                    </div>
-                  </form>
-                </div>
+                <form class="oe_login_form active" id="login-form" role="form" action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
+                  <div class="form-group field-login">
+                    <label for="login" class="control-label">Email</label>
+                    <input type="text" name="login" id="login" class="form-control" required="required" autofocus="autofocus" />
+                  </div>
+                  <div class="form-group field-password">
+                    <label for="password" class="control-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required="required" />
+                  </div>
+                  <input type="hidden" name="redirect" value="/web?" />
+                  <div class="clearfix oe_login_buttons">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                  </div>
+                </form>
+                <form class="oe_login_form" role="form" id="register-form" style="display:none">
+                  <div class="form-group field-login">
+                    <label for="name" class="control-label">Namn</label>
+                    <input type="text" name="name" id="name" class="form-control" required="required" autofocus="autofocus" />
+                  </div>
+                  <div class="form-group field-login">
+                    <label for="login" class="control-label">Email</label>
+                    <input type="text" name="login" id="login" class="form-control" required="required" />
+                  </div>
+                  <div class="form-group field-password">
+                    <label for="password" class="control-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required="required" />
+                  </div>
+                  <input type="hidden" name="redirect" value="/web?" />
+                  <div class="clearfix oe_login_buttons">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
-          <script>
-            $(function() {
-            
-            $('#login-form-link').click(function(e) {
-            $("#login-form").delay(100).fadeIn(100);
-            $("#register-form").fadeOut(100);
-            $('#register-form-link').removeClass('active');
-            $(this).addClass('active');
-            e.preventDefault();
-            });
-            $('#register-form-link').click(function(e) {
-            $("#register-form").delay(100).fadeIn(100);
-            $("#login-form").fadeOut(100);
-            $('#login-form-link').removeClass('active');
-            $(this).addClass('active');
-            e.preventDefault();
-            });
-            
-            });
-          </script>
-        </t>
-      </xpath>
+        </div>
+        <script>
+          $(function() {
+          
+          $('#login-form-link').click(function(e) {
+          $("#login-form").delay(100).fadeIn(100);
+          $("#register-form").fadeOut(100);
+          $('#register-form-link').removeClass('active');
+          $(this).addClass('active');
+          e.preventDefault();
+          });
+          $('#register-form-link').click(function(e) {
+          $("#register-form").delay(100).fadeIn(100);
+          $("#login-form").fadeOut(100);
+          $('#login-form-link').removeClass('active');
+          $(this).addClass('active');
+          e.preventDefault();
+          });
+          
+          });
+        </script>
+      </t>
     </template>
--->
+   
   </data>
 </openerp>
+ <!-- SENASTE UPPDRAGEN START
+         <template id="latest_quotations" >
+         <div class="col-md-4">
+         <div class="panel-group" id="accordion">
+         <div class="panel-heading text-center penta-block" style="background: #73AD21;">
+         <h4 style="margin: 0">
+         <span>Senaste uppdragen</span>
+         </h4>
+         </div>
+         <div class="panel panel-default">
+         <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=2).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
+         <div class="panel-heading">
+         <h4 class="panel-title">
+         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
+         </h4>
+         </div>
+         <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
+         <div class="panel-body">
+         <p t-field="active_order.website_description" />
+         </div>
+         </div>
+         </t>
+         </div>
+         </div>
+         </div>
+         </template>
+         SENASTE UPPDRAGEN STOP -->
+         
+         
+    <!-- LOGIN REGISTER START 
+         
+         <template id="login_register">
+         <div class="col-md-4">
+         <div class="panel panel-login" style="height:400px">
+         <div class="panel-heading text-center penta-block">
+         <div class="row">
+         <div class="col-xs-6">
+         <div class="active" id="login-form-link">Logga in</div>
+         </div>
+         <div class="col-xs-6">
+         <a href="#" class ="" id="register-form-link">Intresseanmälan</a>
+         </div>
+         </div>
+         </div>
+         <div class="panel-body">
+         <form class="oe_login_form active" id="login-form" role="form" action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
+         <div class="form-group field-login">
+         <label for="login" class="control-label">Email</label>
+         <input type="text" name="login" id="login" class="form-control" required="required" autofocus="autofocus" />
+         </div>
+         <div class="form-group field-password">
+         <label for="password" class="control-label">Password</label>
+         <input type="password" name="password" id="password" class="form-control" required="required" />
+         </div>
+         <input type="hidden" name="redirect" value="/web?" />
+         <div class="clearfix oe_login_buttons">
+         <button type="submit" class="btn btn-primary">Log in</button>
+         </div>
+         </form>
+         <form class="oe_login_form" role="form" id="register-form" style="display:none">
+         <div class="form-group field-login">
+         <label for="name" class="control-label">Namn</label>
+         <input type="text" name="name" id="name" class="form-control" required="required" autofocus="autofocus" />
+         </div>
+         <div class="form-group field-login">
+         <label for="login" class="control-label">Email</label>
+         <input type="text" name="login" id="login" class="form-control" required="required" />
+         </div>
+         <div class="form-group field-password">
+         <label for="password" class="control-label">Password</label>
+         <input type="password" name="password" id="password" class="form-control" required="required" />
+         </div>
+         <input type="hidden" name="redirect" value="/web?" />
+         <div class="clearfix oe_login_buttons">
+         <button type="submit" class="btn btn-primary">Log in</button>
+         </div>
+         </form>
+         
+         </div>
+         </div>
+         </div>
+         <script>
+         $(function() {
+         
+         $('#login-form-link').click(function(e) {
+         $("#login-form").delay(100).fadeIn(100);
+         $("#register-form").fadeOut(100);
+         $('#register-form-link').removeClass('active');
+         $(this).addClass('active');
+         e.preventDefault();
+         });
+         $('#register-form-link').click(function(e) {
+         $("#register-form").delay(100).fadeIn(100);
+         $("#login-form").fadeOut(100);
+         $('#login-form-link').removeClass('active');
+         $(this).addClass('active');
+         e.preventDefault();
+         });
+         
+         });
+         </script>
+         </template>
+         
+         LOGIN REGISTER STOP -->
