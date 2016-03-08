@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -18,18 +18,21 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-{
-'name': 'Customer Number',
-'version': '0.1',
-'summary': '',
-'category': 'Hidden',
-'description': """Show customer number on customers and sale orders.""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['sale'],
-'data': [
-'custom_num_view.xml',
-'custom_num_data.xml',
-],
-'installable': True,
-}
+
+from openerp import api, models, fields, _
+import logging
+_logger = logging.getLogger(__name__)
+
+class product_product(models.Model):
+    _inherit ='product.product'
+    
+    def generate_new_ean13(self):
+        number = self.env['ir.sequence'].get('product.product.ean')
+        even = False;
+        total = 0
+        for c in number:
+            total += (3 if even else 1) * int(c)
+            even = not even
+        checksum = total % 10
+        self.ean13 = number + str(checksum if checksum == 0 else 10 - checksum)
+        

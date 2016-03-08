@@ -19,17 +19,16 @@
 #
 ##############################################################################
 {
-'name': 'Customer Number',
+'name': 'Product EAN Generator',
 'version': '0.1',
-'summary': '',
+'summary': 'Generates EAN codes for products.',
 'category': 'Hidden',
-'description': """Show customer number on customers and sale orders.""",
+'description': """""",
 'author': 'Vertel AB',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [
-'custom_num_view.xml',
-'custom_num_data.xml',
+'product_ean_sequence.xml',
 ],
 'installable': True,
 }

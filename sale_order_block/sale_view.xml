@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record model="ir.ui.view" id="view_sale_order_form">
+      <field name="name">sale.order.form.inherit</field>
+      <field name="model">sale.order</field>
+      <field name="inherit_id" ref="sale.view_order_form" />
+      <field name="arch" type="xml">
+        <page string='Other Information' position='before'>
+          <page string ="Website Information" groups="base.group_user">
+            <group>
+              <field name='website_published' />
+              <field name='website_subject' />
+              <field name='website_short_description' />
+              <field name='website_description' />
+            </group>
+          </page>
+        </page>
+      </field>
+    </record>
+    <template id="index">
+      <t t-call="website.layout" />
+    </template>
+  </data>
+</openerp>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data noupdate="0">
+    <record id="sale.sale_order_1" model="sale.order">
+      <field name="website_published" eval="True" />
+      <field name="website_subject">Demo1</field>
+      <field name="website_description">Visas vid start stuff stuff</field>
+    </record>
+    <record id="sale.sale_order_2" model="sale.order">
+      <field name="website_published" eval="True" />
+      <field name="website_subject">Demo2</field>
+      <field name="website_description">Description massa ord</field>
+    </record>
+    <record id="sale.sale_order_3" model="sale.order">
+      <field name="website_published" eval="False" />
+      <field name="website_subject">Demo3</field>
+      <field name="website_description">Visas inte vid start</field>
+    </record>
+    <record id="sale.sale_order_4" model="sale.order">
+      <field name="website_published" eval="False" />
+      <field name="website_subject">Product/Service</field>
+      <field name="website_description">Description</field>
+    </record>
+    <record id="sale.sale_order_5" model="sale.order">
+      <field name="website_published" eval="True" />
+      <field name="website_subject">Chatfield</field>
+      <field name="website_description">Saker</field>
+    </record>
+    <record id="sale.sale_order_6" model="sale.order">
+      <field name="website_published" eval="True" />
+      <field name="website_subject">Product/Service</field>
+      <field name="website_description">Description</field>
+    </record>
+    <record id="sale.sale_order_8" model="sale.order">
+      <field name="website_published" eval="False" />
+      <field name="website_subject">Product/Service</field>
+      <field name="website_description">Description</field>
+    </record>
+  </data>
+</openerp>
