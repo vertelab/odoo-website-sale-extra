@@ -147,31 +147,39 @@
                       <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
                       </h4>
-
                       <p t-field="active_order.website_short_description" />
                     </div>
                     <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
                       <div class="panel-body">
-                                                <p>
-                        Distansarbete:
-                        <t t-esc="active_order.website_remote" />
-                      </p>
-                      <p>
-                        Plats:
-                        <t t-esc="active_order.website_location" />
-                      </p>
-                      <p>
-                        Språk:
-                        <t t-esc="active_order.website_language" />
-                      </p>
+                        <p>
+                          Distansarbete:
+                          <t t-esc="active_order.website_remote" />
+                        </p>
+                        <p>
+                          Plats:
+                          <t t-esc="active_order.website_location" />
+                        </p>
+                        <p>
+                          Språk:
+                          <t t-esc="active_order.website_language" />
+                        </p>
                         <p t-field="active_order.website_description" />
                         <!--
                              <input type="hidden" name="redirect" value="/web?" />
                         -->
-                        <button t-att-href="'%s'%active_order.name" class="btn btn-primary" />
                         <div class="clearfix oe_login_buttons">
-                          <button type="submit" class="btn btn-primary" groups="base.group_user">Intresseanmälan</button>
+                          <a t-att-href="'/so/%s/interest'%active_order.id">
+                            <button type="submit" class="btn btn-primary" groups="base.group_user">Intresseanmälan</button>
+                          </a>
+                          </div>
+                        <div class="clearfix oe_login_buttons">
+                          <a t-att-href="'login/redirect=%s'%active_order.name">
+                            <button type="submit" class="btn btn-primary" groups="base.group_public">Logga in</button>
+                          </a>
+                          
+<!--
                           <p>Om inloggad, annars redirect login.</p>
+-->
                         </div>
                       </div>
                     </div>
