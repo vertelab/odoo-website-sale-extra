@@ -24,7 +24,7 @@
     <template id="index">
       <t t-call="website.layout">
         <div class="container" id="info-board">
-          <div class="text-field col-md-8" id="ingresstext">
+          <div class="text-field col-md-8 mt32" id="ingresstext">
             <p class="text-center">
               <h4>
                 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod
@@ -50,9 +50,8 @@
                 </div>
               </div>
               <div class="panel-body">
-                <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">
-                  <br />
-                  <p>Lämna dina uppgifter så berättar vi mer.</p>
+                <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">                  
+                  <p class="mt16">Lämna dina uppgifter så berättar vi mer.</p>
                   <div class="col-xs-6">
                     <div class="form-group">
                       <input placeholder="Namn" type="text" name="name" id="name" class="form-control" required="required" />
