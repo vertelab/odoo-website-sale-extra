@@ -13,6 +13,9 @@
               <field name='website_subject' />
               <field name='website_short_description' />
               <field name='website_description' />
+              <field name='website_remote' />
+              <field name='website_location' />
+              <field name='website_language' />
             </group>
           </page>
         </page>
@@ -125,6 +128,60 @@
         
         });
       </script>
+    </template>
+    <!-- SENASTE UPPDRAGEN -->
+    <template id="senaste_uppdragen">
+      <t t-call="website.layout">
+        <div class="container" id="info-board">
+          <div class="row mt16">
+            <div class="col-md-4">
+              <div class="panel-group" id="accordion">
+                <div class="panel-heading text-center penta-block" style="background: #73AD21;">
+                  <h4 style="margin: 0">
+                    <span>Senaste uppdragen</span>
+                  </h4>
+                </div>
+                <div class="panel panel-default">
+                  <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=4).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
+                    <div class="panel-heading">
+                      <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
+                      </h4>
+
+                      <p t-field="active_order.website_short_description" />
+                    </div>
+                    <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
+                      <div class="panel-body">
+                                                <p>
+                        Distansarbete:
+                        <t t-esc="active_order.website_remote" />
+                      </p>
+                      <p>
+                        Plats:
+                        <t t-esc="active_order.website_location" />
+                      </p>
+                      <p>
+                        Språk:
+                        <t t-esc="active_order.website_language" />
+                      </p>
+                        <p t-field="active_order.website_description" />
+                        <!--
+                             <input type="hidden" name="redirect" value="/web?" />
+                        -->
+                        <button t-att-href="'%s'%active_order.name" class="btn btn-primary" />
+                        <div class="clearfix oe_login_buttons">
+                          <button type="submit" class="btn btn-primary" groups="base.group_user">Intresseanmälan</button>
+                          <p>Om inloggad, annars redirect login.</p>
+                        </div>
+                      </div>
+                    </div>
+                  </t>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
     </template>
   </data>
 </openerp>

@@ -21,8 +21,25 @@ class sale_order(models.Model):
     website_short_description = fields.Text(compute="_website_short_description")
     website_description = fields.Text(string="Description",size=100,help="Use this box for describing the quotation.")
     website_subject = fields.Char(size=25)
+    website_remote = fields.Char(size=20)
+    website_location = fields.Char(size=20)
+    website_language = fields.Char(size=20)
+
 
 class website_product_category(http.Controller):
+    @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)
+    def sale_order_interest(self, order = None, **post):
+        if order:
+            request.env['mail.message'].create({
+                'body': _("Yes, I'm interested in %s" % order.name),
+                'subject': 'Interested',
+                'author_id': request.uid,
+                'res_id': order.id,
+                'model': order._name,
+                'type': 'notification',})
+        return request.render('sale_order_block.index', {
+       
+        })
     
     @http.route(['/sale_order_block',], type='http', auth="public", website=True)
     def index(self, **post):
@@ -31,5 +48,11 @@ class website_product_category(http.Controller):
         #~ published = published.sorted(key=lambda r: r.partner_id.name)
         return request.render('sale_order_block.index', {
             #~ 'active_orders': published
+        })
+    
+    @http.route(['/senaste_uppdragen',], type='http', auth="public", website=True)
+    def senaste_uppdragen(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.senaste_uppdragen', {
         })
     
