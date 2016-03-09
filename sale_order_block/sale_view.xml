@@ -19,7 +19,78 @@
       </field>
     </record>
     <template id="index">
-      <t t-call="website.layout" />
+      <t t-call="website.layout">
+        <div class="container" id="info-board">
+          <div class="col-md-6">
+            <div class="panel panel-login">
+              <div class="panel-heading text-center penta-block">
+                <div class="col-xs-6">
+                  <button type="button" class="btn btn-primary" id="login-form-link">Intresseanmälan</button>
+                  <!--
+                       <a href="#" class="btn-primary" id="login-form-link">Intresseanmälan</a>
+                  -->
+                </div>
+                <div class="col-xs-6">
+                  <button type="button" class="btn btn-primary" id="register-form-link">Skapa konto</button>
+                  <!--
+                       <a href="#" class ="btn-primary" id="register-form-link">Skapa konto</a>
+                  -->
+                </div>
+              </div>
+              <div class="panel-body">
+                <form class="oe_login_form active" id="login-form" role="form" action="/web/login" method="post" onsubmit="this.action = this.action + location.hash">
+                  <div class="form-group field-login">
+                    <label for="login" class="control-label">Email</label>
+                    <input type="text" name="login" id="login" class="form-control" required="required" />
+                  </div>
+                  <div class="form-group field-password">
+                    <label for="password" class="control-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required="required" />
+                  </div>
+                  <input type="hidden" name="redirect" value="/web?" />
+                  <div class="clearfix oe_login_buttons">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                  </div>
+                </form>
+                <form class="oe_login_form" role="form" id="register-form" style="display:none">
+                  <div class="form-group field-login">
+                    <label for="name" class="control-label">Namn</label>
+                    <input type="text" name="name" id="name" class="form-control" required="required" />
+                  </div>
+                  <div class="form-group field-login">
+                    <label for="login" class="control-label">Email</label>
+                    <input type="text" name="login" id="login" class="form-control" required="required" />
+                  </div>
+                  <div class="form-group field-password">
+                    <label for="password" class="control-label">Password</label>
+                    <input type="password" name="password" id="password" class="form-control" required="required" />
+                  </div>
+                  <input type="hidden" name="redirect" value="/web?" />
+                  <div class="clearfix oe_login_buttons">
+                    <button type="submit" class="btn btn-primary">Log in</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
+      <script>// Login form
+        $(document).ready(function() {
+        $('#login-form-link').click(function(e) {
+        $("#login-form").delay(100).fadeIn(100);
+        $("#register-form").fadeOut(100);
+        $('#register-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+        });
+        $('#register-form-link').click(function(e) {
+        $("#register-form").delay(100).fadeIn(100);
+        $("#login-form").fadeOut(100);
+        $('#login-form-link').removeClass('active');
+        $(this).addClass('active');
+        e.preventDefault();
+        });</script>
     </template>
   </data>
 </openerp>

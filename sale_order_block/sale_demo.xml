@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
-  <data noupdate="0">
+  <data noupdate="1">
     <record id="sale.sale_order_1" model="sale.order">
       <field name="website_published" eval="True" />
       <field name="website_subject">Demo1</field>
