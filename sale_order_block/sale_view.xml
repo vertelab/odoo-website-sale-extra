@@ -13,11 +13,20 @@
               <field name='website_subject' />
               <field name='website_short_description' />
               <field name='website_description' />
-              <!--
-                   <field name='website_remote' />
-                   <field name='website_location' />
-                   <field name='website_language' />
-              -->
+<!--
+              <field name='remote_ids'>
+                <tree string='Remote' editable='bottom'>
+                  <field name='remote' />
+                </tree>
+              </field>
+-->
+<!--
+              <field name='location_ids'>
+                <tree string='Location' editable='bottom'>
+                  <field name='location_id' />
+                </tree>
+              </field>
+-->
               <field name='skill_ids'>
                 <tree string='Skills' editable='bottom'>
                   <field name='categ_id' />
@@ -158,34 +167,24 @@
                     </div>
                     <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
                       <div class="panel-body">
-                          
-                          
-                        
-                             
-                             <div class="row">
-                             <div class="col-sm-4">Distansarbete: </div>
-<!--
-                             <div class="col-sm-4" t-field="active_order.website_remote" />
--->
-                             </div>
-                             <div class="row">
-                             <div class="col-sm-2">Plats: </div>
-<!--
-                             <div class="col-sm-4" t-field="active_order.website_location" />
--->
-                             </div>
-                             
-                             <div class="row">
-                             <div class="col-sm-2 b">Skills: </div>
-                             
-                             <t t-set='skill_desc' t-value='active_order.skill_ids._fields["level"].get_description(active_order.env)["selection"]'/>
-                             <t t-foreach="active_order.skill_ids" t-as='s'>
-                                 <t t-set='level' t-value='[l[1] for l in skill_desc if l[0] == s.level][0]'/>
-                                        <span class="label label-default" t-esc="'%s (%s)' % (s.categ_id.name, level)" />
-                             </t>
-                             
-                             </div>
-                             
+                        <div class="row">
+                          <div class="col-sm-4">Distansarbete:</div>
+                          <div class="col-sm-4" t-field="active_order.website_remote" />
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-2">Plats:</div>
+                          <div class="col-sm-4" t-field="active_order.website_location" />
+                        </div>
+                        <div class="row">
+                          <div class="col-sm-2">Skills:</div>
+                          <div class="col-sm-6">
+                            <t t-set='skill_desc' t-value='active_order.skill_ids._fields["level"].get_description(active_order.env)["selection"]' />
+                            <t t-foreach="active_order.skill_ids" t-as='s'>
+                              <t t-set='level' t-value='[l[1] for l in skill_desc if l[0] == s.level][0]' />
+                              <span class="label label-default" t-esc="'%s (%s)' % (s.categ_id.name, level)" />
+                            </t>
+                          </div>
+                        </div>
                         <p t-field="active_order.website_description" />
                         <!--
                              <input type="hidden" name="redirect" value="/web?" />
