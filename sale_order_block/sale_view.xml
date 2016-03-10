@@ -178,7 +178,7 @@
                              <div class="row">
                              <div class="col-sm-2">Språk:</div>
                              <t t-foreach="active_order.skill_ids" t-as='s'>
-                             <div t-esc="s[0]" />
+                             <span class="tag" t-esc="s[0].categ_id.name" />
                              </t>
                              
                              </div>
