@@ -163,22 +163,25 @@
                         
                              
                              <div class="row">
-                             <div class="col-sm-4">Distansarbete:</div>
+                             <div class="col-sm-4">Distansarbete: </div>
 <!--
                              <div class="col-sm-4" t-field="active_order.website_remote" />
 -->
                              </div>
                              <div class="row">
-                             <div class="col-sm-2">Plats:</div>
+                             <div class="col-sm-2">Plats: </div>
 <!--
                              <div class="col-sm-4" t-field="active_order.website_location" />
 -->
                              </div>
                              
                              <div class="row">
-                             <div class="col-sm-2">Språk:</div>
+                             <div class="col-sm-2 b">Skills: </div>
+                             
+                             <t t-set='skill_desc' t-value='active_order.skill_ids._fields["level"].get_description(active_order.env)["selection"]'/>
                              <t t-foreach="active_order.skill_ids" t-as='s'>
-                             <span class="tag" t-esc="s[0].categ_id.name" />
+                                 <t t-set='level' t-value='[l[1] for l in skill_desc if l[0] == s.level][0]'/>
+                                        <span class="label label-default" t-esc="'%s (%s)' % (s.categ_id.name, level)" />
                              </t>
                              
                              </div>
