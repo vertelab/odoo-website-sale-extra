@@ -13,9 +13,17 @@
               <field name='website_subject' />
               <field name='website_short_description' />
               <field name='website_description' />
-              <field name='website_remote' />
-              <field name='website_location' />
-              <field name='website_language' />
+              <!--
+                   <field name='website_remote' />
+                   <field name='website_location' />
+                   <field name='website_language' />
+              -->
+              <field name='skill_ids'>
+                <tree string='Skills' editable='bottom'>
+                  <field name='categ_id' />
+                  <field name='level' />
+                </tree>
+              </field>
             </group>
           </page>
         </page>
@@ -50,7 +58,7 @@
                 </div>
               </div>
               <div class="panel-body">
-                <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">                  
+                <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">
                   <p class="mt16">Lämna dina uppgifter så berättar vi mer.</p>
                   <div class="col-xs-6">
                     <div class="form-group">
@@ -150,18 +158,31 @@
                     </div>
                     <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
                       <div class="panel-body">
-                        <p>
-                          Distansarbete:
-                          <t t-esc="active_order.website_remote" />
-                        </p>
-                        <p>
-                          Plats:
-                          <t t-esc="active_order.website_location" />
-                        </p>
-                        <p>
-                          Språk:
-                          <t t-esc="active_order.website_language" />
-                        </p>
+                          
+                          
+                        
+                             
+                             <div class="row">
+                             <div class="col-sm-4">Distansarbete:</div>
+<!--
+                             <div class="col-sm-4" t-field="active_order.website_remote" />
+-->
+                             </div>
+                             <div class="row">
+                             <div class="col-sm-2">Plats:</div>
+<!--
+                             <div class="col-sm-4" t-field="active_order.website_location" />
+-->
+                             </div>
+                             
+                             <div class="row">
+                             <div class="col-sm-2">Språk:</div>
+                             <t t-foreach="active_order.skill_ids" t-as='s'>
+                             <div t-esc="s[0]" />
+                             </t>
+                             
+                             </div>
+                             
                         <p t-field="active_order.website_description" />
                         <!--
                              <input type="hidden" name="redirect" value="/web?" />
@@ -170,15 +191,14 @@
                           <a t-att-href="'/so/%s/interest'%active_order.id">
                             <button type="submit" class="btn btn-primary" groups="base.group_user">Intresseanmälan</button>
                           </a>
-                          </div>
+                        </div>
                         <div class="clearfix oe_login_buttons">
                           <a t-att-href="'login/redirect=%s'%active_order.name">
                             <button type="submit" class="btn btn-primary" groups="base.group_public">Logga in</button>
                           </a>
-                          
-<!--
-                          <p>Om inloggad, annars redirect login.</p>
--->
+                          <!--
+                               <p>Om inloggad, annars redirect login.</p>
+                          -->
                         </div>
                       </div>
                     </div>
