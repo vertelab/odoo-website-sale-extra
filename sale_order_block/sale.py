@@ -14,16 +14,9 @@ class sale_order_skill(models.Model):
     _name = 'sale.order.skill'
     categ_id = fields.Many2one(comodel_name='crm.case.categ')
     order_id = fields.Many2one(comodel_name='sale.order', string='Order')
-    level = fields.Selection([('1', '1 - 3 year'),('2', '3 - 5 year'),('3', '5 - more years')],string='Level', required=False)
-    
-class sale_order_location(models.Model):
-    _name = 'sale.order.location'
-    location_id = fields.Many2one(comodel_name='crm.case.categ')
-    
-class sale_order_remote(models.Model):
-    _name = 'sale.order.remote'
-    remote = fields.Selection([('1','Helt'),('2','Delvis')],string='Remote', required=False)
-    
+    level = fields.Selection([('1', '1 - 3 year'),('2', '3 - 5 year'),('3', '5 - more years')],string='Level', required=True)
+
+
 class sale_order(models.Model):
     _inherit = 'sale.order'
     
@@ -34,12 +27,13 @@ class sale_order(models.Model):
     website_short_description = fields.Text(compute="_website_short_description")
     website_description = fields.Text(string="Description",size=100,help="Use this box for describing the quotation.")
     website_subject = fields.Char(size=25)
-    website_remote = fields.Char(size=20)
-    website_location = fields.Char(size=40)
-    #~ website_language = fields.Char(size=20)
+    website_remote = fields.Selection([('1','Helt'),('2','Delvis')],string='Remote',required=True)
     skill_ids = fields.One2many(comodel_name='sale.order.skill',inverse_name='order_id', string='Skills')
-    location_ids = fields.One2many(comodel_name='sale.order.location',inverse_name='location_id', string='Location')
-    remote_ids = fields.One2many(comodel_name='sale.order.remote',inverse_name='remote', string='Remote')
+    
+    language_ids = fields.Many2many(comodel_name='hr.language', string='Languages')
+    location_ids = fields.Many2many(comodel_name='hr.location', string='Places')
+    
+    #~ remote_ids = fields.Many2many(comodel_name='hr.location', string='Location')
 
 class website_product_category(http.Controller):
     @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)

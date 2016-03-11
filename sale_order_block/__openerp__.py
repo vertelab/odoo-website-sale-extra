@@ -20,7 +20,7 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['website', 'sale','crm'],
+    'depends': ['website', 'sale','crm','website_hr_cv'],
 
     # always loaded
     'data': [
