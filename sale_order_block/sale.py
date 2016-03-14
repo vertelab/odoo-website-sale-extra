@@ -24,14 +24,33 @@ class sale_order(models.Model):
     @api.one
     def _website_short_description(self):
         self.website_short_description = re.match(re.compile('(^.*\.)'),self.website_description[:25]) and re.match(re.compile('(^.*\.)'),self.website_description[:25]).group() or self.website_description[:25]
-    website_short_description = fields.Text(compute="_website_short_description")
+    #~ website_short_description = fields.Text(compute="_website_short_description")
     website_description = fields.Text(string="Description",size=100,help="Use this box for describing the quotation.")
     website_subject = fields.Char(size=25)
-    website_remote = fields.Selection([('1','Helt'),('2','Delvis')],string='Remote',required=True)
+    website_remote = fields.Selection([('1','Helt'),('2','Delvis')],string='Remote',required=False)
     skill_ids = fields.One2many(comodel_name='sale.order.skill',inverse_name='order_id', string='Skills')
     
     language_ids = fields.Many2many(comodel_name='hr.language', string='Languages')
     location_ids = fields.Many2many(comodel_name='hr.location', string='Places')
+    
+    date_start = fields.Date(string = "Start Date")
+    date_stop = fields.Date(string = "Stop Date")
+    #~ uom_categ_wtime = self.env.ref("product.uom_categ_wtime")
+    @api.one
+    def _categ_wtime_id(self):
+        self.categ_wtime_id = self.env.ref("product.uom_categ_wtime").id
+    categ_wtime_id = fields.Integer(compute='_categ_wtime_id')
+    uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
+    qty = fields.Float(string="Quantity")
+    
+    #~ date_time = fields.Float(string = "Time")
+    #~ date_time_type = fields.Selection([('1','Hours'),('2','Days'),('3','Weeks')],string='Time type')
+    #~ date_time_procent = fields.Selection([('1','100%'),('2','75%'),('3','50%')],string='Time procent')
+    #~ 
+    #~ 
+    #~ worktime = fields.Many2one(relation='product.uom_categ_wtime',string='Arbetstid')
+    
+    #~ enhet = fields.Many2one(relation='product.uom_id', string='enhetstyp')
     
     #~ remote_ids = fields.Many2many(comodel_name='hr.location', string='Location')
 

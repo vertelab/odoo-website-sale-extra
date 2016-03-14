@@ -11,9 +11,30 @@
             <group>
               <field name='website_published' />
               <field name='website_subject' />
+<!--
               <field name='website_short_description' />
+-->
               <field name='website_description' />
               <field name='website_remote' />
+            </group>
+            <group col="6">
+              <field name='date_start' />
+              <field name='date_stop' />
+            </group>
+            <group col="6">
+              <field name='qty' />
+              <field name='categ_wtime_id' invisible='1' />
+              <field name='uom_id' domain="[('category_id','=',categ_wtime_id)]" />
+            </group>
+            <group>
+              <!--
+                   <field name='date_time' />
+                   <field name='date_time_type' />
+                   <field name='date_time_procent' />
+              -->
+              <!--
+                   <field name='worktime' />
+              -->
               <field name='language_ids' widget='many2many_tags' />
               <field name='location_ids' widget='many2many_tags' />
               <field name='skill_ids'>
@@ -152,13 +173,40 @@
                       <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
                       </h4>
+<!--
                       <p t-field="active_order.website_short_description" />
+-->
                     </div>
                     <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
                       <div class="panel-body">
                         <div class="row">
+                          <span>
+                            <div class="col-sm-4">
+                              Start
+                              <p t-esc='active_order.date_start' />
+                            </div>
+                            <div class="col-sm-4">
+                              Stop
+                              <p t-esc='active_order.date_stop' />
+                            </div>
+                          </span>
+                        </div>
+                        <!-- TIDEN -->
+                        <div class='row'>
+                          <div class="col-sm-8">
+                              <p style='padding:2px'  t-esc="'Omfattning: %.2f %s' %(active_order.qty, active_order.uom_id.name)"/>
+                            <!--
+                                 <t t-set='time_value' t-value='active_order._fields["date_time_type"].get_description(active_order.env)["selection"]' />
+                                 <t t-set='time_procent' t-value='active_order._fields["date_time_procent"].get_description(active_order.env)["selection"]' />
+                                 <t t-set='value' t-value='[l[1] for l in time_value if l[0] == active_order.date_time_type][0]'/>
+                                 <t t-set='procent' t-value='[l[1] for l in time_procent if l[0] == active_order.date_time_procent][0]'/>
+                                 <p style='padding:2px' t-esc="'Tid: %.2f %s %s' % (active_order.date_time, value, procent)" />
+                            -->
+                          </div>
+                        </div>
+                        <div class="row">
                           <div class="col-sm-4">Distansarbete:</div>
-                               <div class="label label-default" style='padding:2px' t-field="active_order.website_remote" />
+                          <div class="label label-default" style='padding:2px' t-field="active_order.website_remote" />
                         </div>
                         <div class="row">
                           <div class="col-sm-2">Plats:</div>
@@ -182,6 +230,7 @@
                             </t>
                           </div>
                         </div>
+                        
                         <p t-field="active_order.website_description" />
                         <!--
                              <input type="hidden" name="redirect" value="/web?" />
