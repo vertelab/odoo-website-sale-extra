@@ -42,17 +42,6 @@ class sale_order(models.Model):
     categ_wtime_id = fields.Integer(compute='_categ_wtime_id')
     uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
     qty = fields.Float(string="Quantity")
-    
-    #~ date_time = fields.Float(string = "Time")
-    #~ date_time_type = fields.Selection([('1','Hours'),('2','Days'),('3','Weeks')],string='Time type')
-    #~ date_time_procent = fields.Selection([('1','100%'),('2','75%'),('3','50%')],string='Time procent')
-    #~ 
-    #~ 
-    #~ worktime = fields.Many2one(relation='product.uom_categ_wtime',string='Arbetstid')
-    
-    #~ enhet = fields.Many2one(relation='product.uom_id', string='enhetstyp')
-    
-    #~ remote_ids = fields.Many2many(comodel_name='hr.location', string='Location')
 
 class website_product_category(http.Controller):
     @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)
