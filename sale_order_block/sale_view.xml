@@ -11,11 +11,7 @@
             <group>
               <field name='website_published' />
               <field name='website_subject' />
-<!--
-              <field name='website_short_description' />
--->
               <field name='website_description' />
-              <field name='website_remote' />
             </group>
             <group col="6">
               <field name='date_start' />
