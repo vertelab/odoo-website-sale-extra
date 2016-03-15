@@ -123,9 +123,6 @@
                       <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
                       </h4>
-<!--
-                      <p t-field="active_order.website_short_description" />
--->
                     </div>
                     <div t-att-id="'%s'%active_order.name" class="panel-collapse collapse">
                       <div class="panel-body" style="background: #FFFFFF;">
@@ -141,22 +138,10 @@
                             </div>
                           </span>
                         </div>
-                        <!-- TIDEN -->
                         <div class='row'>
                           <div class="col-sm-8">
                               <p style='padding:2px'  t-esc="'Omfattning: %.2f %s' %(active_order.qty, active_order.uom_id.name)"/>
-                            <!--
-                                 <t t-set='time_value' t-value='active_order._fields["date_time_type"].get_description(active_order.env)["selection"]' />
-                                 <t t-set='time_procent' t-value='active_order._fields["date_time_procent"].get_description(active_order.env)["selection"]' />
-                                 <t t-set='value' t-value='[l[1] for l in time_value if l[0] == active_order.date_time_type][0]'/>
-                                 <t t-set='procent' t-value='[l[1] for l in time_procent if l[0] == active_order.date_time_procent][0]'/>
-                                 <p style='padding:2px' t-esc="'Tid: %.2f %s %s' % (active_order.date_time, value, procent)" />
-                            -->
                           </div>
-                        </div>
-                        <div class="row">
-                          <div class="col-sm-4">Distansarbete:</div>
-                          <div class="label label-default" style='padding:2px' t-field="active_order.website_remote" />
                         </div>
                         <div class="row">
                           <div class="col-sm-2">Plats:</div>
@@ -182,9 +167,6 @@
                         </div>
                         
                         <p t-field="active_order.website_description" />
-                        <!--
-                             <input type="hidden" name="redirect" value="/web?" />
-                        -->
                         <div class="clearfix oe_login_buttons">
                           <a t-att-href="'/so/%s/interest'%active_order.id">
                             <button type="submit" class="btn btn-primary" groups="base.group_user">Intresseanmälan</button>
@@ -194,9 +176,6 @@
                           <a t-att-href="'login/redirect=%s'%active_order.name">
                             <button type="submit" class="btn btn-primary" groups="base.group_public">Logga in</button>
                           </a>
-                          <!--
-                               <p>Om inloggad, annars redirect login.</p>
-                          -->
                         </div>
                       </div>
                     </div>

@@ -53,9 +53,9 @@ class website_product_category(http.Controller):
                 'res_id': order.id,
                 'model': order._name,
                 'type': 'notification',})
-        return request.render('sale_order_block.index', {
-       
-        })
+                
+        return http.local_redirect('/')
+        #return werkzeug.utils.redirect('/', 303) #generic kod
     #~ 
     #~ @http.route(['/sale_order_block',], type='http', auth="public", website=True)
     #~ def index(self, **post):
