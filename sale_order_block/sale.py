@@ -14,7 +14,7 @@ class sale_order_skill(models.Model):
     _name = 'sale.order.skill'
     categ_id = fields.Many2one(comodel_name='crm.case.categ')
     order_id = fields.Many2one(comodel_name='sale.order', string='Order')
-    level = fields.Selection([('1', '1 - 3 year'),('2', '3 - 5 year'),('3', '5 - more years')],string='Level', required=True)
+    level = fields.Selection([('1','< 1 year'),('2', '1 - 3 years'),('3', '3 - 5 years'),('4', '> 5 more years')],string='Level', required=False)
 
 
 class sale_order(models.Model):
@@ -41,6 +41,10 @@ class sale_order(models.Model):
     categ_wtime_id = fields.Integer(compute='_categ_wtime_id')
     uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
     qty = fields.Float(string="Quantity")
+    
+    
+    
+    
 
 class website_product_category(http.Controller):
     @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)
@@ -52,20 +56,18 @@ class website_product_category(http.Controller):
                 'author_id': request.uid,
                 'res_id': order.id,
                 'model': order._name,
-                'type': 'notification',})
-                
+                'type': 'notification',})                
         return http.local_redirect('/')
-        #return werkzeug.utils.redirect('/', 303) #generic kod
-    #~ 
-    #~ @http.route(['/sale_order_block',], type='http', auth="public", website=True)
-    #~ def index(self, **post):
-        #~ cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        #~ return request.render('sale_order_block.index', {
-        #~ })
-    #~ 
-    #~ @http.route(['/senaste_uppdragen',], type='http', auth="public", website=True)
-    #~ def senaste_uppdragen(self, **post):
-        #~ cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
-        #~ return request.render('sale_order_block.senaste_uppdragen', {
-        #~ })
-    #~ 
+    
+    @http.route(['/sale_order_block',], type='http', auth="public", website=True)
+    def index(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.index', {
+        })
+    
+    @http.route(['/senaste_uppdragen',], type='http', auth="public", website=True)
+    def senaste_uppdragen(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.senaste_uppdragen', {
+        })
+    
