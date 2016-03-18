@@ -319,6 +319,7 @@
                   <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=4).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
                     <div class="panel-heading">
                       <h4 class="panel-title">
+                
                         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
                       </h4>
                     </div>
@@ -381,7 +382,12 @@
                           <!--
                                <a t-att-href="'?id=%s'%active_order.id">
                           -->
-                          <button class="btn btn-primary" groups="base.group_user" onclick="interestedButton()">Intresseanmälan</button>
+<!--
+                          <div class="btn btn-primary javascriptThing"/>
+-->
+                        
+                        <button class='btn btn-primary' groups='base.group_user' t-att-onclick="'interestedButton(%s,%s)' %(active_order.id, active_order.name)">Intresseanmälan</button>
+                          
                           <!--
                                </a>
                           -->
@@ -401,11 +407,26 @@
         </div>
       </t>
       <script>
-        function interestedButton() {
-        var period_val = $("#accordion > .active");
-        alert(period_val);
+          $( document ).ready(function() {
+            console.log( "ready!" );
+            });
+          
+        function interestedButton(id, name){
+            //name.id är sale ordern vi ska göra intresseanmälan på.
+            
+            var website = openerp.website;
+            //alert(website);
+            website.session.model('sale.order').call('javascript',{name.id});        
+            //alert("IT'S DONE!\n"+id + "\n" +name.id);
         }
 
+    $(document).ready(function() {
+        //"use strict";
+        var website = openerp.website;
+        var $group = this.$dialog.find("div.javascriptThing");
+    
+        });
+        
       </script>
     </template>
   </data>
