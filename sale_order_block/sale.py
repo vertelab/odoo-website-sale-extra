@@ -71,3 +71,8 @@ class website_product_category(http.Controller):
         return request.render('sale_order_block.senaste_uppdragen', {
         })
     
+    @http.route(['/jobba_hos_oss',], type='http', auth="public", website=True)
+    def work_with_us(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.work_with_us', {
+        })
