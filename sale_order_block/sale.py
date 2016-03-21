@@ -48,11 +48,15 @@ class sale_order(models.Model):
     @api.model
     def send_mail(self, order_name, order_id, context=None):
         #_logger.warning('\norder_name: %s\norder_id: %s\nContext: %s\n'%(order_name,order_id,context))
-        _logger.warning('self: %s\nOrdername: %s\n%s\n%s' %(self._uid,order_name,order_id,context))
+        
+        #~ _logger.warning("self: %s" % ([x for x in (self)])
+        _logger.warning('self: %s\nOrdername: %s\norder_id: %s\nContext: %s\n' %(self._uid, order_name, order_id, context))
+        #~ _logger.warning('\nBALFFA: %s'%self.env['res.users'].search([('id','=',self._uid)])[0].name)
         self.env['mail.message'].sudo().create({
                 'body': _("Yes, I'm interested in %s" % order_name),
                 'subject': 'Interested',
-                'author_id': self._uid,
+                #'author_id': self._uid,
+                'author_id': self.user_id,
                 'res_id': order_id,
                 'model': 'sale.order',
                 'type': 'notification',

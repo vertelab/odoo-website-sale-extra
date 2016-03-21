@@ -403,28 +403,11 @@
           </div>
         </div>
       </t>
-      <script>
-        $( document ).ready(function() {
-        console.log( "ready!" );
-        });
-        
-        function interestedButton(id, name){
+      <script>function interestedButton(id, name){
         //name.id är sale ordern vi ska göra intresseanmälan på.
         
-        var website = openerp.website;
-        //alert(website);
-        website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("IT'S DONE!\n"+id + "\n" +name.id));
-        //alert("IT'S DONE!\n"+id + "\n" +name.id);
-        }
-        
-        $(document).ready(function() {
-        //"use strict";
-        var website = openerp.website;
-        var $group = this.$dialog.find("div.javascriptThing");
-        
-        });
-
-      </script>
+        openerp.website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("Notification sent to " + name.id));
+        }</script>
     </template>
   </data>
 </openerp>
