@@ -10,15 +10,18 @@ import werkzeug
 import pytz
 import re
 
+import logging
+_logger = logging.getLogger(__name__)
+
 class sale_order_skill(models.Model):
     _name = 'sale.order.skill'
     categ_id = fields.Many2one(comodel_name='crm.case.categ')
     order_id = fields.Many2one(comodel_name='sale.order', string='Order')
-    level = fields.Selection([('1','< 1 year'),('2', '1 - 3 years'),('3', '3 - 5 years'),('4', '> 5 more years')],string='Level', required=False)
+    level = fields.Selection([('1','< 1 year'),('2', '1 - 3 years'),('3', '3 - 5 years'),('4', '> 5 years')],string='Level', required=False)
 
 
 class sale_order(models.Model):
-    _inherit = 'sale.order'
+    _inherit = ['sale.order']#,'mail.thread']
     
     website_published = fields.Boolean()
     #~ @api.one
@@ -42,9 +45,19 @@ class sale_order(models.Model):
     uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
     qty = fields.Float(string="Quantity")
     
-    
-    
-    
+    @api.model
+    def send_mail(self, order_name, order_id, context=None):
+        #_logger.warning('\norder_name: %s\norder_id: %s\nContext: %s\n'%(order_name,order_id,context))
+        _logger.warning('self: %s\nOrdername: %s\n%s\n%s' %(self._uid,order_name,order_id,context))
+        self.env['mail.message'].sudo().create({
+                'body': _("Yes, I'm interested in %s" % order_name),
+                'subject': 'Interested',
+                'author_id': self._uid,
+                'res_id': order_id,
+                'model': 'sale.order',
+                'type': 'notification',
+                })  
+                
 
 class website_product_category(http.Controller):
     @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)

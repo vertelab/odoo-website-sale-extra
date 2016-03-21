@@ -363,7 +363,10 @@
                           <!--
                                <a t-att-href="'?id=%s'%active_order.id">
                           -->
-                          <button class="btn btn-primary" groups="base.group_user" onclick="interestedButton()">Intresseanmälan</button>
+                          <!--
+                               <div class="btn btn-primary javascriptThing"/>
+                          -->
+                          <button class='btn btn-primary' groups='base.group_user' t-att-onclick="'interestedButton(%s,%s)' %(active_order.id, active_order.name)">Intresseanmälan</button>
                           <!--
                                </a>
                           -->
@@ -383,10 +386,25 @@
         </div>
       </t>
       <script>
-        function interestedButton() {
-        var period_val = $("#accordion > .active");
-        alert(period_val);
+        $( document ).ready(function() {
+        console.log( "ready!" );
+        });
+        
+        function interestedButton(id, name){
+        //name.id är sale ordern vi ska göra intresseanmälan på.
+        
+        var website = openerp.website;
+        //alert(website);
+        website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("IT'S DONE!\n"+id + "\n" +name.id));
+        //alert("IT'S DONE!\n"+id + "\n" +name.id);
         }
+        
+        $(document).ready(function() {
+        //"use strict";
+        var website = openerp.website;
+        var $group = this.$dialog.find("div.javascriptThing");
+        
+        });
 
       </script>
     </template>
