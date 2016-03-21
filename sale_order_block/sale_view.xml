@@ -52,106 +52,85 @@
             </p>
           </div>
           <div class="container">
-            <h2>Dynamic Tabs</h2>
             <ul class="nav nav-tabs">
               <li class="active">
                 <a data-toggle="tab" href="#home">Interest</a>
               </li>
               <li>
-                <a data-toggle="tab" href="#menu1">Menu 1</a>
-              </li>
-              <li>
-                <a data-toggle="tab" href="#menu2">Skapa konto</a>
+                <a data-toggle="tab" href="#menu1">Create Account</a>
               </li>
             </ul>
             <div class="tab-content">
+              <!-- Tab 1 -->
               <div id="home" class="tab-pane fade in active">
-                <h3>Lämna dina uppgifter så berättar vi mer.</h3>
+                <h4>Leave your details and we will tell more.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
-                  <div class="col-md-12">
+                  <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
-                      <label class="col-md-3 col-sm-4 control-label" for="contact_name">Your Name</label>
-                      <div class="col-md-7 col-sm-8">
-                        <input type="text" class="form-control" name="contact_name" required="True" t-attf-value="#{contact_name or ''}" />
+                      <div class="col-md-12">
+                        <input type="text" class="form-control" name="contact_name" required="True" placeholder="Your Name" t-attf-value="#{contact_name or ''}" />
                       </div>
                     </div>
                     <div t-attf-class="form-group #{error and 'phone' in error and 'has-error' or ''}">
-                      <label class="col-md-3 col-sm-4 control-label" for="phone">Phone Number</label>
-                      <div class="col-md-7 col-sm-8">
-                        <input type="text" class="form-control" name="phone" t-attf-value="#{phone or ''}" />
+                      <div class="col-md-12">
+                        <input type="text" class="form-control" name="phone" placeholder="Phone Number" t-attf-value="#{phone or ''}" />
                       </div>
                     </div>
                     <div name="email_from_container" t-attf-class="form-group #{error and 'email_from' in error and 'has-error' or ''}">
-                      <label class="col-md-3 col-sm-4 control-label" for="email_from">Email</label>
-                      <div class="col-md-7 col-sm-8">
-                        <input type="email" class="form-control" name="email_from" required="True" t-attf-value="#{email_from or ''}" />
+                      <div class="col-md-12">
+                        <input type="email" class="form-control" name="email_from" placeholder="Email" required="True" t-attf-value="#{email_from or ''}" />
                       </div>
                     </div>
+                    <!-- Knapp -->
+                    <div class="form-group">
+                      <div class="col-md-6">
+                        <button class="btn btn-primary btn-lg">Send</button>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Text Area with subject -->
+                  <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
-                      <label class="col-md-3 col-sm-4 control-label" for="name">Subject</label>
-                      <div class="col-md-7 col-sm-8">
-                        <input type="text" class="form-control" name="name" t-attf-value="#{name or ''}" />
+                      <div class="col-md-10">
+                        <input type="text" class="form-control" name="name" placeholder="Subject" t-attf-value="#{name or ''}" />
                       </div>
                     </div>
                     <div t-attf-class="form-group #{error and 'description' in error and 'has-error' or ''}">
-                      <label class="col-md-3 col-sm-4 control-label" for="description">Your Question</label>
-                      <div class="col-md-7 col-sm-8">
-                        <textarea class="form-control" name="description" style="min-height: 120px" required="True">
-                          <t t-esc="description or ''" />
-                        </textarea>
-                      </div>
-                    </div>
-                    <div class="form-group">
-                      <div class="col-md-offset-3 col-sm-offset-4 col-sm-8 col-md-7">
-                        <button class="btn btn-primary btn-lg">Send</button>
+                      <div class="col-md-10">
+                        <textarea class="form-control" placeholder="Your Question" name="description" style="min-height: 120px" required="True" />
                       </div>
                     </div>
                   </div>
                 </form>
               </div>
-              <!--
-                   <form>
-                   <div class="form-group">
-                   <label for="exampleInputEmail1">Email address</label>
-                   <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
-                   </div>
-                   <div class="form-group">
-                   <label for="exampleInputPassword1">Password</label>
-                   <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                   </div>
-                   <div class="form-group">
-                   <label for="exampleInputFile">File input</label>
-                   <input type="file" id="exampleInputFile">
-                   <p class="help-block">Example block-level help text here.</p>
-                   </div>
-                   <div class="checkbox">
-                   <label>
-                   <input type="checkbox"> Check me out
-                   </label>
-                   </div>
-                   <button type="submit" class="btn btn-default">Submit</button>
-                   </form>
-              -->
+              <!-- Tab 2 -->
               <div id="menu1" class="tab-pane fade">
-                <h3>Menu 1</h3>
-                <div class="form-group">
-                  <label for="exampleInputEmail1">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Email" />
-                </div>
-              </div>
-              <div id="menu2" class="tab-pane fade">
-                <h3>Skapa konto</h3>
-                <form class="oe_signup_form" role="form" method="post" action="/web/signup" t-if="not message">
-                  <div class="col-md-8">
-                    <t t-call="auth_signup.fields">
-                      <t t-set="only_passwords" t-value="bool(token)" />
-                    </t>
-                    <p class="alert alert-danger" t-if="error">
-                      <t t-esc="error" />
-                    </p>
+                <h4>Create Your Account</h4>
+                <form action="/web/signup" method="post" role="form" t-if="not message" class="form-horizontal mt32" enctype="multipart/form-data">
+                  <div class="col-md-6">
+                    <div t-attf-class="form-group #{error and 'login' in error and 'has-error' or ''}">
+                      <div class="col-md-10">
+                        <input type="text" name="login" placeholder="Your Email" t-att-value="login" id="login" class="form-control" autofocus="autofocus" required="required" t-att-readonly="'readonly' if only_passwords else None" />
+                      </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
+                      <div class="col-md-10">
+                        <input type="text" name="name" t-att-value="name" id="name" class="form-control" placeholder="Your Name (e.g. John Doe)" required="required" t-att-readonly="'readonly' if only_passwords else None" t-att-autofocus="'autofocus' if login and not only_passwords else None" />
+                      </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'password' in error and 'has-error' or ''}">
+                      <div class="col-md-10">
+                        <input type="password" name="password" placeholder="Password" id="password" class="form-control" required="required" t-att-autofocus="'autofocus' if only_passwords else None" />
+                      </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'confirm_password' in error and 'has-error' or ''}">
+                      <div class="col-md-10">
+                        <input type="password" name="confirm_password" placeholder="Confirm Password" id="confirm_password" class="form-control" required="required" />
+                      </div>
+                    </div>
                     <input type="hidden" name="redirect" t-att-value="redirect" />
                     <input type="hidden" name="token" t-att-value="token" />
-                    <div class="clearfix oe_login_buttons">
+                    <div class="clearfix oe_login_buttons form-group col-md-12">
                       <a t-attf-href="/web/login?{{ keep_query() }}" class="btn btn-link pull-right">Back to Login</a>
                       <button type="submit" class="btn btn-primary pull-left">Sign up</button>
                     </div>
@@ -160,106 +139,109 @@
               </div>
             </div>
           </div>
-          <div class="col-md-6">
-            <div class="panel panel-login">
-              <div class="panel-heading text-center penta-block">
-                <div class="col-xs-4">
-                  <button type="button" class="btn btn-primary" id="intressent-form-link">Intresseanmälan</button>
-                </div>
-                <div class="col-xs-4">
-                  <button type="button" class="btn btn-primary" id="login-form-link">Logga in</button>
-                </div>
-                <div class="col-xs-4">
-                  <button type="button" class="btn btn-primary" id="register-form-link">Skapa konto</button>
-                </div>
-              </div>
-              <div class="panel-body">
-                <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">
-                  <p class="mt16">Lämna dina uppgifter så berättar vi mer.</p>
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <input placeholder="Namn" type="text" name="name" id="name" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Epost" type="text" name="email" id="email" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Telefonnummer" type="text" name="phonenumber" id="phonenumber" class="form-control" required="required" />
-                    </div>
-                    <div class="clearfix oe_login_buttons">
-                      <button type="submit" class="btn btn-primary">Skicka</button>
-                    </div>
-                  </div>
-                  <div class="col-xs-4">
-                    <textarea name="textarea" style="resize: none;" type="text" placeholder="Meddelande (valfritt)" rows="8" cols="26" />
-                  </div>
-                </form>
-                <form class="oe_register_form" id="login-form" role="form" action="" method="post" onsubmit="" style="display:none">
-                  <br />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <input placeholder="Login" type="text" name="login" id="login" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Lösenord" type="password" name="password" id="password" class="form-control" required="required" />
-                    </div>
-                    <div class="clearfix oe_login_buttons">
-                      <button type="submit" class="btn btn-primary">Skicka</button>
-                    </div>
-                  </div>
-                </form>
-                <form class="oe_register_form" id="register-form" role="form" action="" method="post" onsubmit="" style="display:none">
-                  <br />
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <input placeholder="Namn" type="text" name="name" id="name" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Adress" type="text" name="adress" id="adress" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Adress" type="text" name="adress" id="adress" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Postnummer" type="text" name="adress" id="adress" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Stad" type="text" name="adress" id="adress" class="form-control" required="required" />
-                    </div>
-                  </div>
-                  <div class="col-xs-6">
-                    <div class="form-group">
-                      <input placeholder="Telefonnummer (Hem)" type="text" name="name" id="name" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Telefonnummer (Mobil)" type="text" name="adress" id="adress" class="form-control" required="required" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Info 1" type="text" name="adress" id="adress" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Info 2" type="text" name="adress" id="adress" class="form-control" />
-                    </div>
-                    <div class="form-group">
-                      <input placeholder="Info 3" type="text" name="adress" id="adress" class="form-control" />
-                    </div>
-                  </div>
-                  <div class="col-xs-12">
-                    <div class="col-xs-6">
-                      <div class="clearfix oe_login_buttons">
-                        <div class="col-xs-8">
-                          <button type="submit" class="btn btn-primary">Skapa</button>
-                        </div>
-                        <div class="col-xs-4">
-                          <button type="submit" class="btn btn-primary">Bifoga CV</button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
+          <!-- Old Version -->
+          <!--
+               <div class="col-md-6">
+               <div class="panel panel-login">
+               <div class="panel-heading text-center penta-block">
+               <div class="col-xs-4">
+               <button type="button" class="btn btn-primary" id="intressent-form-link">Intresseanmälan</button>
+               </div>
+               <div class="col-xs-4">
+               <button type="button" class="btn btn-primary" id="login-form-link">Logga in</button>
+               </div>
+               <div class="col-xs-4">
+               <button type="button" class="btn btn-primary" id="register-form-link">Skapa konto</button>
+               </div>
+               </div>
+               <div class="panel-body">
+               <form class="oe_register_form active" id="intressent-form" role="form" action="" method="post" onsubmit="">
+               <p class="mt16">Lämna dina uppgifter så berättar vi mer.</p>
+               <div class="col-xs-6">
+               <div class="form-group">
+               <input placeholder="Namn" type="text" name="name" id="name" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Epost" type="text" name="email" id="email" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Telefonnummer" type="text" name="phonenumber" id="phonenumber" class="form-control" required="required" />
+               </div>
+               <div class="clearfix oe_login_buttons">
+               <button type="submit" class="btn btn-primary">Skicka</button>
+               </div>
+               </div>
+               <div class="col-xs-4">
+               <textarea name="textarea" style="resize: none;" type="text" placeholder="Meddelande (valfritt)" rows="8" cols="26" />
+               </div>
+               </form>
+               <form class="oe_register_form" id="login-form" role="form" action="" method="post" onsubmit="" style="display:none">
+               <br />
+               <div class="col-xs-6">
+               <div class="form-group">
+               <input placeholder="Login" type="text" name="login" id="login" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Lösenord" type="password" name="password" id="password" class="form-control" required="required" />
+               </div>
+               <div class="clearfix oe_login_buttons">
+               <button type="submit" class="btn btn-primary">Skicka</button>
+               </div>
+               </div>
+               </form>
+               <form class="oe_register_form" id="register-form" role="form" action="" method="post" onsubmit="" style="display:none">
+               <br />
+               <div class="col-xs-6">
+               <div class="form-group">
+               <input placeholder="Namn" type="text" name="name" id="name" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Adress" type="text" name="adress" id="adress" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Adress" type="text" name="adress" id="adress" class="form-control" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Postnummer" type="text" name="adress" id="adress" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Stad" type="text" name="adress" id="adress" class="form-control" required="required" />
+               </div>
+               </div>
+               <div class="col-xs-6">
+               <div class="form-group">
+               <input placeholder="Telefonnummer (Hem)" type="text" name="name" id="name" class="form-control" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Telefonnummer (Mobil)" type="text" name="adress" id="adress" class="form-control" required="required" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Info 1" type="text" name="adress" id="adress" class="form-control" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Info 2" type="text" name="adress" id="adress" class="form-control" />
+               </div>
+               <div class="form-group">
+               <input placeholder="Info 3" type="text" name="adress" id="adress" class="form-control" />
+               </div>
+               </div>
+               <div class="col-xs-12">
+               <div class="col-xs-6">
+               <div class="clearfix oe_login_buttons">
+               <div class="col-xs-8">
+               <button type="submit" class="btn btn-primary">Skapa</button>
+               </div>
+               <div class="col-xs-4">
+               <button type="submit" class="btn btn-primary">Bifoga CV</button>
+               </div>
+               </div>
+               </div>
+               </div>
+               </form>
+               </div>
+               </div>
+               </div>
+          -->
         </div>
       </t>
       <script>
