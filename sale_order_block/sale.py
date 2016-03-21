@@ -21,7 +21,7 @@ class sale_order_skill(models.Model):
 
 
 class sale_order(models.Model):
-    _inherit = 'sale.order'
+    _inherit = ['sale.order']#,'mail.thread']
     
     website_published = fields.Boolean()
     #~ @api.one
@@ -45,8 +45,19 @@ class sale_order(models.Model):
     uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
     qty = fields.Float(string="Quantity")
     
-    def javascript(self, cr, uid, data):
-        _logger.warning('\nJavascript: %s\n%s'%(uid,data))
+    @api.model
+    def send_mail(self, order_name, order_id, context=None):
+        #_logger.warning('\norder_name: %s\norder_id: %s\nContext: %s\n'%(order_name,order_id,context))
+        _logger.warning('self: %s\nOrdername: %s\n%s\n%s' %(self._uid,order_name,order_id,context))
+        self.env['mail.message'].sudo().create({
+                'body': _("Yes, I'm interested in %s" % order_name),
+                'subject': 'Interested',
+                'author_id': self._uid,
+                'res_id': order_id,
+                'model': 'sale.order',
+                'type': 'notification',
+                })  
+                
 
 class website_product_category(http.Controller):
     @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)
