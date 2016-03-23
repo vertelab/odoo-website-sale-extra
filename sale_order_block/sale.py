@@ -50,17 +50,22 @@ class sale_order(models.Model):
         #_logger.warning('\norder_name: %s\norder_id: %s\nContext: %s\n'%(order_name,order_id,context))
         
         #~ _logger.warning("self: %s" % ([x for x in (self)])
-        _logger.warning('self: %s\nOrdername: %s\norder_id: %s\nContext: %s\n' %(self._uid, order_name, order_id, context))
+        
+        users = self.env['res.partner'].search([('active','=',True)])
+        
+        _logger.warning('logged in: %s'%users[0].name)
+    
+        #~ _logger.warning('\nself: %s\nOrdername: %s\norder_id: %s\nContext: %s\n' %(self, order_name, order_id, context))
         #~ _logger.warning('\nBALFFA: %s'%self.env['res.users'].search([('id','=',self._uid)])[0].name)
-        self.env['mail.message'].sudo().create({
-                'body': _("Yes, I'm interested in %s" % order_name),
-                'subject': 'Interested',
-                #'author_id': self._uid,
-                'author_id': self.user_id,
-                'res_id': order_id,
-                'model': 'sale.order',
-                'type': 'notification',
-                })  
+        #~ self.env['mail.message'].sudo().create({
+                #~ 'body': _("Yes, I'm interested in %s" % order_name),
+                #~ 'subject': 'Interested',
+                #~ #'author_id': self._uid,
+                #~ 'author_id': self.user_id,
+                #~ 'res_id': order_id,
+                #~ 'model': 'sale.order',
+                #~ 'type': 'notification',
+                #~ })  
                 
 
 class website_product_category(http.Controller):

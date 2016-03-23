@@ -375,19 +375,12 @@
                         </t>
                         <p t-field="active_order.website_description" />
                         <div class="clearfix oe_login_buttons">
-                          <!--
-                               <a t-att-href="'/so/%s/interest'%active_order.id">
-                          -->
-                          <!--
-                               <a t-att-href="'?id=%s'%active_order.id">
-                          -->
-                          <!--
-                               <div class="btn btn-primary javascriptThing"/>
-                          -->
+<!--
+                          <t t-set="user" t-value="request.env['res.partner'].sudo().search([('active','=',True)])[0]" />
+                          <p t-esc="user" />
+-->
+                          
                           <button class='btn btn-primary' groups='base.group_user' t-att-onclick="'interestedButton(%s,%s)' %(active_order.id, active_order.name)">Intresseanmälan</button>
-                          <!--
-                               </a>
-                          -->
                         </div>
                         <div class="clearfix oe_login_buttons">
                           <a t-att-href="'login/redirect=%s'%active_order.name">
@@ -405,8 +398,10 @@
       </t>
       <script>function interestedButton(id, name){
         //name.id är sale ordern vi ska göra intresseanmälan på.
-        
-        openerp.website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("Notification sent to " + name.id));
+        var website = openerp.website;
+        //name_search', ['',[]], { context: website.get_context()}
+        //website.jsonRpc
+        website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("Notification sent to " + name.id));
         }</script>
     </template>
   </data>
