@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+<data>
+    
+    <!---- Rad i produktpresentationen ---->
+    
+    <section class="s_text_block" style="margin: 0px;">
+<div class="container">
+<div class="row">
+<table class="table table-bordered table-responsive" style="margin: 0px;">
+    <tbody>
+        <tr>
+            <td class="text-center" style="width: 92px;">​<span class="fa fa-laptop fa-5x" style="animation-play-state: paused; transition: none 0s ease 0s"></span></td>
+            <td>Kundanpassad utbildning på gjord installation. Utbildningen kan ske hos oss eller per telefon och inloggad i systemet.</td>
+        </tr>
+    </tbody>
+</table>
+</div>
+</div>
+</section>
+    
+    <!------------------------------------------>
+    
+    
+    <t name="Product Quotation" t-name="website_quote.so_quotation">
+  <t t-call="website.layout">
+  <style>
+      div.para_large p, section.para_large p { font-size: 1em; }
+  </style>
+    <body data-spy="scroll" data-target=".navspy" data-offset="50">
+      <div class="container o_website_quote">
+        <div class="row mt16">
+          <div class="col-md-3">
+            <div class="bs-sidebar">
+              <div class="text-center hidden-print" t-if="quotation.state in ('draft', 'sent', 'waiting_date')" style="padding: 10px">
+                <a t-if="order_valid" class="btn btn-primary btn-block fa fa-check" data-toggle="modal" data-target="#modelaccept"> Acceptera offerten</a>
+                <a t-if="not order_valid" href="#discussion" class="btn btn-info btn-block"><strong>Offerten har gått ut!</strong><br/>
+                                  Kontakta oss för en ny offert.
+                              </a>
+                <div class="mt8" t-if="order_valid"><a href="#discussion" type="submit">Ställ en fråga</a> eller <a data-target="#modeldecline" data-toggle="modal"> tacka nej </a></div>
+              </div>
+              <hr class="mt0 mb0"/>
+              <t t-call="website_quote.navigation_menu"/>
+              <hr class="mt0 mb0"/>
+              <div t-if="order_valid" class="text-center hidden-print">
+                <input type="hidden" t-att-value="quotation.validity_date" id="validity_date"/>
+                <div class="mt8" t-if="days_valid &gt; 0">
+                  <strong>Denna offert är giltig i</strong>
+                  <div class="fa fa-clock-o fa-2x day_counter mt8 mb16">
+                    <t t-esc="days_valid"/>
+                    <t t-if="days_valid &gt; 1">
+                                          dagar
+                                      </t>
+                    <t t-if="days_valid &lt;= 1">
+                                          dag
+                                      </t>
+                  </div>
+                </div>
+                <div class="text-center mb16" t-if="quotation.amount_undiscounted &gt; quotation.amount_untaxed">
+                  <p class="text-muted mb8">Dina rabatter:</p>
+                  <t t-if="quotation.amount_untaxed == quotation.amount_total">
+                    <strong t-field="quotation.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/>
+                    <small> <strong t-field="quotation.amount_undiscounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}" style="text-decoration: line-through" class="text-danger"/></small>
+                  </t>
+                  <t t-if="quotation.amount_untaxed != quotation.amount_total"><strong t-field="quotation.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/><small> <strong t-field="quotation.amount_undiscounted" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}" style="text-decoration: line-through" class="text-danger"/></small><br/>
+                                      <small>(<span t-field="quotation.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/> ink moms)</small>
+                                  </t>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-9">
+            <div class="alert alert-success alert-dismissable" t-if="message==1"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                          Ditt meddelande har skickats!
+                      </div>
+            <div class="alert alert-warning alert-dismissable" t-if="message==2"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                          Denna offert har du tackat nej till. 
+                          <a href="#discussion">Kontakta oss</a> om du vill ha ett nytt förslag.
+                      </div>
+            <div class="alert alert-warning alert-dismissable" t-if="message==3"><button type="button" class="close" data-dismiss="alert" aria-hidden="true">&amp;times;</button>
+                          Denna offert är accepterad. Tack för ditt förtroende,
+                          tveka inte att <a href="#discussion">kontakta oss</a> för frågor.
+                          
+                      </div>
+            <a id="introduction"/>
+            <h1 class="page-header mt16">
+              <span t-if="quotation.state in ('draft','sent','cancel')">Offert</span>
+              <span t-if="quotation.state not in ('draft','sent','cancel')">Din order</span>
+              <em t-esc="quotation.name"/>
+              <small t-field="quotation.state"/>
+              <div groups="base.group_website_publisher" t-ignore="true" class="pull-right css_editable_mode_hidden">
+                <a class="btn btn-info hidden-print" t-att-href="'/web#return_label=Website&amp;model=%s&amp;id=%s' % (quotation._name, quotation.id)">Update Quote</a>
+              </div>
+            </h1>
+            <div class="modal fade" id="modelaccept" role="dialog" aria-hidden="true">
+              <div class="modal-dialog">
+                <form id="accept" method="POST" t-attf-action="/quote/accept/#{quotation.id}/?token=#{quotation.access_token}" class="js_accept_json modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+                    <h4 class="modal-title">Granska order</h4>
+                  </div>
+                  <div class="modal-body" id="sign-dialog">
+                    <p>
+                                  Jag accepterar denna offert genom att signera den,
+                                  som representant för <b t-field="quotation.company_id"/>,
+                                  för summan 
+                                  <b data-id="total_amount" t-field="quotation.amount_total" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/>
+                                  med betalvillkoren: <b t-field="quotation.payment_term"/>.
+                              </p>
+                    <div id="signer" class="form-group">
+                      <label class="control-label" for="name">Ditt namn:</label>
+                      <input type="text" name="signer" id="name" class="form-control"/>
+                    </div>
+                  </div>
+                  <div class="modal-footer"><button type="submit" t-attf-class="btn btn-primary">Signera ordern</button> eller
+                                <button type="button" class="btn btn-link" data-dismiss="modal" style="padding: 0">Avbryt</button>
+                            </div>
+                </form>
+              </div>
+            </div>
+            <div class="alert alert-warning alert-dismissable" t-if="quotation.state == 'cancel'"><button type="button" class="close hidden-print" data-dismiss="alert" aria-hidden="true">&amp;times;</button><strong>This quotation has been canceled.</strong> Contact us to get a new quote.
+                      </div>
+            <div class="modal fade" id="modeldecline" role="dialog" aria-hidden="true">
+              <div class="modal-dialog">
+                <form id="decline" method="POST" t-attf-action="/quote/#{quotation.id}/#{quotation.access_token}/decline" class="modal-content">
+                  <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&amp;times;</button>
+                    <h4 class="modal-title">Tacka nej till denna offert</h4>
+                  </div>
+                  <div class="modal-body">
+                    <p>
+                                  Berätta för oss varför du avvisat denna offert,
+                                  detta hjälper oss att bli bättre nästa gång.
+                              </p>
+                    <textarea rows="4" name="decline_message" placeholder="Din återkoppling..." class="form-control"/>
+                  </div>
+                  <div class="modal-footer"><button type="submit" t-att-id="quotation.id" class="btn btn-primary">Reject</button> or
+                                <button type="button" class="btn btn-link" data-dismiss="modal" style="padding: 0">Cancel</button>
+                            </div>
+                </form>
+              </div>
+            </div>
+            <div class="row mt32">
+              <div class="col-md-6">
+                <div class="row">
+                  <label class="col-sm-4 text-right">Kund:</label>
+                  <div class="col-sm-8">
+                    <div t-field="quotation.partner_id"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-4 text-right">Fakturera till:</label>
+                  <div class="col-sm-8">
+                    <div t-field="quotation.partner_invoice_id" t-field-options="{ 
+                    &quot;widget&quot;: &quot;contact&quot;, &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;, &quot;email&quot;]                                           }"/>
+                  </div>
+                </div>
+                <div t-if="quotation.partner_shipping_id.id != quotation.partner_invoice_id.id" class="row">
+                  <label class="col-sm-4 text-right">Leverera till:</label>
+                  <div class="col-sm-8">
+                    <div t-field="quotation.partner_shipping_id" t-field-options="{                                         &quot;widget&quot;: &quot;contact&quot;,                                         &quot;fields&quot;: [&quot;address&quot;, &quot;name&quot;, &quot;phone&quot;]                                         }"/>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="row">
+                  <label class="col-sm-5 text-right">Din kontakt:</label>
+                  <div class="col-sm-7">
+                    <div t-field="quotation.user_id" t-field-options="{                                           &quot;widget&quot;: &quot;contact&quot;,                                           &quot;fields&quot;: [&quot;name&quot;, &quot;phone&quot;, &quot;email&quot;]                                           }"/>
+                  </div>
+                </div>
+                <div class="row">
+                  <label class="col-sm-5 text-right">Offertdatum:</label>
+                  <div class="col-sm-7">
+                    <span t-field="quotation.date_order"/>
+                  </div>
+                  <div class="clearfix"/>
+                  <div t-if="quotation.client_order_ref">
+                    <label class="col-sm-5 text-right">Er referens:</label>
+                    <div class="col-sm-7">
+                      <span t-field="quotation.client_order_ref"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <a id="offer"/>
+            <div t-field="quotation.website_description"/>
+            <t t-foreach="quotation.order_line" t-as="line">
+              <a t-att-id="line.id"/>
+              <div t-field="line.website_description"/>
+            </t>
+            <div class="oe_structure"/>
+            <a id="pricing"/>
+            <t t-call="website_quote.pricing"/>
+            <a id="options"/>
+            <t t-call="website_quote.optional_products"/>
+           
+            <a id="discussion">
+              
+            </a>
+            <t t-call="website_quote.chatter"/>
+          </div>
+        </div>
+      </div>
+    </body>
+  </t>
+</t>
+    <!--------------------------------------------------------------->
+    
+<t name="Price" t-name="website_quote.pricing">
+  <section data-snippet-id="title">
+    <h1 class="page-header">Priser</h1>
+  </section>
+  <section id="quote">
+    <table class="table">
+      <thead>
+        <tr>
+          <th class="text-left">Produkt/tjänst</th>
+          <th class="text-left">Antal</th>
+          <th/>
+          <th class="text-right">Styckpris</th>
+          <th class="text-right">Pris</th>
+          <th/>
+        </tr>
+      </thead>
+      <tbody>
+        <tr t-foreach="quotation.order_line" t-as="line">
+          <td>
+            <div class="" t-field="line.name"/>
+          </td>
+          <td>
+            <div id="quote_qty">
+              <span t-field="line.product_uom_qty"/>
+              <span t-field="line.product_uom"/>
+            </div>
+          </td>
+          <td>
+            <strong t-if="line.discount" class="text-info"><t t-esc="((line.discount % 1) and '%s' or '%d') % line.discount"/>% rabatt
+                          </strong>
+          </td>
+          <td>
+            <div class="text-right">
+              <strong>
+                <span t-att-style="line.discount and 'text-decoration: line-through' or ''" t-att-class="line.discount and 'text-danger' or ''" t-esc="'%d' % line.price_unit"/>
+                <span t-att-style="line.discount and 'text-decoration: line-through' or ''" t-att-class="line.discount and 'text-danger' or ''" t-field="quotation.pricelist_id.currency_id.symbol"/>
+                <t t-if="line.product_uom.id != 1">/<span t-att-style="line.discount and 'text-decoration: line-through' or ''" t-att-class="line.discount and 'text-danger' or ''" t-field="line.product_uom.name"/></t>
+                <!-- TODO: apply monetary widget formating -->
+                <div t-if="line.discount">
+                  <t t-esc="'%d' % ((1-line.discount / 100.0) * line.price_unit)"/>
+                  <span t-field="quotation.pricelist_id.currency_id.symbol"/>
+                  <t t-if="line.product_uom.id != 1">/<span t-field="line.product_uom.name"/></t>
+                </div>
+              </strong>
+            </div>
+          </td>
+          <td>
+            <div class="text-right">
+              <strong>
+                <t t-esc="'%d' % line.price_subtotal"/>
+                <span t-field="quotation.pricelist_id.currency_id.symbol"/>
+              </strong>
+            </div>
+            <!--<div class="text-right" t-field="line.price_subtotal" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/>-->
+          </td>
+          <td>
+            <a t-attf-href="./update_line/#{ line.id }/?order_id=#{ quotation.id }&amp;unlink=True&amp;token=#{ quotation.access_token }" class="mb8 js_update_line_json pull-right hidden-print" t-if="line.option_line_id">
+              <span class="fa fa-trash-o"/>
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td/>
+          <td/>
+          <td/>
+          <td class="text-right">
+            <strong>Totalt (ex moms):</strong>
+          </td>
+          <td class="text-right">
+            <strong data-id="total_amount" t-field="quotation.amount_untaxed" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;,&quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}"/>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </section>
+  <t t-call="website_quote.quotation_toolbar"/>
+  <section id="terms" class="container" t-if="quotation.note">
+    <h2 class="page-header">Villkor</h2>
+    <p>
+      <t t-raw="quotation.note"/>
+      <a href="/page/anvandaravtal-odoo">Läs mer</a>
+    </p>
+  </section>
+</t>
+
+<!------------------------------------------------------->
+
+<t t-name="website_quote.optional_products">
+  <div class="container mt32" t-if="option">
+    <section data-snippet-id="title">
+      <h1 class="page-header">Optioner</h1>
+    </section>
+    <section id="options">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th>Produkt/tjänst</th>
+            <th/>
+            <th class="text-right">Pris</th>
+            <th/>
+          </tr>
+        </thead>
+        <tbody>
+          <tr t-foreach="quotation.options" t-as="option">
+            <t t-if="not option.line_id">
+              <td>
+                <a t-attf-href="{{'#%s' % option.id}}" t-field="option.name"/>
+              </td>
+              <td>
+                <strong t-if="option.discount" class="text-info"><t t-esc="((option.discount % 1) and '%s' or '%d') % option.discount"/>% discount
+                                </strong>
+              </td>
+              <td>
+                <strong class="text-right">
+                  <div t-field="option.price_unit" t-field-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: &quot;quotation.pricelist_id.currency_id&quot;}" t-att-style="option.discount and 'text-decoration: line-through' or ''" t-att-class="option.discount and 'text-danger' or ''"/>
+                  <div t-if="option.discount">
+                    <t t-esc="'%.2f' % ((1-option.discount / 100.0) * option.price_unit)"/>
+                  </div>
+                </strong>
+              </td>
+              <td>
+                <div class="pull-right">
+                  <a t-attf-href="/quote/add_line/#{ option.id }/#{ quotation.id }/#{ quotation.access_token }" class="mb8 hidden-print">
+                    <span class="fa fa-shopping-cart" style=""/>
+                  </a>
+                </div>
+              </td>
+            </t>
+          </tr>
+        </tbody>
+      </table>
+      <t t-foreach="quotation.options" t-as="line">
+        <a t-att-id="line.id"/>
+        <div t-field="line.website_description"/>
+      </t>
+    </section>
+  </div>
+</t>
+
+</data>
+</openerp>
