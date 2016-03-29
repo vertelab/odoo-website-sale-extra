@@ -298,7 +298,7 @@
                   </h4>
                 </div>
                 <div class="panel panel-default">
-                  <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=4).sorted(key=lambda r: r.partner_id.name)" t-as="active_order">
+                  <t t-foreach="request.env['sale.order'].sudo().search([('website_published','=',True)],limit=4).sorted(key=lambda r: r.create_date, reverse=True)" t-as="active_order">
                     <div class="panel-heading">
                       <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" t-att-href="'#%s' %active_order.name" t-field="active_order.website_subject" />
@@ -357,19 +357,23 @@
                         </t>
                         <p t-field="active_order.website_description" />
                         <div class="clearfix oe_login_buttons">
-                          <!--
-                               <a t-att-href="'/so/%s/interest'%active_order.id">
-                          -->
-                          <!--
-                               <a t-att-href="'?id=%s'%active_order.id">
-                          -->
-                          <!--
-                               <div class="btn btn-primary javascriptThing"/>
-                          -->
+<!--
+                          <t t-set="user" t-value="request.env['res.partner'].sudo().search([('active','=',True)])[0]" />
+                          <p t-esc="user" />
+-->
+<!--
+                        <a t-att-href="'login/redirect=%s'%active_order.name">
+-->
+<!--
                           <button class='btn btn-primary' groups='base.group_user' t-att-onclick="'interestedButton(%s,%s)' %(active_order.id, active_order.name)">Intresseanmälan</button>
-                          <!--
-                               </a>
-                          -->
+-->
+<!--
+                            <t t-set="user" t-value="env['res.partner'].search([('active','=',True)])[0]"/>
+-->
+                          <button class='btn btn-primary' groups='base.group_user' t-att-onclick="'jsonButton(%s)'%(active_order.id)">Intresseanmälan</button>
+<!--
+                          </a>
+-->
                         </div>
                         <div class="clearfix oe_login_buttons">
                           <a t-att-href="'login/redirect=%s'%active_order.name">
@@ -386,27 +390,26 @@
         </div>
       </t>
       <script>
-        $( document ).ready(function() {
-        console.log( "ready!" );
-        });
+            function jsonButton(order_id){
         
-        function interestedButton(id, name){
-        //name.id är sale ordern vi ska göra intresseanmälan på.
+        //openerp.jsonRpc("/partner/1/json/", 'call', {}).then(function(data){
+        openerp.jsonRpc("/so/"+order_id+"/interest", 'call', {}).then(function(data){
+                console.log('data: ' + JSON.stringify(data));
+                alert(JSON.stringify(data));
+            });
         
-        var website = openerp.website;
-        //alert(website);
-        website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("IT'S DONE!\n"+id + "\n" +name.id));
-        //alert("IT'S DONE!\n"+id + "\n" +name.id);
+//        openerp.website.session.model('sale.order').call('send_mail',[name, id],{}).then(alert("Notification sent to " + name));
         }
-        
-        $(document).ready(function() {
-        //"use strict";
-        var website = openerp.website;
-        var $group = this.$dialog.find("div.javascriptThing");
-        
-        });
-
-      </script>
+          
+          
+          
+          
+          function interestedButton(id, name){
+      
+      //window.location.replace('so/'+name+'/interest');
+      //alert('Interest sent to ' + id);
+        openerp.website.session.model('sale.order').call('send_mail',[name.id, id],{}).then(alert("Notification sent to " + name.id));
+        }</script>
     </template>
   </data>
 </openerp>

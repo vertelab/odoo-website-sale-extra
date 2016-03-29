@@ -30,6 +30,7 @@ class res_partner(models.Model):
 
     @api.depends('ref', 'parent_id.ref')
     @api.one
+    @api.depends('ref','parent_id','parent_id.ref')
     def _get_customer_no(self):
         if self.parent_id:
             self.customer_no = self.parent_id.customer_no
