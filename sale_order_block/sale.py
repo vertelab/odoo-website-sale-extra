@@ -44,42 +44,22 @@ class sale_order(models.Model):
     categ_wtime_id = fields.Integer(compute='_categ_wtime_id')
     uom_id = fields.Many2one(comodel_name='product.uom',string='Unit of measure' )
     qty = fields.Float(string="Quantity")
-    
-    @api.model
-    def send_mail(self, order_name, order_id, context=None):
-        #_logger.warning('\norder_name: %s\norder_id: %s\nContext: %s\n'%(order_name,order_id,context))
-        
-        #~ _logger.warning("self: %s" % ([x for x in (self)])
-        
-        users = self.env['res.partner'].search([('active','=',True)])
-        
-        _logger.warning('logged in: %s'%users[0].name)
-    
-        #~ _logger.warning('\nself: %s\nOrdername: %s\norder_id: %s\nContext: %s\n' %(self, order_name, order_id, context))
-        #~ _logger.warning('\nBALFFA: %s'%self.env['res.users'].search([('id','=',self._uid)])[0].name)
-        #~ self.env['mail.message'].sudo().create({
-                #~ 'body': _("Yes, I'm interested in %s" % order_name),
-                #~ 'subject': 'Interested',
-                #~ #'author_id': self._uid,
-                #~ 'author_id': self.user_id,
-                #~ 'res_id': order_id,
-                #~ 'model': 'sale.order',
-                #~ 'type': 'notification',
-                #~ })  
-                
+            
 
 class website_product_category(http.Controller):
-    @http.route(['/so/<model("sale.order"):order>/interest'], type='http', auth="public", website=True)
+    @http.route(['/so/<model("sale.order"):order>/interest'], type='json', auth="user")
     def sale_order_interest(self, order = None, **post):
         if order:
+            partner = request.env['res.users'].browse(request.context.get("uid")).partner_id
             request.env['mail.message'].create({
                 'body': _("Yes, I'm interested in %s" % order.name),
                 'subject': 'Interested',
-                'author_id': request.uid,
+                'author_id': partner.id,
                 'res_id': order.id,
                 'model': order._name,
                 'type': 'notification',})                
-        return http.local_redirect('/')
+        #~ return http.local_redirect('/')
+        return {"data":_('Thanks for shown interest.')}
     
     @http.route(['/sale_order_block',], type='http', auth="public", website=True)
     def index(self, **post):
@@ -98,3 +78,10 @@ class website_product_category(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         return request.render('sale_order_block.work_with_us', {
         })
+        
+ 
+    
+    
+    
+    
+    
