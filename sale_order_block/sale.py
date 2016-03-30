@@ -59,8 +59,8 @@ class website_product_category(http.Controller):
                 'model': order._name,
                 'type': 'notification',})                
         #~ return http.local_redirect('/')
-        return {"data":_('Thanks for shown interest.')}
-    
+        return _('Thanks for shown interest.')
+        
     @http.route(['/sale_order_block',], type='http', auth="public", website=True)
     def index(self, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
@@ -77,6 +77,12 @@ class website_product_category(http.Controller):
     def work_with_us(self, **post):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         return request.render('sale_order_block.work_with_us', {
+        })
+        
+    @http.route(['/hitta_konsult',], type='http', auth="public", website=True)
+    def hitta_konsult(self, **post):
+        cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
+        return request.render('sale_order_block.hitta_konsult', {
         })
         
  
