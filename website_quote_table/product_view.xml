@@ -1,0 +1,18 @@
+<openerp>
+<data>
+
+
+<record model="ir.ui.view" id="product_media_form">
+    <field name="inherit_id" ref="product.product_template_form_view"/>
+    <field name="name">product.quote.form.view</field>
+    <field name="model">product.template</field>
+    <field name="arch" type="xml">
+        <field name="warranty" position="after">
+            <field name="bootstrap_icon"/>
+        </field>
+    </field>
+</record>
+
+
+</data>
+</openerp>

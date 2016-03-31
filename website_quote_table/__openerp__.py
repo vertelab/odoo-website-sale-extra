@@ -21,9 +21,9 @@
 
 {
     'name': 'Website_quote_table',
-    'version': '0.1',
+    'version': '0.2',
     'category': 'Tools',
-    'summary': '',
+    'summary': 'Additional quote templates',
     'licence': 'AGPL-3',
     'description': """
 
@@ -35,7 +35,8 @@
     'website': 'http://www.vertel.se',
     'depends': ['website_quote',],
     'data': [
-    'website_quote_table.xml'
+    'website_quote_table.xml',
+    'product_view.xml'
     ],
     'application': False,
     'installable': True,
