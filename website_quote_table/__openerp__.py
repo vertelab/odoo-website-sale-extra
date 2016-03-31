@@ -1,34 +1,45 @@
 # -*- coding: utf-8 -*-
+##############################################################################
+#
+#    OpenERP, Open Source Management Solution, third party addon
+#    Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
+#
+#    This program is free software: you can redistribute it and/or modify
+#    it under the terms of the GNU Affero General Public License as
+#    published by the Free Software Foundation, either version 3 of the
+#    License, or (at your option) any later version.
+#
+#    This program is distributed in the hope that it will be useful,
+#    but WITHOUT ANY WARRANTY; without even the implied warranty of
+#    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#    GNU Affero General Public License for more details.
+#
+#    You should have received a copy of the GNU Affero General Public License
+#    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+##############################################################################
+
 {
-    'name': "website_quote_table",
-
-    'summary': """
-        Short (1 phrase/line) summary of the module's purpose, used as
-        subtitle on modules listing or apps.openerp.com""",
-
+    'name': 'Website_quote_table',
+    'version': '0.2',
+    'category': 'Tools',
+    'summary': 'Additional quote templates',
+    'licence': 'AGPL-3',
     'description': """
-        Long description of module's purpose
-    """,
 
-    'author': "Your Company",
-    'website': "http://www.yourcompany.com",
 
-    # Categories can be used to filter modules in modules listing
-    # Check https://github.com/odoo/odoo/blob/master/openerp/addons/base/module/module_data.xml
-    # for the full list
-    'category': 'Uncategorized',
-    'version': '0.1',
 
-    # any module necessary for this one to work correctly
-    'depends': ['base'],
 
-    # always loaded
+""",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['website_quote',],
     'data': [
-        # 'security/ir.model.access.csv',
-        'templates.xml',
+    'website_quote_table.xml',
+    'product_view.xml'
     ],
-    # only loaded in demonstration mode
-    'demo': [
-        'demo.xml',
-    ],
+    'application': False,
+    'installable': True,
+    'demo': [],
 }
+# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
