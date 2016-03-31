@@ -185,6 +185,7 @@
     <!-- HITTA KONSULT -->
     <template id="hitta_konsult">
       <t t-call="website.layout">
+
         <div class="container" id="info-board">
           <div class="text-field col-md-12 mt32" id="ingresstext">
             <p class="text-center">
@@ -289,7 +290,7 @@
               </div>
               <!-- TAB 3 -->
               <div id="menu2" class="tab-pane fade in">
-                <h4>Leave your details and we will tell more.</h4>
+                <h4>Create an assigment.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
@@ -307,6 +308,10 @@
                         <input type="email" class="form-control" name="email_from" placeholder="Email" required="True" t-attf-value="#{email_from or ''}" />
                       </div>
                     </div>
+                    <!-- HIDDEN TAG FOR TAG field-->
+<!--
+                    <input type="hidden" name="categ_ids" value="[6,_,[7]]"/>
+-->
                     <!-- Knapp -->
                     <div class="form-group">
                       <div class="col-md-6">
@@ -424,13 +429,11 @@
       </t>
       <script>function jsonButton(order_id){
         
-        //openerp.jsonRpc("/partner/1/json/", 'call', {}).then(function(data){
         openerp.jsonRpc("/so/"+order_id+"/interest", 'call', {}).then(function(data){
         console.log('data: ' + JSON.stringify(data));
         alert(JSON.stringify(data));
         });
         
-        //        openerp.website.session.model('sale.order').call('send_mail',[name, id],{}).then(alert("Notification sent to " + name));
         }</script>
     </template>
   </data>

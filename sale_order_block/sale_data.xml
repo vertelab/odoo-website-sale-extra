@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+  <data>
+    <record id="website_crm.consultant" model="crm.case.categ">
+      <field name="name">Consultant</field>
+    </record>
+    <record id="website_crm.buyer" model="crm.case.categ">
+      <field name="name">Buyer</field>
+    </record>
+    <record id="website_crm.miscellanous" model="crm.case.categ">
+      <field name="name">Miscellanous</field>
+    </record>
+  </data>
+</openerp>
