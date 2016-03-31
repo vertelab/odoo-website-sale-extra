@@ -89,19 +89,17 @@ class website_product_category(http.Controller):
     
 class contactus(openerp.addons.website_crm.controllers.main.contactus):
     def create_lead(self, request, values, kwargs):
-        #~ raise Warning(values)
-        
         #~ action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
-        hidden_tag = values.get('categ_ids')
-        #~ raise Warning(hidden_tag)
+        
+        path_or_xml_id_or_id = "website_crm." + values['categ_ids']
+        #~ raise Warning(path_or_xml_id_or_id)
         
         action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
         #~ modul prefix sale_order_block.consultant -> path_or_xml_id_or_id
         
-        #~ läggs istället för 7 i []
-        
+        #~ Add hidden specific TAG to Lead, depending on form.
         values['categ_ids'] = [(6,0,[action_id])]
-        return super(contactus,self).create_lead(request,values, kwargs)
+        return super(contactus,self).create_lead(request, values, kwargs)
 
 
 

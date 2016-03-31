@@ -7,8 +7,8 @@
     <record id="website_crm.buyer" model="crm.case.categ">
       <field name="name">Buyer</field>
     </record>
-    <record id="website_crm.miscellanous" model="crm.case.categ">
-      <field name="name">Miscellanous</field>
+    <record id="website_crm.miscellaneous" model="crm.case.categ">
+      <field name="name">Miscellaneous</field>
     </record>
   </data>
 </openerp>
