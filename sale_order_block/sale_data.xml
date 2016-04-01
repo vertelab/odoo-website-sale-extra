@@ -3,12 +3,18 @@
   <data>
     <record id="website_crm.consultant" model="crm.case.categ">
       <field name="name">Consultant</field>
+      <field name="section_id" ref="sales_team.section_sales_department" />
+      <field name="object_id" search="[('model','=','crm.lead')]" model="ir.model" />
     </record>
     <record id="website_crm.buyer" model="crm.case.categ">
       <field name="name">Buyer</field>
+      <field name="section_id" ref="sales_team.section_sales_department" />
+      <field name="object_id" search="[('model','=','crm.lead')]" model="ir.model" />
     </record>
     <record id="website_crm.miscellaneous" model="crm.case.categ">
       <field name="name">Miscellaneous</field>
+      <field name="section_id" ref="sales_team.section_sales_department" />
+      <field name="object_id" search="[('model','=','crm.lead')]" model="ir.model" />
     </record>
   </data>
 </openerp>

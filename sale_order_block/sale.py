@@ -92,6 +92,8 @@ class contactus(openerp.addons.website_crm.controllers.main.contactus):
         #~ action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
         
         path_or_xml_id_or_id = "website_crm." + values['categ_ids']
+        #~ path_or_xml_id_or_id = "website_crm.consultant"
+        
         #~ raise Warning(path_or_xml_id_or_id)
         
         action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)

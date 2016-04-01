@@ -66,7 +66,7 @@
                 <h4>Leave your details and we will tell more.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
                     <!-- HIDDEN TAG FOR TAG field-->
-                    <input type="hidden" class="corm-control" name="categ_ids" value="Consultant" />
+                    <input type="hidden" class="corm-control" name="categ_ids" value="consultant" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
@@ -218,7 +218,7 @@
                 <h4>Leave your details and we will tell more.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
                     <!-- HIDDEN TAG FOR TAG field-->
-                    <input type="hidden" class="corm-control" name="categ_ids" value="Buyer" />
+                    <input type="hidden" class="corm-control" name="categ_ids" value="buyer" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
@@ -296,7 +296,7 @@
                 <h4>Create an assigment.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
                     <!-- HIDDEN TAG FOR TAG field-->
-                    <input type="hidden" class="corm-control" name="categ_ids" value="Buyer" />
+                    <input type="hidden" class="corm-control" name="categ_ids" value="buyer" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
