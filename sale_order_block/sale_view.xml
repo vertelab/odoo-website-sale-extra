@@ -151,7 +151,7 @@
         var texten = "name: " + name + "\nemail: " + email + "\nphone: " + phone;
         alert(texten);
         }
-        
+
         $(document).ready(function() {
         $('#intressent-form-link').click(function(e) {
         $("#intressent-form").delay(100).fadeIn(100);
@@ -180,7 +180,7 @@
         $(this).addClass('active');
         e.preventDefault();
         });
-        
+
         });
       </script>
     </template>
@@ -430,12 +430,12 @@
       </t>
       <script>
         function jsonButton(order_id){
-        
+
         openerp.jsonRpc("/so/"+order_id+"/interest", 'call', {}).then(function(data){
         console.log('data: ' + JSON.stringify(data));
         alert(JSON.stringify(data));
         });
-        
+
         }
       </script>
     </template>

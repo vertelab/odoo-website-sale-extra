@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="find_consultant" name="Find Consultants">
+            <t t-call="website.layout">
+                <section class="mt32 mb32">
+                    <div class="container" style="padding: 0px; max-width: 1140px;">
+                        <div class="col-md-12 col-sm-12" style="border: 1px solid #369; background-color: #fefefe; padding: 20px;">
+                            <div class="col-sm-12 text-center">
+                                <h2>Vad söker du?</h2>
+                            </div>
+                            <div class="container">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#assign_interest">Interest</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#add_assign">Create Assignment</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#account">Create Account</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!-- assignment interest -->
+                                    <div class="tab-pane fade in">
+                                        <t t-call="website_penta.assign_interest"/>
+                                    </div>
+                                    <!-- add assignment -->
+                                    <div class="tab-pane fade in">
+                                        <t t-call="website_penta.add_assign"/>
+                                    </div>
+                                    <!-- create account -->
+                                    <div class="tab-pane fade in">
+                                        <t t-call="website_penta.account"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </template>
+
+        <template id="work_with_us" name="Work With Us">
+            <t t-call="website.layout">
+                <section class="mt32 mb32">
+                    <div class="container" style="padding: 0px; max-width: 1140px;">
+                        <div class="col-md-12 col-sm-12" style="border: 1px solid #369; background-color: #fefefe; padding: 20px;">
+                            <div class="col-sm-12 text-center">
+                                <h2>Vill du jobba hos oss?</h2>
+                            </div>
+                            <div class="container">
+                                <ul class="nav nav-tabs">
+                                    <li class="active">
+                                        <a data-toggle="tab" href="#job_interest">Interest</a>
+                                    </li>
+                                    <li>
+                                        <a data-toggle="tab" href="#account">Create Account</a>
+                                    </li>
+                                </ul>
+                                <div class="tab-content">
+                                    <!--jobb interest -->
+                                    <div class="tab-pane fade in active">
+                                        <t t-call="website_penta.job_interest"/>
+                                    </div>
+                                    <!-- create account -->
+                                    <div class="tab-pane fade in">
+                                        <t t-call="website_penta.account"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </t>
+        </template>
+
+        <template id="assign_interest">
+            <h4>Interest assignment</h4>
+            <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                <input type="hidden" class="corm-control" name="categ_ids" value="assign"/>
+                <!-- TODO: add more information -->
+            </form>
+        </template>
+
+        <template id="add_assign">
+            <h4>Add an assignment</h4>
+            <form action="" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                <!-- TODO: add more information -->
+            </form>
+        </template>
+
+        <template id="job_interest">
+            <h4>Job interest</h4>
+            <form action="" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                <input type="hidden" class="corm-control" name="categ_ids" value="job"/>
+                <!-- TODO: add more information -->
+            </form>
+        </template>
+
+        <template id="account">
+            <h4>Create account</h4>
+            <form action="/web/signup" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                <!-- TODO: add more information -->
+            </form>
+        </template>
+
+    </data>
+</openerp>
