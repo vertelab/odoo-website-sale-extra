@@ -35,16 +35,3 @@ class penta(http.Controller):
     @http.route(['/work_with_us'], type='http', auth='public', website=True)
     def work_with_us(self, **post):
         return request.website.render('website_penta.work_with_us', {})
-
-
-class contactus(openerp.addons.website_crm.controllers.main.contactus):
-    def create_lead(self, request, values, kwargs):
-        path_or_xml_id_or_id = "website_crm." + values['categ_ids']
-
-        #~ raise Warning(path_or_xml_id_or_id)
-
-        action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
-        #~ Add hidden specific TAG to Lead, depending on form.
-        values['categ_ids'] = [(6,0,[action_id])]
-        return super(contactus,self).create_lead(request, values, kwargs)
-
