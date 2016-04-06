@@ -30,7 +30,7 @@ Module For Penta Project
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['website', 'sale', 'crm', 'website_hr_cv', 'website_crm'],
-    'data': ['penta_view.xml',
+    'data': ['penta_view.xml', 'penta_data.xml'
     ],
     'application': False,
     'installable': True,

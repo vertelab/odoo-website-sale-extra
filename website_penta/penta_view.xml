@@ -19,20 +19,29 @@
                                         <a data-toggle="tab" href="#add_assign">Create Assignment</a>
                                     </li>
                                     <li>
+                                        <a data-toggle="tab" href="#consultants">Out consultants</a>
+                                    </li>
+                                    <li>
                                         <a data-toggle="tab" href="#account">Create Account</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
                                     <!-- assignment interest -->
-                                    <div class="tab-pane fade in">
+                                    <div id="assign_interest" class="tab-pane fade in active">
                                         <t t-call="website_penta.assign_interest"/>
                                     </div>
                                     <!-- add assignment -->
-                                    <div class="tab-pane fade in">
+                                    <div id="add_assign" class="tab-pane fade in">
                                         <t t-call="website_penta.add_assign"/>
                                     </div>
+                                    <!-- out consultants -->
+                                    <div id="consultants" class="tab-pane fade in">
+<!--
+                                        <t t-call="website_penta.our_consultants"/>
+-->
+                                    </div>
                                     <!-- create account -->
-                                    <div class="tab-pane fade in">
+                                    <div id="account" class="tab-pane fade in">
                                         <t t-call="website_penta.account"/>
                                     </div>
                                 </div>
@@ -62,11 +71,11 @@
                                 </ul>
                                 <div class="tab-content">
                                     <!--jobb interest -->
-                                    <div class="tab-pane fade in active">
+                                    <div id="job_interest" class="tab-pane fade in active">
                                         <t t-call="website_penta.job_interest"/>
                                     </div>
                                     <!-- create account -->
-                                    <div class="tab-pane fade in">
+                                    <div id="account" class="tab-pane fade in">
                                         <t t-call="website_penta.account"/>
                                     </div>
                                 </div>
@@ -101,9 +110,36 @@
         </template>
 
         <template id="account">
-            <h4>Create account</h4>
-            <form action="/web/signup" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
-                <!-- TODO: add more information -->
+            <h4 class="text-center mt32">Create Your Account</h4>
+            <form action="/web/signup" method="post" role="form" t-if="not message" class="form-horizontal mt32" enctype="multipart/form-data">
+                <div class="col-md-6 col-md-offset-3">
+                    <div t-attf-class="form-group #{error and 'login' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" name="login" placeholder="Your Email" t-att-value="login" id="login" class="form-control" autofocus="autofocus" required="required" t-att-readonly="'readonly' if only_passwords else None" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" name="name" t-att-value="name" id="name" class="form-control" placeholder="Your Name (e.g. John Doe)" required="required" t-att-readonly="'readonly' if only_passwords else None" t-att-autofocus="'autofocus' if login and not only_passwords else None" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'password' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="password" name="password" placeholder="Password" id="password" class="form-control" required="required" t-att-autofocus="'autofocus' if only_passwords else None" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'confirm_password' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="password" name="confirm_password" placeholder="Confirm Password" id="confirm_password" class="form-control" required="required" />
+                        </div>
+                    </div>
+                    <input type="hidden" name="redirect" t-att-value="redirect" />
+                    <input type="hidden" name="token" t-att-value="token" />
+                    <div class="clearfix oe_login_buttons form-group col-md-12">
+                        <a t-attf-href="/web/login?{{ keep_query() }}" class="btn btn-link pull-right">Back to Login</a>
+                        <button type="submit" class="btn btn-primary pull-right">Sign up</button>
+                    </div>
+                </div>
             </form>
         </template>
 
