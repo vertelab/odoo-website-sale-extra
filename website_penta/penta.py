@@ -36,14 +36,6 @@ class penta(http.Controller):
     def work_with_us(self, **post):
         return request.website.render('website_penta.work_with_us', {})
 
-    #~ @http.route(['/assign_interest'], type='http', auth='public', website=True)
-    #~ def assign_interest(self, **post):
-        #~ return request.website.render('website_penta.assign_interest', {})
-
-    #~ @http.route(['/add_assign'], type='http', auth='public', website=True)
-    #~ def add_assign(self, **post):
-        #~ return request.website.render('website_penta.add_assign', {})
-
 
 class contactus(openerp.addons.website_crm.controllers.main.contactus):
     def create_lead(self, request, values, kwargs):

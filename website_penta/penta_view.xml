@@ -13,32 +13,23 @@
                             <div class="container">
                                 <ul class="nav nav-tabs">
                                     <li class="active">
-                                        <a data-toggle="tab" href="#assign_interest">Interest</a>
+                                        <a data-toggle="tab" href="#add_assign">Registry an assignment</a>
                                     </li>
                                     <li>
-                                        <a data-toggle="tab" href="#add_assign">Create Assignment</a>
-                                    </li>
-                                    <li>
-                                        <a data-toggle="tab" href="#consultants">Out consultants</a>
+                                        <a data-toggle="tab" href="#our_consultants">Our consultants</a>
                                     </li>
                                     <li>
                                         <a data-toggle="tab" href="#account">Create Account</a>
                                     </li>
                                 </ul>
                                 <div class="tab-content">
-                                    <!-- assignment interest -->
-                                    <div id="assign_interest" class="tab-pane fade in active">
-                                        <t t-call="website_penta.assign_interest"/>
-                                    </div>
                                     <!-- add assignment -->
-                                    <div id="add_assign" class="tab-pane fade in">
+                                    <div id="add_assign" class="tab-pane fade in active">
                                         <t t-call="website_penta.add_assign"/>
                                     </div>
                                     <!-- out consultants -->
-                                    <div id="consultants" class="tab-pane fade in">
-<!--
+                                    <div id="our_consultants" class="tab-pane fade in">
                                         <t t-call="website_penta.our_consultants"/>
--->
                                     </div>
                                     <!-- create account -->
                                     <div id="account" class="tab-pane fade in">
@@ -86,26 +77,111 @@
             </t>
         </template>
 
-        <template id="assign_interest">
-            <h4>Interest assignment</h4>
+        <template id="add_assign">
+            <h4 class="text-center mt32">Registry an assignment</h4>
             <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
-                <input type="hidden" class="corm-control" name="categ_ids" value="assign"/>
-                <!-- TODO: add more information -->
+                <input type="hidden" class="corm-control" name="categ_ids" value="buyer" />
+                <div class="col-md-6 col-md-offset-3">
+                    <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="name" required="True" placeholder="Assignment Name" t-attf-value="#{name or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'partner_name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="partner_name" required="True" placeholder="Company Name" t-attf-value="#{partner_name or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="contact_name" required="True" placeholder="Contact Person" t-attf-value="#{contact_name or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'street' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="street" placeholder="Address" t-attf-value="#{street or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'phone' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="phone" placeholder="Phone Number" t-attf-value="#{phone or ''}" />
+                        </div>
+                    </div>
+                    <div name="email_from_container" t-attf-class="form-group #{error and 'email_from' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="email" class="form-control" name="email_from" placeholder="Email" required="True" t-attf-value="#{email_from or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'description' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <textarea class="form-control" placeholder="Other Information" name="description" style="min-height: 120px" required="True" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-1">
+                            <button class="btn btn-success pull-right">Create</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </template>
 
-        <template id="add_assign">
-            <h4>Add an assignment</h4>
-            <form action="" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
-                <!-- TODO: add more information -->
-            </form>
+        <template id="our_consultants">
+            <t t-set="employee_ids" t-value="request.env['hr.employee'].sudo().search([],order='name')"/>
+            <div class="container">
+                <div class="col-md-12 col-sm-12">
+                    <h4 class="text-center mt32" t-if="len(employee_ids)">Our Consultants</h4>
+                    <div t-foreach="employee_ids" t-as="employee" class="col-md-4 mt16 text-center colsize">
+                        <div t-if="employee.website_published == True or user_id.has_group('base.group_website_publisher')">
+                            <t t-call="website.publish_management"><t t-set="object" t-value="employee"/></t>
+                            <div class="clearfix"/>
+                            <a t-att-href="'/consultant/%s' % employee.id"><img t-att-src="website.imagemagick_url(employee, 'image', 'website_hr_cv.im_hr_single')" class="img shadow img-rounded"/></a>
+                            <div class="mt8">
+                                <a t-att-href="'/consultant/%s' % employee.id"><strong t-field="employee.name"/></a>
+                            </div>
+                        </div>
+                    </div>
+                    <hr/>
+                </div>
+            </div>
         </template>
 
         <template id="job_interest">
-            <h4>Job interest</h4>
-            <form action="" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
-                <input type="hidden" class="corm-control" name="categ_ids" value="job"/>
-                <!-- TODO: add more information -->
+            <h4 class="text-center mt32">Vill du jobba hos oss?</h4>
+            <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                <input type="hidden" class="corm-control" name="categ_ids" value="consultant" />
+                <div class="col-md-6 col-md-offset-3">
+                    <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="contact_name" required="True" placeholder="Your Name" t-attf-value="#{contact_name or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'phone' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="phone" placeholder="Phone Number" t-attf-value="#{phone or ''}" />
+                        </div>
+                    </div>
+                    <div name="email_from_container" t-attf-class="form-group #{error and 'email_from' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="email" class="form-control" name="email_from" placeholder="Email" required="True" t-attf-value="#{email_from or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'name' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <input type="text" class="form-control" name="name" placeholder="Job Position" t-attf-value="#{name or ''}" />
+                        </div>
+                    </div>
+                    <div t-attf-class="form-group #{error and 'description' in error and 'has-error' or ''}">
+                        <div class="col-md-10 col-md-offset-1">
+                            <textarea class="form-control" name="description" placeholder="Personal letter" style="min-height: 120px" required="True" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-10 col-md-offset-1">
+                            <button class="btn btn-primary pull-right">Apply</button>
+                        </div>
+                    </div>
+                </div>
             </form>
         </template>
 
