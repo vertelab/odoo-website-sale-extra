@@ -32,7 +32,7 @@ class res_partner(models.Model):
     @api.one
     @api.depends('ref','parent_id','parent_id.ref')
     def _get_customer_no(self):
-        if self.parent_id:
+        if not self.is_company and self.parent_id:
             self.customer_no = self.parent_id.customer_no
         else:
             self.customer_no = self.ref
@@ -66,3 +66,8 @@ class sale_order(models.Model):
     _inherit = 'sale.order'
 
     customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
+    
+    @api.one
+    def get_customer_no(self):
+        #raise Warning('hejsan %s' % self.partner_id.customer_no)
+        self.partner_id.write({'ref': self.partner_id.ref })
