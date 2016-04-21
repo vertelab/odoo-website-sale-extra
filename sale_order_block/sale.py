@@ -6,6 +6,7 @@ from openerp import http
 from openerp.http import request
 from openerp import SUPERUSER_ID
 from datetime import datetime
+import openerp
 import werkzeug
 import pytz
 import re
@@ -85,9 +86,33 @@ class website_product_category(http.Controller):
         return request.render('sale_order_block.hitta_konsult', {
         })
         
- 
     
-    
-    
-    
-    
+class contactus(openerp.addons.website_crm.controllers.main.contactus):
+    def create_lead(self, request, values, kwargs):
+        #~ action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
+        
+        path_or_xml_id_or_id = "website_crm." + values['categ_ids']
+        #~ path_or_xml_id_or_id = "website_crm.consultant"
+        
+        #~ raise Warning(path_or_xml_id_or_id)
+        
+        action_id = request.registry['ir.model.data'].xmlid_to_res_id(request.cr, request.uid, path_or_xml_id_or_id, raise_if_not_found=False)
+        #~ modul prefix sale_order_block.consultant -> path_or_xml_id_or_id
+        
+        #~ Add hidden specific TAG to Lead, depending on form.
+        values['categ_ids'] = [(6,0,[action_id])]
+        return super(contactus,self).create_lead(request, values, kwargs)
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -65,6 +65,8 @@
               <div id="home" class="tab-pane fade in active">
                 <h4>Leave your details and we will tell more.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                    <!-- HIDDEN TAG FOR TAG field-->
+                    <input type="hidden" class="corm-control" name="categ_ids" value="consultant" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
@@ -149,7 +151,7 @@
         var texten = "name: " + name + "\nemail: " + email + "\nphone: " + phone;
         alert(texten);
         }
-        
+
         $(document).ready(function() {
         $('#intressent-form-link').click(function(e) {
         $("#intressent-form").delay(100).fadeIn(100);
@@ -178,7 +180,7 @@
         $(this).addClass('active');
         e.preventDefault();
         });
-        
+
         });
       </script>
     </template>
@@ -215,6 +217,8 @@
               <div id="home" class="tab-pane fade in active">
                 <h4>Leave your details and we will tell more.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                    <!-- HIDDEN TAG FOR TAG field-->
+                    <input type="hidden" class="corm-control" name="categ_ids" value="buyer" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
@@ -289,8 +293,10 @@
               </div>
               <!-- TAB 3 -->
               <div id="menu2" class="tab-pane fade in">
-                <h4>Leave your details and we will tell more.</h4>
+                <h4>Create an assigment.</h4>
                 <form action="/crm/contactus" method="post" class="form-horizontal mt32" enctype="multipart/form-data">
+                    <!-- HIDDEN TAG FOR TAG field-->
+                    <input type="hidden" class="corm-control" name="categ_ids" value="buyer" />
                   <div class="col-md-4">
                     <div t-attf-class="form-group #{error and 'contact_name' in error and 'has-error' or ''}">
                       <div class="col-md-12">
@@ -422,16 +428,16 @@
           </div>
         </div>
       </t>
-      <script>function jsonButton(order_id){
-        
-        //openerp.jsonRpc("/partner/1/json/", 'call', {}).then(function(data){
+      <script>
+        function jsonButton(order_id){
+
         openerp.jsonRpc("/so/"+order_id+"/interest", 'call', {}).then(function(data){
         console.log('data: ' + JSON.stringify(data));
         alert(JSON.stringify(data));
         });
-        
-        //        openerp.website.session.model('sale.order').call('send_mail',[name, id],{}).then(alert("Notification sent to " + name));
-        }</script>
+
+        }
+      </script>
     </template>
   </data>
 </openerp>
