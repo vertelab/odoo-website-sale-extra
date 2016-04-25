@@ -48,8 +48,10 @@ for o in obj:
         <field name="code">
 obj = object.browse(context.get('active_ids', []))
 for o in obj:
-    if o.ref:
-        o.write({'ref': o.ref + ''})
+    if o.parent_id and o.parent_id.ref:
+        o.parent_id.write({'ref': o.parent_id.ref})
+    elif o.ref:
+        o.write({'ref': o.ref})
         </field>
     </record>
     
@@ -58,6 +60,34 @@ for o in obj:
         <field name="model">res.partner</field>
         <field name="key2">client_action_multi</field>
         <field name="value" eval="'ir.actions.server,%d' % fix_customer_no_partner"/>
+    </record>
+    
+    <record model="ir.actions.server" id="fix_customer_no_invoice">
+        <field name="name">Uppdatera Kundnummer Invoice</field>
+        <field name="state">code</field>
+        <field name="condition" eval="True"/>
+        <field name="model_id" ref="account.model_account_invoice"/>
+        <field name="code">
+obj = object.browse(context.get('active_ids', []))
+partner_ids = []
+for o in obj:
+    if o.partner_id.parent_id:
+        p = o.partner_id.parent_id.id
+    else:
+        p = o.partner_id.id
+    if not p in partner_ids:
+        partner_ids.append(p)
+obj = object.env['res.partner'].browse(partner_ids)
+for o in obj:
+    o.write({'ref': o.ref})
+        </field>
+    </record>
+    
+    <record model="ir.values" id="fix_customer_no_invoice_action_menu">
+        <field name="name">Uppdatera kundnummer</field>
+        <field name="model">account.invoice</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.server,%d' % fix_customer_no_invoice"/>
     </record>
     
 </data>

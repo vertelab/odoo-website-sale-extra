@@ -26,11 +26,17 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit ='res.partner'
 
-    customer_no = fields.Char('Customer Number', compute='_get_customer_no', store=True)
-
+    customer_no = fields.Char('Customer Number', select=True, compute='_get_customer_no', store=True)
+    
+    #Use this field definition, and remove depends on _get_customer_no
+    #to avoid calculating customer_no for all customers on installation.
+    #Switch back and upgrade after installation.
+    #customer_no = fields.Char('Customer Number', select=True)
+    
     @api.one
     @api.depends('ref','parent_id','parent_id.customer_no')
     def _get_customer_no(self):
+        _logger.warn('_get_customer_no %s, %s' % (self.id, self.name))
         if not self.is_company and self.parent_id:
             self.customer_no = self.parent_id.customer_no
         else:
