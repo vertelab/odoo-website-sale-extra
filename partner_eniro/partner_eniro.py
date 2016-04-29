@@ -82,4 +82,4 @@ class res_partner(models.Model):
                 'country_id': self.env['res.country'].search([('code','=','SE')])[0].id,
             })
 
-        return json
+            return json
