@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#	* sale_customer_no
+#   * sale_customer_no
 #
 msgid ""
 msgstr ""
@@ -50,4 +50,9 @@ msgstr "Kund"
 #: model:ir.model,name:sale_customer_no.model_sale_order
 msgid "Sales Order"
 msgstr "Kundorder"
+
+#. module: sale_customer_no
+#: model:ir.model,name:sale_customer_no.model_sale_order
+msgid "Salesperson"
+msgstr "Säljare"
 
