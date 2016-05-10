@@ -36,6 +36,7 @@
     'depends': ['website_quote',],
     'data': [
     'website_quote_table.xml',
+    'website_quote_data.xml',
     'product_view.xml'
     ],
     'application': False,

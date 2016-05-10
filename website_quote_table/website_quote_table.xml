@@ -1,7 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
   <data>
+    <template id="monthly_costs" inherit_id="website_quote.pricing" active="False" customize_show="True" name="Monthly Costs Pricing">
+        <xpath expr="//h1[@class='page-header']" position="replace">
+            <h1 class="page-header"><t t-esc="product_section_title if product_section_title else 'Pricing'"/></h1>
+        </xpath>
+        <xpath expr="//section[@id='quote']" position="attributes">
+            <atribute name="id"/>
+            <attribute name="t-att-id">'quote_%s' % product_section_title if product_section_title else 'quote'</attribute>
+        </xpath>
+        <xpath expr="//tr[@t-foreach='quotation.order_line']" position="attributes">
+            <attribute name="t-foreach">order_lines if order_lines or order_lines == [] else quotation.order_line</attribute>
+        </xpath>
+        <xpath expr="//strong[@t-field='quotation.amount_untaxed']" position="replace">
+            <t t-if="not alt_field">
+                <strong data-id="total_amount" t-field="quotation.amount_untaxed" t-field-options='{"widget": "monetary","display_currency": "quotation.pricelist_id.currency_id"}'/>
+            </t>
+            <t t-if="alt_field">
+                <strong data-id="total_amount" t-field="alt_field" t-field-options='{"widget": "monetary","display_currency": "quotation.pricelist_id.currency_id"}'/>
+            </t>
+        </xpath>
+        
+<!--
+        <tr>
+          <td></td><td></td><td></td><td></td>
+          <td class="text-right"><strong>Subtotal:</strong></td>
+          <td class="text-right">
+              <strong data-id="total_amount" t-field="quotation.amount_untaxed" t-field-options='{"widget": "monetary","display_currency": "quotation.pricelist_id.currency_id"}'/>
+          </td>
+      </tr>
+      <tr>
+          <td></td><td></td><td></td><td></td>
+          <td class="text-right">Taxes:</td>
+          <td class="text-right">
+              <span data-id="total_amount" t-field="quotation.amount_tax" t-field-options='{"widget": "monetary","display_currency": "quotation.pricelist_id.currency_id"}'/>
+          </td>
+      </tr>
+      <tr>
+          <td></td><td></td><td></td><td></td>
+          <td class="text-right"><strong>Total:</strong></td>
+          <td class="text-right">
+              <strong data-id="total_amount" t-field="quotation.amount_total" t-field-options='{"widget": "monetary","display_currency": "quotation.pricelist_id.currency_id"}'/>
+          </td>
+      </tr>
+-->
+    </template>
+    
+    <template id="so_quotation_monthly" inherit_id="website_quote.so_quotation" active="False" customize_show="True" name="Monthly Costs">
+        <xpath expr="//t[@t-call='website_quote.pricing']" position="replace">
+            <t t-call="website_quote.pricing">
+                <t t-set="product_section_title" t-value="'Monthly Costs'"/>
+                <t t-set="order_lines" t-value="[l for l in quotation.order_line if l.product_id and l.product_id.uom_id == request.env.ref('website_quote_table.product_uom_month')]"/>
+            </t>
+            <t t-call="website_quote.pricing">
+                <t t-set="order_lines" t-value="[l for l in quotation.order_line if l.product_id and l.product_id.uom_id != request.env.ref('website_quote_table.product_uom_month')]"/>
+            </t>
+        </xpath>
+    </template>
     <template id="website_quote_table.pricing" inherit_id="website_quote.pricing" customize_show="True" active="False" name="Price Table">
+      <!-- Same as original -->
       <xpath expr="//tr[@t-foreach='quotation.order_line']" position="replace">
         <tr t-foreach="quotation.order_line" t-as="line">
           <td>
