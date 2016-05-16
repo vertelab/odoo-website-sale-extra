@@ -37,7 +37,7 @@ class res_partner(models.Model):
     @api.depends('ref','parent_id','parent_id.customer_no')
     def _get_customer_no(self):
         _logger.warn('_get_customer_no %s, %s' % (self.id, self.name))
-        if not self.is_company and self.parent_id:
+        if self.parent_id:
             self.customer_no = self.parent_id.customer_no
         else:
             self.customer_no = self.ref
@@ -51,20 +51,22 @@ class res_partner(models.Model):
 
     @api.one
     def generate_new_customer_no(self):
-        if self.is_company:
-            if self.customer:
-                self.ref = self.env['ir.sequence'].get('res.partner.customer.no')
-            elif self.supplier:
-                self.ref = self.env['ir.sequence'].get('res.partner.supplier.no')
-
+        self.ref = self._generate_new_customer_no()
+    
+    @api.model
+    def _generate_new_customer_no(self, customer=False, supplier=False):
+        _logger.warn(self.customer)
+        if customer or self.customer:
+            return self.env['ir.sequence'].get('res.partner.customer.no')
+        elif supplier or self.supplier:
+            return self.env['ir.sequence'].get('res.partner.supplier.no')
+        return ''
+    
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
-        if vals.get('is_company', False):
-            if vals.get('customer', False):
-                vals['ref'] = self.env['ir.sequence'].get('res.partner.customer.no')
-            elif vals.get('supplier', False):
-                vals['ref'] = self.env['ir.sequence'].get('res.partner.supplier.no')
+        if not (vals.get('parent_id', False) and vals.get('ref', False)):
+            vals['ref'] = self._generate_new_customer_no(vals.get('customer'), vals.get('supplier'))
         return super(res_partner, self).create(vals)
     
 class sale_order(models.Model):
