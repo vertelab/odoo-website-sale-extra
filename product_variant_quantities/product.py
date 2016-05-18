@@ -27,7 +27,8 @@ _logger = logging.getLogger(__name__)
 class product_product(models.Model):
     _inherit = 'product.product'
     
-    volume = fields.Float('Volume', digits_compute=dp.get_precision('Stock Volume'), help="The volume in m3.")
-    weight = fields.Float('Gross Weight', digits_compute=dp.get_precision('Stock Weight'), help="The gross weight in Kg.")
-    weight_net = fields.Float('Net Weight', digits_compute=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
+    #Volume digits is hardcoded in the product view!
+    volume = fields.Float('Volume', digits=dp.get_precision('Stock Volume'), help="The volume in m3.")
+    weight = fields.Float('Gross Weight', digits=dp.get_precision('Stock Weight'), help="The gross weight in Kg.")
+    weight_net = fields.Float('Net Weight', digits=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
         
