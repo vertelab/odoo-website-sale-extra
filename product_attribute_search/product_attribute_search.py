@@ -29,7 +29,7 @@ class product_product(models.Model):
     @api.v7
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
         values = name.split(',')
-        ids = set(self.pool.get('product.product').search(cr, uid, [('name','ilike',values[0].strip()), ('sale_ok', '=', True)], context=context))
+        ids = set(self.pool.get('product.product').search(cr, uid, ['&', ('name','ilike',values[0].strip()), ('sale_ok', '=', True)], context=context))
         if len(values) > 1:
             attributes = values[1:]
             for attr in attributes:
