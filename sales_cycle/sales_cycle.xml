@@ -2,6 +2,22 @@
 <openerp>
     <data>
         
+        <record id="view_res_partner_search" model="ir.ui.view">
+            <field name="name">res.partner.visited.search</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_res_partner_filter" />
+            <field name="arch" type="xml">
+                 <filter name="supplier" position="after">
+                    <separator/>
+                    <filter string="Visited" name="filter_by_visited" domain="[('visited_last_cycle','=', True)]" />
+                    <filter string="Not visited" name="filter_by_not_visited" domain="[('visited_last_cycle','=', False)]" />
+                </filter>
+                <field name="user_id" position="after">
+                    <field name="visited_last_cycle" />
+                </field>
+            </field>
+        </record>
+        
         <record id="view_sale_cycle_form" model="ir.ui.view">
             <field name="name">sale.cycle.form</field>
             <field name="model">sale.cycle</field>

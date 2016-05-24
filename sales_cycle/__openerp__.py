@@ -28,7 +28,7 @@
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sale'],
+    'depends': ['sale', 'crm_meeting'],
     'data': ['sales_cycle.xml',
     ],
     'application': False,
