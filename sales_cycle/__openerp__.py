@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2004-2016 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,26 +20,18 @@
 ##############################################################################
 
 {
-    'name': 'Website_quote_table',
-    'version': '0.2',
-    'category': 'Tools',
-    'summary': 'Additional quote templates',
-    'licence': 'AGPL-3',
+    'name': 'Sales Cycle',
+    'version': '0.1',
+    'category': 'Sales',
     'description': """
-
-
-
 
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['website_quote',],
-    'data': [
-    'website_quote_table.xml',
-    'product_view.xml'
+    'depends': ['sale', 'crm_meeting'],
+    'data': ['sales_cycle.xml',
     ],
     'application': False,
     'installable': True,
-    'demo': [],
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

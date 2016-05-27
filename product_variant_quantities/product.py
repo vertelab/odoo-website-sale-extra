@@ -19,13 +19,16 @@
 #
 ##############################################################################
 
-from openerp import fields, api, models, _
-
+from openerp import models, fields, api, _
+import openerp.addons.decimal_precision as dp
 import logging
 _logger = logging.getLogger(__name__)
 
-
-class product_template(models.Model):
-    _inherit = 'product.template'
-
-    bootstrap_icon = fields.Char(string='Boostrap Icon',help="eg fa-laptop")    
+class product_product(models.Model):
+    _inherit = 'product.product'
+    
+    #Volume digits is hardcoded in the product view!
+    volume = fields.Float('Volume', digits=dp.get_precision('Stock Volume'), help="The volume in m3.")
+    weight = fields.Float('Gross Weight', digits=dp.get_precision('Stock Weight'), help="The gross weight in Kg.")
+    weight_net = fields.Float('Net Weight', digits=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
+        
