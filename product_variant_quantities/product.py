@@ -26,9 +26,9 @@ _logger = logging.getLogger(__name__)
 
 class product_product(models.Model):
     _inherit = 'product.product'
-    
+
     #Volume digits is hardcoded in the product view!
     volume = fields.Float('Volume', digits=dp.get_precision('Stock Volume'), help="The volume in m3.")
     weight = fields.Float('Gross Weight', digits=dp.get_precision('Stock Weight'), help="The gross weight in Kg.")
     weight_net = fields.Float('Net Weight', digits=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
-        
+    categ_id = fields.Many2one(string='Category', comodel_name='product.category')
