@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
-        
+
         <record id="view_res_partner_search" model="ir.ui.view">
             <field name="name">res.partner.visited.search</field>
             <field name="model">res.partner</field>
@@ -17,7 +17,7 @@
                 </field>
             </field>
         </record>
-        
+
         <record id="view_sale_cycle_form" model="ir.ui.view">
             <field name="name">sale.cycle.form</field>
             <field name="model">sale.cycle</field>
@@ -33,12 +33,13 @@
                         <group>
                             <field name="date_start"/>
                             <field name="date_end"/>
+                            <field name="campaign_id"/>
                         </group>
                     </sheet>
                 </form>
             </field>
         </record>
-        
+
         <record id="view_sale_cycle_tree" model="ir.ui.view">
             <field name="name">sale.cycle.tree</field>
             <field name="model">sale.cycle</field>
@@ -48,10 +49,11 @@
                     <field name="name"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
+                    <field name="campaign_id"/>
                 </tree>
             </field>
         </record>
-        
+
         <record id="sale_cycle_action" model="ir.actions.act_window">
             <field name="name">Sales Cycles</field>
             <field name="res_model">sale.cycle</field>
@@ -60,8 +62,19 @@
             <field name="view_id" ref="view_sale_cycle_tree"/>
             <field name="context">{}</field>
         </record>
-        
+
         <menuitem action="sale_cycle_action" id="menu_sale_cycle_action" parent="base.menu_sales" sequence="30"/>
-        
+
+        <record id="marketing_campaign_form_view_inherit" model="ir.ui.view">
+            <field name="name">marketing.campaign.form</field>
+            <field name="model">marketing.campaign</field>
+            <field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_form"/>
+            <field name="arch" type="xml">
+                <field name="fixed_cost" position="after">
+                    <field name="sales_cycle_ids"/>
+                </field>
+            </field>
+        </record>
+
     </data>
 </openerp>
