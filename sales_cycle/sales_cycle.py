@@ -33,14 +33,9 @@ class sales_cycle(models.Model):
     campaign_id = fields.Many2one(comodel_name='marketing.campaign', string='Campaign')
 
     @api.model
-    def _get_last_cycle_start_date(self):
-        last_cycle = self.search_read([], ['date_start'], order='date_end', limit=1)
-        return last_cycle and last_cycle[0]['date_start'] or ''
-
-    @api.model
-    def _get_last_cycle_stop_date(self):
-        last_cycle = self.search_read([], ['date_end'], order='date_end', limit=1)
-        return last_cycle and last_cycle[0]['date_end'] or ''
+    def _get_last_cycle_dates(self):
+        last_cycle = self.search_read([('date_start', '<=', fields.Date.today())], ['date_start', 'date_end'], order='date_end DESC', limit=1)
+        return last_cycle and (last_cycle[0]['date_start'], last_cycle[0]['date_end']) or ('', '')
 
 
 class marketing_campaign(models.Model):
@@ -57,15 +52,25 @@ class res_partner(models.Model):
     @api.one
     @api.depends('last_meeting')
     def _compute_visited_last_cycle(self):
-        last_date = self.env['sale.cycle']._get_last_cycle_start_date()
+        last_date, foo = self.env['sale.cycle']._get_last_cycle_dates()
         self.visited_last_cycle = last_date == self.last_meeting
 
     def _search_visited_last_cycle(self, operator, value):
-        start_date = self.env['sale.cycle']._get_last_cycle_start_date()
-        stop_date = self.env['sale.cycle']._get_last_cycle_stop_date()
+        _logger.warn("\n\n0\n\n")
+        start_date, stop_date = self.env['sale.cycle']._get_last_cycle_dates()
         if (operator == '=' and value == False) or (operator == '!=' and value == True):
-            partners = self.search_read(['&', ('last_meeting', '>=', start_date), ('last_meeting', '<=', stop_date)], [])
-            return [('id', 'not in', [p['id'] for p in partners])]
+            if start_date and stop_date:
+                _logger.warn("\n\n1\n\n")
+                return ['|', '|', ('last_meeting', '<', start_date), ('last_meeting', '>', stop_date), ('last_meeting', '=', False)]
+            else:
+                _logger.warn("\n\n2\n\n")
+                return []
+            
         else:
-            return ['&', ('last_meeting', '>=', start_date), ('last_meeting', '<=', stop_date)]
+            if start_date and stop_date:
+                _logger.warn("\n\n3\n\n")
+                return ['&', ('last_meeting', '>=', start_date), ('last_meeting', '<=', stop_date)]
+            else:
+                return [('id', '<', 1)]
+                
 
