@@ -23,25 +23,19 @@ from openerp import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
-class sales_cycle(models.Model):
+class sale_cycle(models.Model):
     _name = 'sale.cycle'
     _description = 'Sales Cycle'
 
     name = fields.Char('Name', required=True)
     date_start = fields.Date('Start Date', required=True)
     date_end = fields.Date('End Date', required=True)
-    campaign_id = fields.Many2one(comodel_name='marketing.campaign', string='Campaign')
+    campaign_ids = fields.One2many(comodel_name='marketing.campaign', inverse_name='cycle_id',string='Campaigns')
 
     @api.model
     def _get_last_cycle_dates(self):
         last_cycle = self.search_read([('date_start', '<=', fields.Date.today())], ['date_start', 'date_end'], order='date_end DESC', limit=1)
         return last_cycle and (last_cycle[0]['date_start'], last_cycle[0]['date_end']) or ('', '')
-
-
-class marketing_campaign(models.Model):
-    _inherit='marketing.campaign'
-
-    sales_cycle_ids = fields.One2many(comodel_name='sale.cycle', inverse_name='campaign_id', string='Sale cycles')
 
 
 class res_partner(models.Model):
@@ -73,4 +67,9 @@ class res_partner(models.Model):
             else:
                 return [('id', '<', 1)]
                 
+class marketing_campaign(models.Model):
+    _inherit = "marketing.campaign"
+
+    cycle_id = fields.Many2one(comodel_name='sale.cycle', string='Sale cycle')
+
 

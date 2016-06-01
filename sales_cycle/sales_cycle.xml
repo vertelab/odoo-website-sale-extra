@@ -33,7 +33,7 @@
                         <group>
                             <field name="date_start"/>
                             <field name="date_end"/>
-                            <field name="campaign_id"/>
+                            <field name="campaign_ids" widget="many2many_tags"/>
                         </group>
                     </sheet>
                 </form>
@@ -49,7 +49,7 @@
                     <field name="name"/>
                     <field name="date_start"/>
                     <field name="date_end"/>
-                    <field name="campaign_id"/>
+                    <field name="campaign_ids" widget="many2many_tags"/>
                 </tree>
             </field>
         </record>
@@ -65,16 +65,18 @@
 
         <menuitem action="sale_cycle_action" id="menu_sale_cycle_action" parent="base.menu_sales" sequence="30"/>
 
-        <record id="marketing_campaign_form_view_inherit" model="ir.ui.view">
-            <field name="name">marketing.campaign.form</field>
-            <field name="model">marketing.campaign</field>
-            <field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_form"/>
-            <field name="arch" type="xml">
-                <field name="fixed_cost" position="after">
-                    <field name="sales_cycle_ids"/>
-                </field>
-            </field>
-        </record>
+<!-- marketing_campaign -->
+
+    <record model="ir.ui.view" id="view_marketing_campaign_form">
+      <field name="name">marketing.campaign.form</field>
+      <field name="model">marketing.campaign</field>
+      <field name="inherit_id" ref="marketing_campaign.view_marketing_campaign_form" />
+      <field name="arch" type="xml">
+        <field name="unique_field_id" position="after">
+          <field name="cycle_id" />
+        </field>
+      </field>
+    </record>
 
     </data>
 </openerp>
