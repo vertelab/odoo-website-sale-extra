@@ -67,4 +67,9 @@ class res_partner(models.Model):
             else:
                 return [('id', '<', 1)]
                 
+class marketing_campaign(models.Model):
+    _inherit = "marketing.campaign"
+
+    cycle_id = fields.Many2one(comodel_name='sale.cycle', string='Sale cycle')
+
 
