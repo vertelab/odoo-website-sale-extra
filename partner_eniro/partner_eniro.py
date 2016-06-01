@@ -41,7 +41,7 @@ class res_partner(models.Model):
 
             try:
                 res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
-                (true,false,null) = (True,False,None) 
+                (true,false,null) = (True,False,None)
             except urllib2.HTTPError as e:
                 _logger.error('api.eniro error: %s %s' % (e.code, e.reason))
                 if e.code == 401:
@@ -51,7 +51,7 @@ class res_partner(models.Model):
             except urllib2.URLError as e:
                 _logger.error('api.eniro url error: %s %s' % (e.code, e.reason))
                 return False
-            
+
             json = eval(res)
             _logger.info('<<<<<< API Eniro Result: %s >>>>>' % json)
 
