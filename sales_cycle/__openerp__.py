@@ -29,7 +29,9 @@
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['sale', 'crm_meeting', 'crm_campaign'],
-    'data': ['sales_cycle.xml',
+    'data': [
+        'sales_cycle.xml',
+        'security/ir.model.access.csv',
     ],
     'application': False,
     'installable': True,
