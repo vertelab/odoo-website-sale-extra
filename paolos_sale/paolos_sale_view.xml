@@ -1,0 +1,71 @@
+<openerp>
+<data>
+     sale.view_order_form
+     <record id="view_order_paolos_custom_form" model="ir.ui.view">
+        <field name="name">sale.order.paolos.custom.form</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <field name="state" position="attributes">
+                <attribute name="statusbar_visible">draft,purchased,delivered,invoiced,progress,done</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_order_paolos_custom_tree" model="ir.ui.view">
+        <field name="name">sale.order.paolos.custom.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="client_order_ref"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_sales_order_paolos_custom_filter" model="ir.ui.view">
+            <field name="name">sale.order.paolos.custom.list.select</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_sales_order_filter"/>
+            <field name="arch" type="xml">
+                <field name="user_id" position="after">
+                    <field name="client_order_ref"/>
+                </field>
+            </field>
+    </record>
+
+    <record id="view_quotation_paolos_custom_tree" model="ir.ui.view">
+        <field name="name">sale.quotations.paolos.custom.tree</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_quotation_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="after">
+                <field name="client_order_ref"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_invoice_paolos_custom_tree" model="ir.ui.view">
+        <field name="name">account.invoice.paolos.custom.tree</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_tree"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="client_order_ref"/>
+            </field>
+        </field>
+    </record>
+    
+    <record id="view_picking_paolos_custom_tree" model="ir.ui.view">
+        <field name="name">stock.picking.paolos.custom.tree</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.vpicktree"/>
+        <field name="arch" type="xml">
+            <field name="origin" position="after">
+                <field name="client_order_ref"/>
+            </field>
+        </field>
+    </record>
+    
+</data>
+</openerp>
