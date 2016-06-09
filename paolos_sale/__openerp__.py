@@ -29,6 +29,7 @@
 'depends': ['sale', 'edi_gs1'],
 'data': [
 'paolos_sale_view.xml',
+'paolos_sale_workflow.xml',
 ],
 'installable': True,
 }

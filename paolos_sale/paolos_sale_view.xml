@@ -9,6 +9,15 @@
             <field name="state" position="attributes">
                 <attribute name="statusbar_visible">draft,purchased,delivered,invoiced,progress,done</attribute>
             </field>
+            <button name="action_cancel" position="attributes">
+                <attribute name="states">manual,progress,purchased,delivered,invoiced</attribute>
+            </button>
+            <button name="print_quotation" states="sent,progress,manual" position="attributes">
+                <attribute name="states">sent,progress,manual,purchased,delivered,invoiced</attribute>
+            </button>
+            <button name="action_quotation_send" states="sent,progress,manual" position="attributes">
+                <attribute name="states">sent,progress,manual,purchased,delivered,invoiced</attribute>
+            </button>
         </field>
     </record>
 
