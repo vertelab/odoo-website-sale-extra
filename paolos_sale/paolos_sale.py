@@ -61,6 +61,7 @@ class purchase_order(models.Model):
                         purchased = False
                 if purchased and so.state in ['progress']:
                     so.state = 'purchased'
+                    so.signal_workflow('set_as_purchased')
         return res
 
 class stock_picking(models.Model):
@@ -88,6 +89,7 @@ class stock_picking(models.Model):
                             delivered = False
                     if delivered and so.state in ['progress', 'purchased']:
                         so.state = 'delivered'
+                        so.signal_workflow('set_as_delivered')
         return res
 
 class account_invoice(models.Model):
@@ -120,5 +122,6 @@ class account_invoice(models.Model):
                 if invoiced and so.state in ['progress', 'purchased', 'delivered']:
                     _logger.warn('invoiced')
                     so.state = 'invoiced'
+                    so.signal_workflow('set_as_invoiced')
                 _logger.warn('%s, %s' %(so.name, so.state))
         return res

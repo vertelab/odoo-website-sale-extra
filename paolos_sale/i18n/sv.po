@@ -21,6 +21,22 @@ msgid "Draft Quotation"
 msgstr "Order i utkast"
 
 #. module: paolos_sale
+#: view:sale.order:sale.view_order_form
+#: view:sale.order:sale.view_quotation_tree selection:sale.report,state:0
+msgid "Quotation"
+msgstr "Orderutkast"
+
+#. module: paolos_sale
+#: view:crm.case.section:sale.crm_case_section_salesteams_view_kanban
+#: field:crm.case.section,use_quotations:0
+#: model:ir.actions.act_window,name:sale.action_quotations
+#: model:ir.actions.act_window,name:sale.action_quotations_salesteams
+#: model:ir.ui.menu,name:sale.menu_sale_quotations
+#: view:sale.order:sale.view_sales_order_filter
+msgid "Quotations"
+msgstr "Ordrar i utkast"
+
+#. module: paolos_sale
 #: selection:sale.order,state:0
 msgid "Purchased"
 msgstr "Inköpt"
