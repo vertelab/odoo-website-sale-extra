@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        
+        <record id="act_wait_purchase" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="name">wait_purchase</field>
+        </record>
+        
+        <record id="act_wait_delivery" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="name">wait_delivery</field>
+        </record>
+        
+        <record id="act_wait_invoice_sent" model="workflow.activity">
+            <field name="wkf_id" ref="sale.wkf_sale"/>
+            <field name="name">wait_invoice_sent</field>
+        </record>
+        
+        <record id="sale.trans_ship_end_done" model="workflow.transition">
+            <field name="act_from" ref="sale.act_ship_end"/>
+            <field name="act_to" ref="act_wait_purchase"/>
+        </record>
+        
+        <record id="sale.trans_invoice_end_done" model="workflow.transition">
+            <field name="act_from" ref="sale.act_invoice_end"/>
+            <field name="act_to" ref="act_wait_purchase"/>
+        </record>
+        
+        <record id="trans_wait_purchased_wait_delivery" model="workflow.transition">
+            <field name="act_from" ref="act_wait_purchase"/>
+            <field name="act_to" ref="act_wait_delivery"/>
+            <field name="signal">set_as_purchased</field>
+        </record>
+        
+        <record id="trans_wait_delivery_wait_invoice_sent" model="workflow.transition">
+            <field name="act_from" ref="act_wait_delivery"/>
+            <field name="act_to" ref="act_wait_invoice_sent"/>
+            <field name="signal">set_as_delivered</field>
+        </record>
+        
+        <record id="trans_wait_invoice_sent_done" model="workflow.transition">
+            <field name="act_from" ref="act_wait_invoice_sent"/>
+            <field name="act_to" ref="sale.act_done"/>
+            <field name="signal">set_as_invoiced</field>
+        </record>
+        
+    </data>
+</openerp>
