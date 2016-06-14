@@ -39,6 +39,8 @@ class website_product_category(http.Controller):
         cr, uid, context, pool = request.cr, request.uid, request.context, request.registry
         if category and not category.website_published:
             return request.render('website.page_404', {})
+        elif category.website_description_template:
+            return request.render(category.website_description_template.id, {'products': request.env['product.template'].sudo().search(['&', ('categ_id', '=', category.id), ('state', '=', 'sellable')], order='website_sequence'), 'category': category})
         else:
             return request.render('website_product_category.page_behandling', {'products': request.env['product.template'].sudo().search(['&', ('categ_id', '=', category.id), ('state', '=', 'sellable')], order='website_sequence'), 'category': category})
     
@@ -57,6 +59,7 @@ class product_category(models.Model):
     website_small_description = fields.Html('Short description', translate=True, sanitize=False)
     website_published = fields.Boolean('Available in the website', copy=False)
     website_image = fields.Binary('Category Image')
+    website_description_template  = fields.Many2one(comodel_name="ir.ui.view",string="Optional Description Template", help="Optional with a custom template")
 
     def is_translated(self,lang):
         return len(self.env['ir.translation'].search(['&',('name','=','product.category,website_small_description'),('lang','=',lang)])) == 1

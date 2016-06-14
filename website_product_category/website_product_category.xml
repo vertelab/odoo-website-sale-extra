@@ -68,6 +68,7 @@
               <field name="website_image"/>
               <field colspan="4" style="max-width: 600px;" name="website_small_description"/>
               <field colspan="4" style="max-width: 600px;" name="website_description" />
+              <field name="website_description_template" />
             </field>
         </field>
     </record>
