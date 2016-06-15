@@ -26,6 +26,7 @@ _logger = logging.getLogger(__name__)
 class sale_order(models.Model):
     _inherit = 'sale.order'
     
+    date_order = fields.Datetime(string='Delivery Date', help="The date when the order should be delivered to the customer.")
     state = fields.Selection([
             ('draft', 'Draft Quotation'),
             ('sent', 'Quotation Sent'),
