@@ -1,0 +1,43 @@
+<openerp>
+<data>
+    
+     <record id="view_product_attribute_wizard" model="ir.ui.view">
+        <field name="name">product.attribute.wizard.form</field>
+        <field name="model">product.attribute.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Add Attributes">
+                    <group>
+                        <field name="attribute_value_ids" widget="many2many_tags"/>
+                        <field name="product_ids"/>
+                    </group>
+                    <footer>
+                        <button name="add_product_attributes" string="Add Attributes" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+               </form>
+        </field>
+    </record>
+    
+    <record id="action_product_attribute_wizard" model="ir.actions.act_window">
+        <field name="name">Add Attributes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.attribute.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_product_attribute_wizard"/>
+        <field name="target">new</field>
+        <field name="multi">True</field>
+    </record>
+    
+    <record model="ir.values" id="product_attribute_wizard">
+        <field name="model_id" ref="product_attribute_wizard.model_product_attribute_wizard" />
+        <field name="name">Add Attributes</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('action_product_attribute_wizard'))" />
+        <field name="key">action</field>
+        <field name="model">product.product</field>
+    </record>
+        
+</data>
+</openerp>
