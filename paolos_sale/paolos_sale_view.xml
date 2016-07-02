@@ -5,6 +5,11 @@
         <field name="model">sale.order</field>
         <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
+            <field name="state" position="before">
+                <button string="Mark as Purchased" name="set_as_purchased" attrs="{'invisible': [('state', '!=', 'progress')]}"/>
+                <button string="Mark as Delivered" name="set_as_delivered" attrs="{'invisible': [('state', '!=', 'purchased')]}"/>
+                <button string="Mark as Invoiced" name="set_as_invoiced" attrs="{'invisible': [('state', '!=', 'delivered')]}"/>
+            </field>
             <field name="date_order" position="before">
                 <field name="create_date"/>
             </field>

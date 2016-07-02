@@ -41,7 +41,19 @@ class sale_order(models.Model):
             ('invoice_except', 'Invoice Exception'),
             ('done', 'Done'),
             ])
-
+    
+    #~ @api.one
+    #~ def action_set_as_purchased(self):
+        #~ self.state = 'purchased'
+    #~ 
+    #~ @api.one
+    #~ def action_set_as_delivered(self):
+        #~ self.state = 'delivered'
+    #~ 
+    #~ @api.one
+    #~ def action_set_as_invoiced(self):
+        #~ self.state = 'invoiced'
+    
 class purchase_order(models.Model):
     _inherit = 'purchase.order'
     
@@ -61,7 +73,6 @@ class purchase_order(models.Model):
                     if po.state not in ['approved', 'done']:
                         purchased = False
                 if purchased and so.state in ['progress']:
-                    so.state = 'purchased'
                     so.signal_workflow('set_as_purchased')
         return res
 
@@ -89,7 +100,6 @@ class stock_picking(models.Model):
                         if p.state not in ['done']:
                             delivered = False
                     if delivered and so.state in ['progress', 'purchased']:
-                        so.state = 'delivered'
                         so.signal_workflow('set_as_delivered')
         return res
 
@@ -122,7 +132,6 @@ class account_invoice(models.Model):
                         invoiced = False
                 if invoiced and so.state in ['progress', 'purchased', 'delivered']:
                     _logger.warn('invoiced')
-                    so.state = 'invoiced'
                     so.signal_workflow('set_as_invoiced')
                 _logger.warn('%s, %s' %(so.name, so.state))
         return res

@@ -55,3 +55,18 @@ msgstr "Fakturerad"
 #: field:sale.order,date_order:0
 msgid "Delivery Date"
 msgstr "Leveransdatum"
+
+#. module: paolos_sale
+#: view:sale.order:paolos_sale.view_order_form
+msgid "Mark as Purchased"
+msgstr "Markera som Inköpt"
+
+#. module: paolos_sale
+#: view:sale.order:paolos_sale.view_order_form
+msgid "Mark as Delivered"
+msgstr "Markera som Levererad"
+
+#. module: paolos_sale
+#: view:sale.order:paolos_sale.view_order_form
+msgid "Mark as Invoiced"
+msgstr "Markera som Fakturerad"
