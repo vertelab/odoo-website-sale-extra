@@ -1,1 +1,1 @@
-
+import sale_invoice
