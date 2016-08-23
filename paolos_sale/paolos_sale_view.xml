@@ -25,6 +25,7 @@
             <button name="action_quotation_send" states="sent,progress,manual" position="attributes">
                 <attribute name="states">sent,progress,manual,purchased,delivered,invoiced</attribute>
             </button>
+
         </field>
     </record>
 
