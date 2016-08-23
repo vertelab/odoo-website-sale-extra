@@ -11,6 +11,22 @@
                 </h3>
             </xpath>
 
+            <xpath expr="//label[@for='street']" position="replace">
+                <label class="control-label" for="company_name" style="font-weight: normal">Company Name</label>
+            </xpath>
+
+            <xpath expr="//input[@name='street']" position="replace">
+                <t t-set="partner" t-value="request.env['res.users'].browse(request.uid).partner_id"/>
+                <t t-if="partner.parent_id">
+                    <input type="text" name="company_name" class="form-control" t-att-value="partner.parent_id.name"/>
+                </t>
+            </xpath>
+
+            <xpath expr="//input[@name='street2']" position="before">
+                <t t-set="partner" t-value="request.env['res.users'].browse(request.uid).partner_id"/>
+                <input type="text" name="street" class="form-control" t-att-value="partner.street"/>
+            </xpath>
+
             <xpath expr="//div[@class='col-md-8 oe_cart']/div[@class='row']/div[@class='form-group col-lg-12']" position="before">
                 <div class="form-group col-lg-12">
                     <t t-set="partner" t-value="request.env['res.users'].browse(request.uid).partner_id"/>
@@ -67,9 +83,10 @@
                         <div t-attf-class="form-group #{error.get('invoice_country_id') and 'has-error' or ''} col-lg-6">
                             <label class="control-label" for="invoice_country_id">Country</label>
                             <select name="invoice_country_id" class="form-control" t-att-disabled="  'disabled' if invoice_id &gt;= 0 else ''">
-                                <option value="">Country...</option>
+                                <t t-esc="invoice_id"/>
+                                <option><t t-esc="invoice.country_id.name"/></option>
                                 <t t-foreach="countries or []" t-as="country">
-                                    <option t-att-value="country.id" t-att-selected="country.id == invoice.country_id"><t t-esc="country.name"/></option>
+                                    <option t-att-value="country.id" t-att-selected="country.id == invoice.country_id.id"><t t-esc="country.name"/></option>
                                 </t>
                             </select>
                         </div>
@@ -78,7 +95,7 @@
                             <select name="invoice_state_id" class="form-control" t-att-disabled="  'disabled' if invoice_id &gt;= 0 else ''">
                                 <option value="">State / Province...</option>
                                 <t t-foreach="states or []" t-as="state">
-                                    <option t-att-value="state.id" style="display:none;" t-att-data-country_id="state.country_id.id" t-att-selected="state.id == invoice.state_id"><t t-esc="state.name"/></option>
+                                    <option t-att-value="state.id" style="display:none;" t-att-data-country_id="state.country_id.id" t-att-selected="state.id == invoice.state_id.id"><t t-esc="state.name"/></option>
                                 </t>
                             </select>
                         </div>

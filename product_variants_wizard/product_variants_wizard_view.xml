@@ -1,0 +1,44 @@
+<openerp>
+<data>
+    
+     <record id="view_product_variants_wizard" model="ir.ui.view">
+        <field name="name">product.variants.wizard.form</field>
+        <field name="model">product.variants.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Merge Products">
+                    <group>
+                        <field name="name"/>
+                        <field name="product_ids"/>
+                        <field name="line_ids"/>
+                    </group>
+                    <footer>
+                        <button name="merge_products" string="Merge Products" type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel" />
+                    </footer>
+               </form>
+        </field>
+    </record>
+    
+    <record id="action_product_variants_wizard" model="ir.actions.act_window">
+        <field name="name">Merge Products</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">product.variants.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_product_variants_wizard"/>
+        <field name="target">new</field>
+        <field name="multi">True</field>
+    </record>
+    
+    <record model="ir.values" id="product_variants_wizard">
+        <field name="model_id" ref="product_variants_wizard.model_product_variants_wizard" />
+        <field name="name">Merge Products</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('action_product_variants_wizard'))" />
+        <field name="key">action</field>
+        <field name="model">product.template</field>
+    </record>
+        
+</data>
+</openerp>

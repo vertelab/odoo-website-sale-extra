@@ -19,17 +19,14 @@
 #
 ##############################################################################
 {
-'name': 'Paolos Sale Customisations',
-'version': '0.1',
-'summary': '',
-'category': 'Hidden',
-'description': """""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['sale', 'sale_stock'],
-'data': [
-'paolos_sale_view.xml',
-'paolos_sale_workflow.xml',
-],
-'installable': True,
+    'name': 'Product Variants Wizard',
+    'version': '0.1',
+    'summary': '',
+    'category': 'Hidden',
+    'description': """Wizard that can turn several products into variants on one product.template.""",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['product'],
+    'data': ['product_variants_wizard_view.xml',],
+    'installable': True,
 }
