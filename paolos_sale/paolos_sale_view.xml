@@ -93,7 +93,7 @@
         <field name="inherit_id" ref="stock.vpicktree"/>
         <field name="arch" type="xml">
             <field name="origin" position="after">
-                <field name="client_order_ref"/>
+                <field name="sale_id"/>
             </field>
         </field>
     </record>

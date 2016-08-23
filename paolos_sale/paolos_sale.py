@@ -79,12 +79,12 @@ class purchase_order(models.Model):
 class stock_picking(models.Model):
     _inherit = 'stock.picking'
     
-    @api.one
-    def _compute_client_order_ref(self):
-        order = self._get_order()
-        return order and order.client_order_ref or ''
+    #~ @api.one
+    #~ def _compute_client_order_ref(self):
+        #~ order = self._get_order()
+        #~ return order and order.client_order_ref or ''
 
-    client_order_ref = fields.Char(compute="_compute_client_order_ref", string="Client Order Ref")
+    #client_order_ref = fields.Char(compute="_compute_client_order_ref", string="Client Order Ref")
     
     @api.multi
     def do_transfer(self):
@@ -107,12 +107,9 @@ class account_invoice(models.Model):
     _inherit = 'account.invoice'
     
     @api.one
-    def _compute_client_order_ref(self):
-        order = self._get_order()
-        _logger.warn(order)
-        return order and order.client_order_ref or ''
-    
-    client_order_ref = fields.Char(compute="_compute_client_order_ref", string="Client Order Ref")
+    def _client_order_ref(self):
+        self.client_order_ref = ','.join([o.name for o in self.order_ids])
+    client_order_ref = fields.Char(compute="_client_order_ref", string="Client Order Ref")
     
     #~ #Note: Store will not work properly. Implement search function if needed.
     #~ def _search_client_order_ref(self):
