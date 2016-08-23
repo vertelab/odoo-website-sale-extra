@@ -8,7 +8,9 @@
             <form string="Merge Products">
                     <group>
                         <field name="name"/>
-                        <field name="product_ids"/>
+                        <field name="product_tmpl_id"/>
+                        <field name="price_attribute"/>
+                        <field name="product_tmpl_ids"/>
                         <field name="line_ids"/>
                     </group>
                     <footer>
