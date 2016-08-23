@@ -25,11 +25,27 @@
             <button name="action_quotation_send" states="sent,progress,manual" position="attributes">
                 <attribute name="states">sent,progress,manual,purchased,delivered,invoiced</attribute>
             </button>
+<!--
+            <button name="action_view_delivery" position="attributes">
+                <attribute name="attrs">{'invisible': ['|','|',('picking_ids','=',False),('picking_ids','=',[]),('state', '=', 'progress')]}</attribute>
+            </button>
+-->
+        </field>
+    </record>
+<!--
+     <record id="view_order_paolos_custom_formII" model="ir.ui.view">
+        <field name="name">sale.order.paolos.custom.formII</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale_stock.view_order_form_inherit"/>
+        <field name="arch" type="xml">
             <button name="action_view_delivery" position="attributes">
                 <attribute name="attrs">{'invisible': ['|','|',('picking_ids','=',False),('picking_ids','=',[]),('state', '=', 'progress')]}</attribute>
             </button>
         </field>
     </record>
+-->
+
+
 
     <record id="view_order_paolos_custom_tree" model="ir.ui.view">
         <field name="name">sale.order.paolos.custom.tree</field>
