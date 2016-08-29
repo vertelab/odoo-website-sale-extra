@@ -27,12 +27,12 @@ class res_partner(models.Model):
     _inherit ='res.partner'
 
     customer_no = fields.Char('Customer Number', select=True, compute='_get_customer_no', store=True)
-    
+
     #Use this field definition, and remove depends on _get_customer_no
     #to avoid calculating customer_no for all customers on installation.
     #Switch back and upgrade after installation.
     #customer_no = fields.Char('Customer Number', select=True)
-    
+
     @api.one
     @api.depends('ref','parent_id','parent_id.customer_no')
     def _get_customer_no(self):
@@ -52,7 +52,7 @@ class res_partner(models.Model):
     @api.one
     def generate_new_customer_no(self):
         self.ref = self._generate_new_customer_no()
-    
+
     @api.model
     def _generate_new_customer_no(self, customer=False, supplier=False):
         _logger.warn(self.customer)
@@ -61,19 +61,19 @@ class res_partner(models.Model):
         elif supplier or self.supplier:
             return self.env['ir.sequence'].get('res.partner.supplier.no')
         return ''
-    
+
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
-        if not (vals.get('parent_id', False) and vals.get('ref', False)):
+        if not (vals.get('parent_id') and vals.get('ref')) and vals.get('is_company'): #TODO: what about if this is a child company?
             vals['ref'] = self._generate_new_customer_no(vals.get('customer'), vals.get('supplier'))
         return super(res_partner, self).create(vals)
-    
+
 class sale_order(models.Model):
     _inherit = 'sale.order'
 
     customer_no = fields.Char('Customer Number', related="partner_id.customer_no", store=True)
-    
+
     @api.one
     def get_customer_no(self):
         #raise Warning('hejsan %s' % self.partner_id.customer_no)
