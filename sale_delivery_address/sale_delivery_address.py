@@ -24,48 +24,6 @@ import logging
 _logger = logging.getLogger(__name__)
 
 
-class sale_order(models.Model):
-    _inherit = "sale.order"
-
-    @api.one
-    def _get_address(self):
-        #address_format = "%(street)s,%(zip)s %(city)s"
-        address_format = "%(street)s%(street2)s, %(zip)s %(city)s"
-
-        self.invoice_address = address_format % {
-            'street': self.partner_invoice_id.street or '',
-            'street2': self.partner_invoice_id.street2 or '',
-            'zip': self.partner_invoice_id.zip or '',
-            'city': self.partner_invoice_id.city or '',}
-
-        if self.partner_id.parent_id:
-            delivery_address = None
-            deliveries = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'delivery')])
-            if len(deliveries) > 0:
-                delivery_address = deliveries[0]
-            else:
-                defaults = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'default')])
-                if len(defaults) > 0:
-                    delivery_address = defaults[0]
-                else:
-                    delivery_address = self.partner_id.parent_id
-            self.shipping_address = address_format % {
-                'street': delivery_address.street or '',
-                'street2': delivery_address.street2 or '',
-                'zip': delivery_address.zip or '',
-                'city': delivery_address.city or '',}
-        else:
-            self.shipping_address = address_format % {
-                'street': self.partner_shipping_id.street or '',
-                'street2': self.partner_shipping_id.street2 or '',
-                'zip': self.partner_shipping_id.zip or '',
-                'city': self.partner_shipping_id.city or '',}
-
-
-    invoice_address = fields.Char(compute='_get_address', string='')
-    shipping_address = fields.Char(compute='_get_address', string='')
-
-
 class res_partner(models.Model):
     _inherit = "res.partner"
 
