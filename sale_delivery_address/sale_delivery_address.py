@@ -39,28 +39,21 @@ class sale_order(models.Model):
             'city': self.partner_invoice_id.city or '',}
 
         if self.partner_id.parent_id:
+            delivery_address = None
             deliveries = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'delivery')])
             if len(deliveries) > 0:
-                self.shipping_address = address_format % {
-                    'street': deliveries[0].street or '',
-                    'street2': deliveries[0].street2 or '',
-                    'zip': deliveries[0].zip or '',
-                    'city': deliveries[0].city or '',}
+                delivery_address = deliveries[0]
             else:
-                default = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'default')])
-                if len(default) > 0:
-                    self.shipping_address = address_format % {
-                        'street': default[0].street or '',
-                        'street2': default[0].street2 or '',
-                        'zip': default[0].zip or '',
-                        'city': default[0].city or '',}
+                defaults = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'default')])
+                if len(defaults) > 0:
+                    delivery_address = defaults[0]
                 else:
-                    parent = self.partner_id.parent_id
-                    self.shipping_address = address_format % {
-                        'street': parent.street or '',
-                        'street2': parent.street2 or '',
-                        'zip': parent.zip or '',
-                        'city': parent.city or '',}
+                    delivery_address = self.partner_id.parent_id
+            self.shipping_address = address_format % {
+                'street': delivery_address.street or '',
+                'street2': delivery_address.street2 or '',
+                'zip': delivery_address.zip or '',
+                'city': delivery_address.city or '',}
         else:
             self.shipping_address = address_format % {
                 'street': self.partner_shipping_id.street or '',
