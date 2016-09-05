@@ -38,11 +38,35 @@ class sale_order(models.Model):
             'zip': self.partner_invoice_id.zip or '',
             'city': self.partner_invoice_id.city or '',}
 
-        self.shipping_address = address_format % {
-            'street': self.partner_shipping_id.street or '',
-            'street2': self.partner_shipping_id.street2 or '',
-            'zip': self.partner_shipping_id.zip or '',
-            'city': self.partner_shipping_id.city or '',}
+        if self.partner_id.parent_id:
+            deliveries = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'delivery')])
+            if len(deliveries) > 0:
+                self.shipping_address = address_format % {
+                    'street': deliveries[0].street or '',
+                    'street2': deliveries[0].street2 or '',
+                    'zip': deliveries[0].zip or '',
+                    'city': deliveries[0].city or '',}
+            else:
+                default = self.env['res.partner'].search([('parent_id', '=', self.partner_id.parent_id.id), ('type', '=', 'default')])
+                if len(default) > 0:
+                    self.shipping_address = address_format % {
+                        'street': default[0].street or '',
+                        'street2': default[0].street2 or '',
+                        'zip': default[0].zip or '',
+                        'city': default[0].city or '',}
+                else:
+                    parent = self.partner_id.parent_id
+                    self.shipping_address = address_format % {
+                        'street': parent.street or '',
+                        'street2': parent.street2 or '',
+                        'zip': parent.zip or '',
+                        'city': parent.city or '',}
+        else:
+            self.shipping_address = address_format % {
+                'street': self.partner_shipping_id.street or '',
+                'street2': self.partner_shipping_id.street2 or '',
+                'zip': self.partner_shipping_id.zip or '',
+                'city': self.partner_shipping_id.city or '',}
 
 
     invoice_address = fields.Char(compute='_get_address', string='')
