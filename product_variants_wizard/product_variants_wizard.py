@@ -33,6 +33,7 @@ class product_variants_wizard(models.TransientModel):
         ids = self.env.context.get('active_ids')
         if ids:
             return self.env['product.template'].browse(ids).sorted(lambda r: r.product_variant_count, True)
+        return self.env['product.template'].browse()
     
     def _get_default_lines(self):
         templates = self._get_default_templates()
@@ -47,36 +48,44 @@ class product_variants_wizard(models.TransientModel):
                         'price': product.lst_price,
                     })
             return [(0, 0, vals) for vals in res]
+        return self.env['product.variants.wizard.line'].browse()
     
     def _get_default_template_id(self):
         templates = self._get_default_templates()
         if templates:
             return templates[0]
+        return templates
     
     def _get_default_template_ids(self):
         templates = self._get_default_templates()
         if templates:
             return templates[1:]
+        return templates
     
     def _get_default_name(self):
-        return self._get_default_template_id().name.split(',')[0]
+        template = self._get_default_template_id()
+        if template:
+            return template.name.split(',')[0]
+        return template
     
     def _default_price_attribute(self):
         #TODO: Look at price lines to find currently used price attribute
         templates = self._get_default_templates()
-        for template in templates:
-            for product in template.product_variant_ids:
-                for value in product.attribute_value_ids:
-                    if value.attribute_id:
-                        return attribute_id.id
+        if templates:
+            for template in templates:
+                for product in template.product_variant_ids:
+                    for value in product.attribute_value_ids:
+                        if value.attribute_id:
+                            return value.attribute_id
+        return self.env['product.attribute'].browse()
     
-    name = fields.Char(string='Template Name', default=_get_default_name)
-    product_tmpl_id = fields.Many2one(comodel_name='product.template', string='Main Template', default=_get_default_template_id)
+    name = fields.Char(string='Template Name', default=_get_default_name, required=True)
+    product_tmpl_id = fields.Many2one(comodel_name='product.template', string='Main Template', default=_get_default_template_id, required=True)
     product_tmpl_ids = fields.Many2many(comodel_name='product.template', relation='prod_var_wizard_rel_prod_tmpl', string='Product Templates', default=_get_default_template_ids)
-    line_ids = fields.One2many(comodel_name='product.variants.wizard.line', inverse_name='wizard_id', string='Attribute Lines', default=_get_default_lines)
+    line_ids = fields.One2many(comodel_name='product.variants.wizard.line', inverse_name='wizard_id', string='Variant Lines', default=_get_default_lines)
     base_price = fields.Float(string="Base Price", compute="_get_base_price")
     attribute_ids = fields.Many2many(comodel_name='product.attribute', string='Attributes', compute="_get_product_attributes", help='Lists all attributes of the product values on the Attribute Lines below.')
-    price_attribute = fields.Many2one(comodel_name='product.attribute', string='Pricing Attribute', default=_default_price_attribute, help='This attribute will be tied to product prices.')
+    price_attribute = fields.Many2one(comodel_name='product.attribute', string='Pricing Attribute', default=_default_price_attribute, required=True, help='This attribute will be tied to product prices.')
     
     @api.model
     def _get_default_value_ids(self, product, attribute=None):
