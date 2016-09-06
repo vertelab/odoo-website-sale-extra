@@ -6,19 +6,33 @@
         <field name="model">product.variants.wizard</field>
         <field name="arch" type="xml">
             <form string="Merge Products">
-                    <group>
-                        <field name="name"/>
-                        <field name="product_tmpl_id"/>
-                        <field name="price_attribute"/>
-                        <field name="product_tmpl_ids"/>
-                        <field name="line_ids"/>
-                    </group>
-                    <footer>
-                        <button name="merge_products" string="Merge Products" type="object" class="oe_highlight"/>
-                        or
-                        <button string="Cancel" class="oe_link" special="cancel" />
-                    </footer>
-               </form>
+                <group>
+                    <field name="product_tmpl_id"/>
+                    <field name="product_tmpl_ids" widget="many2many_tags"/>
+                    <field name="attribute_ids" widget="many2many_tags"/>
+                </group>
+                <div>
+                    <h1>Warning!</h1>
+                    Do not change above templates unless you know what you are doing.
+                    The lines will not be recomputed, and this wizard will most likely not work as intended.
+                </div>
+                <group>
+                    <field name="name"/>
+                    <field name="price_attribute"/>
+                    <field name="line_ids">
+                        <tree editable="top">
+                            <field name="product_id"/>
+                            <field name="price"/>
+                            <field name="value_ids" widget="many2many_tags"/>
+                        </tree>
+                    </field>
+                </group>
+                <footer>
+                    <button name="merge_products" string="Merge Products" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
         </field>
     </record>
     

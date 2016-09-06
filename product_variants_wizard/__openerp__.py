@@ -27,6 +27,8 @@
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['product'],
-    'data': ['product_variants_wizard_view.xml',],
+    'data': [
+        'product_variants_wizard_view.xml',
+    ],
     'installable': True,
 }
