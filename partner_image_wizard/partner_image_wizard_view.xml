@@ -1,0 +1,43 @@
+<openerp>
+<data>
+    
+     <record id="view_partner_image_wizard" model="ir.ui.view">
+        <field name="name">res.partner.image.wizard.form</field>
+        <field name="model">res.partner.image.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Change Image">
+                <group>
+                    <field name="image" widget="image"/>
+                    <field name="partner_ids" widget="many2many_tags" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="change_image" string="Change Image" type="object" class="oe_highlight"/>
+                    or
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_partner_image_wizard" model="ir.actions.act_window">
+        <field name="name">Change Image</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner.image.wizard</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_partner_image_wizard"/>
+        <field name="target">new</field>
+        <field name="multi">True</field>
+    </record>
+    
+    <record model="ir.values" id="partner_image_wizard">
+        <field name="model_id" ref="partner_image_wizard.model_res_partner_image_wizard" />
+        <field name="name">Change Image</field>
+        <field name="key2">client_action_multi</field>
+        <field name="value" eval="'ir.actions.act_window,' + str(ref('action_partner_image_wizard'))" />
+        <field name="key">action</field>
+        <field name="model">res.partner</field>
+    </record>
+        
+</data>
+</openerp>
