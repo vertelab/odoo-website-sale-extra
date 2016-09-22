@@ -40,6 +40,7 @@ class res_partner(models.Model):
                 raise Warning('Please configurate Eniro api account')
 
             try:
+                #For future reference: use urllib2.quote() to translate the search term to url format.
                 res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
                 (true,false,null) = (True,False,None)
             except urllib2.HTTPError as e:
