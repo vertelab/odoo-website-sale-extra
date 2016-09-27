@@ -173,6 +173,10 @@ class product_variants_wizard(models.TransientModel):
             for template in self.product_tmpl_ids:
                 for bom in template.bom_ids:
                     bom.write({'product_tmpl_id': self.product_tmpl_id.id})
+                #Inactive BOMs will not show up, and will prevent deletion of template.
+                inactive_boms = self.env['mrp.bom'].search([('active', '=', False), ('product_tmpl_id', '=', template.id)])
+                for bom in inactive_boms:
+                    bom.write({'product_tmpl_id': self.product_tmpl_id.id})
                 #delete unused templates
                 template.unlink()
             new_products = self.product_tmpl_id.product_variant_ids
