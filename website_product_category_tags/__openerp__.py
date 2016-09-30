@@ -29,7 +29,7 @@ Add Tags for Product Category
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['website_sale'],
+    'depends': ['website_sale', 'child_catagory_tags'],
     'data': ['website_product_category_tags_view.xml'],
     'application': False,
     'installable': True,
