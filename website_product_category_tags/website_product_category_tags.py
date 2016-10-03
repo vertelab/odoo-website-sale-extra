@@ -34,10 +34,16 @@ class product_template(models.Model):
 
     @api.multi
     def product_visible(self, user_id):
-        if user_id.partner_id.parent_id:
-            if (self.public_categ_ids.partner_tag_ids & user_id.partner_id.parent_id.child_category_ids) or (self.public_categ_ids.partner_tag_ids & user_id.partner_id.parent_id.category_id):
-                return True
+        if self.public_categ_ids.partner_tag_ids:
+            if user_id.partner_id.parent_id:
+                if (self.public_categ_ids.partner_tag_ids & user_id.partner_id.parent_id.child_category_ids) or (self.public_categ_ids.partner_tag_ids & user_id.partner_id.parent_id.category_id):
+                    return True
+                else:
+                    return False
+            else:
+                if self.public_categ_ids.partner_tag_ids & user_id.partner_id.category_id:
+                    return True
+                else:
+                    return False
         else:
-            if self.public_categ_ids.partner_tag_ids & user_id.partner_id.category_id:
-                return True
-        return False
+            return True
