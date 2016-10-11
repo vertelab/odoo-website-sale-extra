@@ -26,7 +26,7 @@ _logger = logging.getLogger(__name__)
 class sale_journal_invoice_type(models.Model):
     _inherit = 'sale_journal.invoice.type'
     
-    send_email = fields.Boolean('Send Email')
+    send_email = fields.Boolean('Send Invoice by Email')
 
 class res_partner(models.Model):
     _inherit ='res.partner'
@@ -38,19 +38,27 @@ class res_partner(models.Model):
         for partner in self.child_ids:
             partner.invoice_type_id = self.invoice_type_id
 
-class sale_order(models.Model):
-    _inherit = 'sale.order'
+class account_invoice(models.Model):
+    _inherit = 'account.invoice'
     
+    invoice_type_id = fields.Many2one('sale_journal.invoice.type', 'Invoice Type', compute='_get_invoice_type_id')
     #Field for hiding/showing email buttons
-    sjm_send_email = fields.Boolean('Send Email', compute='_get_sjm_send_email')
+    sjm_send_email = fields.Boolean('Send Email', compute='_get_invoice_type_id')
     
     @api.one
-    @api.depends('invoice_type_id', 'invoice_type_id.send_email')
-    def _get_sjm_send_email(self):
+    @api.depends('order_id', 'picking_id')
+    def _get_invoice_type_id(self):
+        if self.order_id:
+            self.invoice_type_id = self.order_id.invoice_type_id
+        elif self.picking_id:
+            self.invoice_type_id = self.picking_id.invoice_type_id
         if self.invoice_type_id and self.invoice_type_id.send_email:
             self.sjm_send_email = True
         else:
-            self.sjm_send_email = False
+            self.sjm_send_email = False    
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
     
     @api.multi
     def onchange_partner_id(self, part):

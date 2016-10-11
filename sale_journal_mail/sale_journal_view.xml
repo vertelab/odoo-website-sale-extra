@@ -23,17 +23,15 @@
         </field>
     </record>
     
-    <record id="view_order_form" model="ir.ui.view">
-        <field name="name">sale.order.invoice.type.mail.form</field>
-        <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form"/>
+    <record id="view_invoice_form" model="ir.ui.view">
+        <field name="name">account.invoice.sale_journal.invoice.type.mail.form</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
         <field name="arch" type="xml">
-            <button name="action_quotation_send" states="draft" position="replace">
+            <button name="action_invoice_sent" class="oe_highlight" position="replace">
                 <field name="sjm_send_email" invisible="1"/>
-                <span states="draft">
-                    <button name="action_quotation_send" attrs="{'invisible': [('sjm_send_email', '!=', True)]}" string="Send by Email" type="object" class="oe_highlight" groups="base.group_user"/>
-                    <button name="action_quotation_send" attrs="{'invisible': [('sjm_send_email', '=', True)]}" string="Send by Email" type="object" groups="base.group_user"/>
-                </span>
+                <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',True), '|', ('sjm_send_email', '!=', True), ('state', '!=', 'open')]}" class="oe_highlight" groups="base.group_user"/>
+                <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',True), '|', ('sjm_send_email', '=', True), ('state', '!=', 'open')]}" groups="base.group_user"/>
             </button>
         </field>
     </record>
