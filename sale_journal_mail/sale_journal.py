@@ -55,7 +55,7 @@ class account_invoice(models.Model):
         if self.invoice_type_id and self.invoice_type_id.send_email:
             self.sjm_send_email = True
         else:
-            self.sjm_send_email = False    
+            self.sjm_send_email = False
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
