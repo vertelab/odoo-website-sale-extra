@@ -1,17 +1,6 @@
 <openerp>
 <data>
 
-    <record id="view_partner_form" model="ir.ui.view">
-        <field name="name">res.partner.invoice.type.form</field>
-        <field name="model">res.partner</field>
-        <field name="inherit_id" ref="account.view_partner_property_form"/>
-        <field name="arch" type="xml">
-            <field name="property_payment_term" position="after">
-                <field name="invoice_type_id"/>
-            </field>
-        </field>
-    </record>
-
     <record id="view_sale_journal_invoice_type_form" model="ir.ui.view">
         <field name="name">sale_journal.invoice.type.mail.form</field>
         <field name="model">sale_journal.invoice.type</field>
@@ -33,9 +22,6 @@
                 <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',True), '|', ('sjm_send_email', '!=', True), ('state', '!=', 'open')]}" class="oe_highlight" groups="base.group_user"/>
                 <button name="action_invoice_sent" type="object" string="Send by Email" attrs="{'invisible':['|',('sent','=',True), '|', ('sjm_send_email', '=', True), ('state', '!=', 'open')]}" groups="base.group_user"/>
             </button>
-            <field name="fiscal_position" position="after">
-                <field name="invoice_type_id"/>
-            </field>
         </field>
     </record>
 
