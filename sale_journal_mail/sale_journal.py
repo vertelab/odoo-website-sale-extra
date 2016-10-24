@@ -37,6 +37,7 @@ class account_invoice(models.Model):
     @api.one
     @api.depends('order_id', 'picking_id')
     def _get_invoice_type_id(self):
+        invoice_type_id = None
         if self.order_id:
             invoice_type_id = self.order_id.invoice_type_id
         elif self.picking_id:
