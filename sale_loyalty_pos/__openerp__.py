@@ -20,20 +20,20 @@
 ##############################################################################
 
 {
-    'name': 'Sales Loyalty Program',
+    'name': 'Sales Loyalty Program POS',
     'version': '0.1',
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'category': 'sale',
-    'summary': 'Loyalty Program for Sale Orders',
+    'summary': 'Loyalty Program for POS Orders',
     'description': """
-Define loyalty programs to enable customers to colletc points and earn rewards.
+Define loyalty programs to enable customers to colletc points and earn rewards. This modules is for POS.
 
 """,
-    'depends': ['sale'],
+    'depends': ['sale_loyalty','pos_partner'],
     'data': [
         'sale_loyalty_view.xml',
-        'security/ir.model.access.csv',
     ],
     'installable': True,
+    'autoinstall': True,
 }

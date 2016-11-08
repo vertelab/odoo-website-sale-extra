@@ -20,6 +20,8 @@
 ##############################################################################
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
+from datetime import datetime, timedelta
+from dateutil.relativedelta import relativedelta
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -44,12 +46,12 @@ class loyalty_rule(models.Model):
     _name = 'loyalty.rule'
     
     name = fields.Char('Name', select=True, required=True)
-    loyalty_program_id = fields.Many2one('loyalty.program', 'Loyalty Program')
-    product_id = fields.Many2one('product.product','Target Product')
-    category_id = fields.Many2one('product.category', 'Target Category')
-    sequence = fields.Float('Sequence', default=100)
-    product_points = fields.Float('Points per product')
-    currency_points = fields.Float('Points per currency')
+    loyalty_program_id = fields.Many2one(comodel_name='loyalty.program',string='Loyalty Program')
+    product_id = fields.Many2one(comodel_name='product.product',string='Target Product')
+    category_id = fields.Many2one(comodel_name='product.category',string='Target Category')
+    sequence = fields.Integer(string='Sequence', default=100)
+    product_points = fields.Integer(string='Points per product')
+    currency_points = fields.Integer(string='Points per currency')
     
     @api.multi
     def check_match(self, product, qty, price):
@@ -73,49 +75,47 @@ class loyalty_reward(models.Model):
     _name = 'loyalty.reward'
     
     name = fields.Char('Name', select=True, required=True)
-    loyalty_program_id = fields.Many2one('loyalty.program', 'Loyalty Program', help='The Loyalty Program this reward belongs to')
-    type = fields.Selection([('gift','Gift'),('discount','Discount'),('resale','Resale')], 'Type', required=True)
-    gift_product_id = fields.Many2one('product.product','Gift Product', help='The product given as a reward')
-    point_cost = fields.Float('Point Cost', help='The cost of the reward')
-    discount = fields.Float('Discount',help='The discount percentage')
-
-class res_partner(models.Model):
-    _inherit = 'res.partner'
-    
-    loyalty_points = fields.Float('Loyalty Points')
+    loyalty_program_id = fields.Many2one(comodel_name='loyalty.program',string='Loyalty Program', help='The Loyalty Program this reward belongs to')
+    type = fields.Selection([('gift','Gift'),('discount','Discount'),('resale','Resale')], string='Type', required=True)
+    gift_product_id = fields.Many2one(comodel_name='product.product',string='Gift Product', help='The product given as a reward')
+    point_cost = fields.Integer(string='Point Cost', help='The cost of the reward')
+    discount = fields.Float(string='Discount',help='The discount percentage')
 
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
     
-    loyalty_program_id = fields.Many2one('loyalty.program', 'Loyalty Program')
-    loyalty_points = fields.Float('Loyalty Points', compute='get_loyalty_points', store=True)
-    
     @api.one
     @api.depends('product_id', 'product_uom_qty', 'price_subtotal', 'order_id.loyalty_program_id')
-    def get_loyalty_points(self):
+    def _loyalty_points(self):
         if self.order_id.loyalty_program_id:
             self.loyalty_points = self.order_id.loyalty_program_id.calculate_loyalty_points(self.product_id, self.product_uom_qty, self.price_subtotal)
-
+    loyalty_points = fields.Integer(string='Loyalty Points', compute='_loyalty_points', store=True)
+    
 class sale_order(models.Model):
     _inherit = 'sale.order'
     
-    loyalty_program_id = fields.Many2one('loyalty.program', 'Loyalty Program')
-    loyalty_points = fields.Float('Loyalty Points', compute='get_loyalty_points', store=True)
-    
+    loyalty_program_id = fields.Many2one(comodel_name='loyalty.program', string='Loyalty Program')
+    @api.one
     @api.depends('order_line', 'order_line.product_id', 'order_line.product_uom_qty', 'order_line.price_subtotal')
-    def get_loyalty_points(self):
-        points = 0
-        for line in self.order_line:
-            points += line.loyalty_points
-        self.loyalty_points = points
+    def _loyalty_points(self):
+        self.loyalty_points = sum([l.loyalty_points for l in self.order_line])
+    loyalty_points = fields.Integer(string='Loyalty Points', compute='_loyalty_points', store=True)
+
+class res_partner(models.Model):
+    _inherit = 'res.partner'
     
-    @api.multi
-    def action_button_confirm(self):
-        res = super(sale_order, self).action_button_confirm()
-        if res:
-            for order in self:
-                order.partner_id.loyalty_points += order.loyalty_points
-        return res
-            
-             
+    @api.one
+    def _loyalty_points(self):  
+        self.loyalty_points = sum([o.loyalty_points for o in self.sale_order_ids.filtered(lambda o: o.state == 'done' and o.date_order > (datetime.today() - relativedelta(years=1)).strftime('%Y%m%d'))]) - sum([p.loyalty_points for p in self.product_pricelist_ids])
+        self.loyalty_points += sum([child.loyalty_points for child in self.child_ids])
+    loyalty_points = fields.Integer(string='Loyalty Points',compute="_loyalty_points")
+    loyalty_program_id = fields.Many2one(comodel_name='loyalty.program', string='Loyalty Program')
+
+    product_pricelist_ids = fields.One2many(comodel_name='product.pricelist',inverse_name='partner_id')
+
+class product_pricelist(models.Model):
+    _inherit = "product.pricelist"
+    
+    loyalty_points = fields.Integer(string='Loyalty Points')
+    partner_id = fields.Many2one(comodel_name='res.partner')
     
