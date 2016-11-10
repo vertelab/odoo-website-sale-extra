@@ -17,37 +17,18 @@
         </div>
       </t>
     </template>
-    <record id="product_category_form_view" model="ir.ui.view">
-      <field name="name">product.category.inherit.form</field>
-      <field name="model">product.category</field>
-      <field name="inherit_id" ref="product.product_category_form_view" />
+    
+    <record id="product_public_category_form_view" model="ir.ui.view">
+      <field name="name">product.public.category.inherit.form</field>
+      <field name="model">product.public.category</field>
+      <field name="inherit_id" ref="website_sale.product_public_category_form_view" />
       <field name="arch" type="xml">
-        <field name="type" position="after">
+        <field name="sequence" position="after">
             <field name="website_published"/>
           <field name="website_description"/>
         </field>
       </field>
     </record>
-    
-        <record id="product_public_category_form_view" model="ir.ui.view">
-        <field name="name">product.public.category.form</field>
-        <field name="model">product.public.category</field>
-        <field name="arch" type="xml">
-            <form string="Public Categories">
-                <sheet>
-                    <field name="image_medium" widget='image' class="oe_avatar oe_right"/>
-                    <div class="oe_left">
-                        <group>
-                            <field name="name"/>
-                            <field name="parent_id"/>
-                            <field name="sequence"/>
-                        </group>
-                    </div>
-                </sheet>
-            </form>
-        </field>
-    </record>
-    
     
   </data>
 </openerp>
