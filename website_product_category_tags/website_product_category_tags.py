@@ -34,6 +34,10 @@ class product_template(models.Model):
 
     @api.multi
     def product_visible(self, user_id):
+        """
+            A product is "visible" when its public category has common tags with the customer or customers company 
+            or doesnt have a public category with tags at all
+        """
         self.ensure_one()
         
 #        for c in self.public_categ_ids:
