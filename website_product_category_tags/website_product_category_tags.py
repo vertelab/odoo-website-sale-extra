@@ -35,11 +35,11 @@ class product_template(models.Model):
     @api.multi
     def product_visible(self, user_id):
         """
-            A product is "visible" when its public category has common tags with the customer or customers company 
+            A product is "visible" when its public category has common tags with the customer or customers company
             or doesnt have a public category with tags at all
         """
         self.ensure_one()
-        
+
 #        for c in self.public_categ_ids:
 #             for t in  c.partner_tag_ids:
 #                 t.id
@@ -47,7 +47,6 @@ class product_template(models.Model):
         ptags = set([t.id for c in self.public_categ_ids for t in  c.partner_tag_ids])
         utags = set([c.id for c in user_id.partner_id.category_id])
         putags = set([c.id for c in user_id.partner_id.parent_id.category_id])
-        _logger.warn('%s %s %s' % (ptags,utags,putags))
         if ptags:
             if user_id.partner_id.parent_id:
                 if (ptags & utags) or (ptags & putags):
