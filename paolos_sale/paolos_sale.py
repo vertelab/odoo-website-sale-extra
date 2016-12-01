@@ -60,8 +60,10 @@ class purchase_order(models.Model):
     @api.multi
     def _get_sale_orders(self):
         self.ensure_one()
-        order_names = self.origin.split(', ')
-        return self.env['sale.order'].search([('name', 'in', order_names)])
+        if self.origin:
+            order_names = self.origin.split(', ')
+            return self.env['sale.order'].search([('name', 'in', order_names)])
+        return self.env['sale.order'].browse()
     
     @api.multi
     def wkf_approve_order(self):
