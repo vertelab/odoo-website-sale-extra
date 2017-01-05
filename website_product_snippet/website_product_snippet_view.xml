@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <!-- Customize Snippets -->
+        <template id="website_product_snippets" inherit_id="website.snippets" name="Custom Snippets">
+            <!-- Customize Structure -->
+            <xpath expr="//div[@id='snippet_structure']" position="inside">
+                <!-- product snippet -->
+                <div>
+                    <div class="oe_snippet_thumbnail">
+                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_image_text.png" />
+                        <span class="oe_snippet_thumbnail_title">Product Snippet</span>
+                    </div>
+                    <section class="oe_snippet_body product_snippet mb16 mt16">
+                        <div class="container col-md-12">
+                            <div class="o_image_floating o_margin_l pull-left">
+                                <div class="o_container">
+                                    <img id="ps_img" class="img img-responsive" src="/website/static/src/img/odoo.jpg" alt="Product Image" />
+                                </div>
+                            </div>
+                            <h2 id="ps_name" />
+                            <p id="ps_desc" style="text-align: justify;" />
+                        </div>
+                    </section>
+                </div>
+                <!-- end of product snippet -->
+            </xpath>
+        </template>
+        <!-- product snippet options -->
+        <template id="product_snippet_options" inherit_id="website.snippet_options" name="Product Snippet Options">
+            <xpath expr="." position="inside">
+                <div data-snippet-option-id="product-snippet" data-selector=".product_snippet">
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Product</a>
+                        <t t-set="products" t-value="request.env['product.template'].search([('active', '=', True)])" />
+                        <ul class="dropdown-menu">
+                            <t t-if="len(products) &gt; 0">
+                                <t t-foreach="products" t-as="product">
+                                    <li>
+                                        <a t-att-data-value="product.id" t-att-onclick="'product_change(&quot;%s&quot;)' %product.id"><t t-esc="product.name"/></a>
+                                    </li>
+                                </t>
+                            </t>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Columns</a>
+                        <ul class="dropdown-menu">
+                            <li><a value="3" onclick="col_change(3)">Col-3</a></li>
+                            <li><a value="4" onclick="col_change(4)">Col-4</a></li>
+                            <li><a value="6" onclick="col_change(6)">Col-6</a></li>
+                            <li><a value="12" onclick="col_change(12)">Col-12</a></li>
+                        </ul>
+                    </li>
+                </div>
+            </xpath>
+        </template>
+        <!-- Custom Snippet CSS and javascript -->
+        <template id="website_product_snippet_css_and_js" inherit_id="website.layout" name="Website Product Snippet Custom CSS and JS">
+            <!-- Customize css -->
+            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="before">
+                <link href="/website_product_snippet/static/src/css/product_snippet.css" rel="stylesheet"/>
+            </xpath>
+            <!-- Customize javascript -->
+            <xpath expr="//body" position="inside">
+                <script src="/website_product_snippet/static/src/js/product_snippet.js" type="text/javascript"/>
+            </xpath>
+        </template>
+        <!-- Custom Snippet Options CSS -->
+        <template id="website_product_snippet_options_css" inherit_id="website.theme" name="Website Product Snippet Options CSS">
+            <xpath expr="link[last()]" position="after" />
+        </template>
+    </data>
+</openerp>
