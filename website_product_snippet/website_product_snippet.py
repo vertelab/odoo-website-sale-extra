@@ -34,3 +34,11 @@ class product_snippet(http.Controller):
     def product_change(self, product=None, **kw):
         product = request.env['product.template'].browse(int(product))
         return {'id': product.id, 'name': product.name, 'image': product.image_medium, 'description': product.description_sale}
+
+    @http.route(['/product_snippet/get_products'], type='json', auth="user", website=True)
+    def get_products(self, **kw):
+        products = request.env['product.template'].search([])
+        products_list = {}
+        for p in products:
+            products_list[p.id] = p.name
+        return products_list
