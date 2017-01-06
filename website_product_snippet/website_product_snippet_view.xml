@@ -15,11 +15,11 @@
                         <div class="container col-md-12">
                             <div class="o_image_floating o_margin_l pull-left">
                                 <div class="o_container">
-                                    <img id="ps_img" class="img img-responsive" src="/website/static/src/img/odoo.jpg" alt="Product Image" />
+                                    <img class="img img-responsive" src="/website/static/src/img/odoo.jpg" alt="Product Image" />
                                 </div>
                             </div>
-                            <h2 id="ps_name"/>
-                            <p id="ps_desc" style="text-align: justify;" />
+                            <h2 />
+                            <p style="text-align: justify;" />
                         </div>
                     </section>
                 </div>
