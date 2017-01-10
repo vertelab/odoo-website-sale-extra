@@ -18,8 +18,6 @@
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-
-from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 from openerp import http
 from openerp.http import request
@@ -46,6 +44,14 @@ class product_snippet(http.Controller):
     @http.route(['/product_snippet/get_products_by_category'], type='json', auth="user", website=True)
     def get_products_by_category(self, categ_id=None, **kw):
         products = request.env['product.template'].search([('categ_id', '=', int(categ_id))])
+        products_list = {}
+        for p in products:
+            products_list[p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}
+        return products_list
+
+    @http.route(['/product_snippet/get_products_by_partner'], type='json', auth="user", website=True)
+    def get_products_by_partner(self, partner_id=None, **kw):
+        products = request.env['res.partner'].search([('id', '=', int(partner_id))]).website_product_ids
         products_list = {}
         for p in products:
             products_list[p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}

@@ -19,6 +19,20 @@
                     </section>
                 </div>
                 <!-- end of products by category snippet -->
+                <!-- products by category partner -->
+                <div>
+                    <div class="oe_snippet_thumbnail">
+                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
+                        <span class="oe_snippet_thumbnail_title">Products By Supplier</span>
+                    </div>
+                    <section class="oe_snippet_body products_by_partner_snippet mb16 mt16">
+                        <div class="container products_by_partner col-md-12">
+                            <h3 class="text-center mt16 mb16">Supplier</h3>
+                            <div class="products_by_partner_content"/>
+                        </div>
+                    </section>
+                </div>
+                <!-- end of products by category partner -->
             </xpath>
             <!-- Customize Content -->
             <xpath expr="//div[@id='snippet_content']" position="inside">
@@ -66,6 +80,31 @@
                             <li><a value="4" onclick="pbc_col_change(4)">Col-4</a></li>
                             <li><a value="6" onclick="pbc_col_change(6)">Col-6</a></li>
                             <li><a value="12" onclick="pbc_col_change(12)">Col-12</a></li>
+                        </ul>
+                    </li>
+                </div>
+                <!-- products by partner -->
+                <div data-snippet-option-id="products-by-partner-snippet" data-selector=".products_by_partner_snippet">
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Product by Category</a>
+                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False)])" />
+                        <ul class="dropdown-menu">
+                            <t t-if="len(partners) &gt; 0">
+                                <t t-foreach="partners" t-as="partner">
+                                    <li>
+                                        <a t-att-data-value="partner.id" t-att-onclick="'get_products_by_partner(&quot;%s&quot;)' %partner.id"><t t-esc="partner.name"/></a>
+                                    </li>
+                                </t>
+                            </t>
+                        </ul>
+                    </li>
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1" href="#">Columns</a>
+                        <ul class="dropdown-menu">
+                            <li><a value="3" onclick="pbp_col_change(3)">Col-3</a></li>
+                            <li><a value="4" onclick="pbp_col_change(4)">Col-4</a></li>
+                            <li><a value="6" onclick="pbp_col_change(6)">Col-6</a></li>
+                            <li><a value="12" onclick="pbp_col_change(12)">Col-12</a></li>
                         </ul>
                     </li>
                 </div>

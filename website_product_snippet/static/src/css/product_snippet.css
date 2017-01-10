@@ -2,16 +2,16 @@
     margin: auto;
 }
 
-.products_by_category img {
+.products_by_category img, .products_by_partner img {
     margin: auto;
     display: block;
 }
 
-.pbc_outter {
+.pbc_outter, .pbp_outter {
     padding: 5px !important;
 }
 
-.pbc_inner {
+.pbc_inner, .pbp_inner {
     border: 1px solid #ddd;
     padding: 0px 10px;
 }

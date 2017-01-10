@@ -39,7 +39,6 @@ function get_products_by_category(categ_id){
                         product_content += "<div class='pbc_outter'><div class='pbc_inner'><h3 class='text-center'>" + data[key]['name'] +"</h3><img src='data:image/png;base64," + data[key]['image'] + "' data-cke-saved-src='data:image/png;base64," + data[key]['image'] + "'/><p>" + data[key]['description'] + "</p></div></div>";
                     });
                     $(this).find(".products_by_category_content").html(product_content);
-                    //~ $(this).find(".products_by_category_content").find(".pbc").attr({"class": "col-md-4"});
                 }
                 if(counter == 3){
                     return false;
@@ -53,6 +52,35 @@ function get_products_by_category(categ_id){
 function pbc_col_change(col) {
     $(".pbc_outter").attr({
         "class": "pbc_outter col-md-" + col
+    });
+}
+
+function get_products_by_partner(partner_id){
+    if (partner_id != "") {
+        openerp.jsonRpc("/product_snippet/get_products_by_partner", "call", {
+            'partner_id': partner_id
+        }).done(function(data){
+            var counter = 1;
+            $.each($(".products_by_partner"), function() {
+                if(counter == 2){
+                    var product_content = "";
+                    $.each(data, function(key, info) {
+                        product_content += "<div class='pbp_outter'><div class='pbp_inner'><h3 class='text-center'>" + data[key]['name'] +"</h3><img src='data:image/png;base64," + data[key]['image'] + "' data-cke-saved-src='data:image/png;base64," + data[key]['image'] + "'/><p>" + data[key]['description'] + "</p></div></div>";
+                    });
+                    $(this).find(".products_by_partner_content").html(product_content);
+                }
+                if(counter == 3){
+                    return false;
+                }
+                counter ++;
+            });
+        });
+    }
+}
+
+function pbp_col_change(col) {
+    $(".pbp_outter").attr({
+        "class": "pbp_outter col-md-" + col
     });
 }
 

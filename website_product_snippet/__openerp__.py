@@ -29,8 +29,8 @@ Snippets for product presentation
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['website_sale'],
-    'data': ['website_product_snippet_view.xml',
+    'depends': ['base', 'website_sale'],
+    'data': ['website_product_snippet_view.xml', 'res_partner_view.xml'
     ],
     'application': False,
     'installable': True,
