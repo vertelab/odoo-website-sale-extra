@@ -42,3 +42,11 @@ class product_snippet(http.Controller):
         for p in products:
             products_list[p.id] = p.name
         return products_list
+
+    @http.route(['/product_snippet/get_products_by_category'], type='json', auth="user", website=True)
+    def get_products_by_category(self, categ_id=None, **kw):
+        products = request.env['product.template'].search([('categ_id', '=', int(categ_id))])
+        products_list = {}
+        for p in products:
+            products_list[p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}
+        return products_list

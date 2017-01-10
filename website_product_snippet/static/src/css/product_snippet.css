@@ -1,7 +1,28 @@
-.product_snippet .container {
-    border: 1px solid #eee;
+.individual_product img {
+    margin: auto;
 }
 
+.products_by_category img {
+    margin: auto;
+    display: block;
+}
+
+.pbc_outter {
+    padding: 5px !important;
+}
+
+.pbc_inner {
+    border: 1px solid #ddd;
+    padding: 0px 10px;
+}
+
+/*
+.product_snippet {
+    border: 1px solid #eee;
+}
+*/
+
+/*
 #product_selector {
     position: absolute;
     z-index: 1000;
@@ -13,3 +34,4 @@
     z-index: 1000;
     display: none;
 }
+*/
