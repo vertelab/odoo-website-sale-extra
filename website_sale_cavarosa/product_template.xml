@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <template id="product_price" inherit_id="website_sale.product_price">
+            <xpath expr="//b[@class='oe_price']" position="attributes">
+                <attribute name="t-field">product.unit_price</attribute>
+            </xpath>
+            <xpath expr="//h4[@class='css_editable_mode_display']/span[1]" position="attributes">
+                <attribute name="t-field">product.unit_price</attribute>
+            </xpath>
+        </template>
+
+    </data>
+</openerp>
