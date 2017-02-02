@@ -11,6 +11,12 @@
             </xpath>
         </template>
 
+        <template id="cavarosa_css" inherit_id="website.layout">
+            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
+                <link rel="stylesheet" href="/website_sale_cavarosa/static/src/css/cavarosa.css"/>
+            </xpath>
+        </template>
+
         <template id="current_campaign" name="Current Campaign">
             <t t-call="website.layout">
                 <div id="wrap">
@@ -37,11 +43,11 @@
         <template id="product_grid" name="Product Grid">
             <t t-foreach="campaign.product_ids" t-as="product">
                 <t t-if="product.seller_id == partner">
-                    <div class="col-md-3 col-sm-6 col-xs-12" style="padding: 10px; border: 1px solid #ddd; height: 300px;">
+                    <div class="col-md-3 col-sm-6 col-xs-12 product_grid_div">
                         <h4 t-field="product.name" class="text-center"/>
                         <div class="oe_product_image">
                             <a itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
-                                <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name" style="margin: auto; display: block; height: 200px;"/>
+                                <img itemprop="image" class="img img-responsive product_grid_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
                             </a>
                         </div>
                         <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
