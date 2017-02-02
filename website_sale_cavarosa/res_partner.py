@@ -18,25 +18,16 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, _
+import logging
+_logger = logging.getLogger(__name__)
 
-{
-    'name': 'Website Sale Cavarosa',
-    'version': '0.1',
-    'category': '',
-    'description': """
-Special sale configuration for Cavarosa AB
-==========================================
-""",
-    'author': 'Vertel AB',
-    'website': 'http://www.vertel.se',
-    'depends': ['crm', 'website_sale'],
-    'data': [
-        'crm_view.xml',
-        'res_partner_view.xml',
-        'product_view.xml',
-        'product_template.xml',
-        ],
-    'application': False,
-    'installable': True,
-}
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+class res_partner(models.Model):
+    _inherit = 'res.partner'
+
+    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
+    seller_ids = fields.One2many(string='Suppliers', comodel_name='product.supplierinfo', inverse_name='name')
+    @api.one
+    def _product_ids(self):
+        self.product_ids = [(6, 0, [s.product_tmpl_id.id for s in self.seller_ids])]
+    product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')

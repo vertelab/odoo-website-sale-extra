@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <record model="ir.ui.view" id="crm_tracking_campaign_tree">
+            <field name="name">crm.tracking.campaign.tree.inherit.website_sale_cavarosa</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm.crm_tracking_campaign_tree"/>
+            <field name="arch" type="xml">
+                <field name="section_id" position="after">
+                    <field name="date_start"/>
+                    <field name="date_end"/>
+                </field>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="crm_tracking_campaign_form">
+            <field name="name">crm.tracking.campaign.form.inherit.website_sale_cavarosa</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm.crm_tracking_campaign_form"/>
+            <field name="arch" type="xml">
+                <group position="after">
+                    <group>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                    </group>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags"/>
+                        <field name="product_ids" widget="many2many_tags" domain="[('seller_id', 'in', partner_ids)]"/>
+                    </group>
+                    <field name="description"/>
+                </group>
+            </field>
+        </record>
+
+    </data>
+</openerp>

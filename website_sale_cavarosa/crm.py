@@ -19,23 +19,27 @@
 #
 ##############################################################################
 from openerp import models, fields, api, _
+from openerp import http
+from openerp.http import request
 import logging
 _logger = logging.getLogger(__name__)
 
-class product_template(models.Model):
-    _inherit = 'product.template'
+class crm_tracking_campaign(models.Model):
+    _inherit = 'crm.tracking.campaign'
+    _mail_mass_mailing = _('Campaign')
 
-    @api.one
-    def _unit_price(self):
-        if self.uom_id.factor:
-            self.unit_price = self.list_price * self.uom_id.factor
-        elif self.uom_id.factor_inv:
-            self.unit_price = self.list_price / self.uom_id.factor_inv
+    date_start = fields.Date(string='Start Date')
+    date_end = fields.Date(string='End Date')
+    partner_ids = fields.Many2many(string='Suppliers', comodel_name='res.partner')
+    product_ids = fields.Many2many(string='Products', comodel_name='product.template')
+    description = fields.Html(string='Description', sanitize=False)
+
+class current_campaign(http.Controller):
+
+    @http.route(['/shop/campaign'], type='http', auth="user", website=True)
+    def campaign(self, **post):
+        campaigns = request.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_end', '>=', fields.Date.today())])
+        if len(campaigns) > 0:
+            return request.website.render('website_sale_cavarosa.current_campaign', {'campaigns': campaigns})
         else:
-            self.unit_price = self.list_price
-    unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
-    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
-    @api.one
-    def _seller_id(self):
-        self.seller_id = self.seller_ids[0] if len(self.seller_ids) > 0 else None
-    seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
+            return request.website.render('website_sale_cavarosa.current_campaign', {})

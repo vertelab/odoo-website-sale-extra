@@ -11,5 +11,57 @@
             </xpath>
         </template>
 
+        <template id="current_campaign" name="Current Campaign">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="oe_structure">
+                        <t t-foreach="campaigns" t-as="campaign">
+                            <section>
+                                <h1 t-field="campaign.name" class="text-center"/>
+                                <div class="oe_structure">
+                                    <div t-field="campaign.description"/>
+                                </div>
+                                <t t-foreach="campaign.partner_ids" t-as="partner">
+                                    <div class="container">
+                                        <h2 t-field="partner.name" class="text-left"/>
+                                        <t t-call="website_sale_cavarosa.product_grid"/>
+                                    </div>
+                                </t>
+                            </section>
+                        </t>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="product_grid" name="Product Grid">
+            <t t-foreach="campaign.product_ids" t-as="product">
+                <div class="col-md-3">
+<!--
+                    <t t-if="product.seller_ids[0] == partner.seller_ids[0]">
+-->
+                        <h3 t-field="product.name"/>
+                        <div class="oe_product_image">
+                            <a itemprop="url" href="/">
+                                <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
+                            </a>
+                        </div>
+                        <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                            <b>
+                                <span t-field="product.price" style="white-space: nowrap;"  t-field-options='{
+                                       "widget": "monetary",
+                                       "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                    }'>
+                                </span>
+                                <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                            </b>
+                        </div>
+<!--
+                    </t>
+-->
+                </div>
+            </t>
+        </template>
+
     </data>
 </openerp>

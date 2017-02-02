@@ -9,6 +9,7 @@
             <field name="arch" type="xml">
                 <field name="list_price" position="after">
                     <field name="unit_price"/>
+                    <field name="campaign_ids" widget="many2many_tags"/>
                 </field>
             </field>
         </record>
