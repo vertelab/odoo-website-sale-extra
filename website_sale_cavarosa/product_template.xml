@@ -21,20 +21,18 @@
             <t t-call="website.layout">
                 <div id="wrap">
                     <div class="oe_structure">
-                        <t t-foreach="campaigns" t-as="campaign">
-                            <div class="mt64 mb64">
-                                <h1 t-field="campaign.name" class="text-center"/>
-                                <div class="oe_structure">
-                                    <div t-field="campaign.description"/>
-                                </div>
-                                <t t-foreach="campaign.partner_ids" t-as="partner">
-                                    <div class="container">
-                                        <h2 t-field="partner.name" class="text-left"/>
-                                        <t t-call="website_sale_cavarosa.product_grid"/>
-                                    </div>
-                                </t>
+                        <div class="mt64 mb64">
+                            <h1 t-field="campaign.name" class="text-center"/>
+                            <div class="oe_structure">
+                                <div t-field="campaign.description"/>
                             </div>
-                        </t>
+                            <t t-foreach="campaign.partner_ids" t-as="partner">
+                                <div class="container">
+                                    <h2 t-field="partner.name" class="text-left"/>
+                                    <t t-call="website_sale_cavarosa.product_grid"/>
+                                </div>
+                            </t>
+                        </div>
                     </div>
                 </div>
             </t>

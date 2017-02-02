@@ -34,13 +34,25 @@ class crm_tracking_campaign(models.Model):
     product_ids = fields.Many2many(string='Products', comodel_name='product.template')
     description = fields.Html(string='Description', sanitize=False)
 
+
+class website(models.Model):
+    _inherit = 'website'
+
+    def sale_get_order(self, cr, uid, ids, force_create=False, code=None, update_pricelist=None, context=None):
+        res = super(website, self).sale_get_order(cr, uid, ids, force_create, code, update_pricelist, context)
+        if res:
+            res[0].campaign_id = request.session.get('default_campaign_id')
+        return res
+
+
 class current_campaign(http.Controller):
 
     @http.route(['/shop/campaign'], type='http', auth="user", website=True)
     def campaign(self, **post):
         campaigns = request.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_end', '>=', fields.Date.today())])
         if len(campaigns) > 0:
-            return request.website.render('website_sale_cavarosa.current_campaign', {'campaigns': campaigns})
+            request.session.update(default_campaign_id=campaigns[0].id)
+            return request.website.render('website_sale_cavarosa.current_campaign', {'campaigns': campaigns[0]})
         else:
             campaigns = request.env['crm.tracking.campaign'].search([('date_start', '>=', fields.Date.today())])
             if len(campaigns) > 0:
