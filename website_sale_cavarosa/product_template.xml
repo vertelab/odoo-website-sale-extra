@@ -16,7 +16,7 @@
                 <div id="wrap">
                     <div class="oe_structure">
                         <t t-foreach="campaigns" t-as="campaign">
-                            <section>
+                            <div class="mt64 mb64">
                                 <h1 t-field="campaign.name" class="text-center"/>
                                 <div class="oe_structure">
                                     <div t-field="campaign.description"/>
@@ -27,7 +27,7 @@
                                         <t t-call="website_sale_cavarosa.product_grid"/>
                                     </div>
                                 </t>
-                            </section>
+                            </div>
                         </t>
                     </div>
                 </div>
@@ -36,29 +36,42 @@
 
         <template id="product_grid" name="Product Grid">
             <t t-foreach="campaign.product_ids" t-as="product">
-                <div class="col-md-3">
-<!--
-                    <t t-if="product.seller_ids[0] == partner.seller_ids[0]">
--->
-                        <h3 t-field="product.name"/>
+                <t t-if="product.seller_id == partner">
+                    <div class="col-md-3 col-sm-6 col-xs-12" style="padding: 10px; border: 1px solid #ddd; height: 300px;">
+                        <h4 t-field="product.name" class="text-center"/>
                         <div class="oe_product_image">
-                            <a itemprop="url" href="/">
-                                <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
+                            <a itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
+                                <img itemprop="image" class="img img-responsive" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name" style="margin: auto; display: block; height: 200px;"/>
                             </a>
                         </div>
                         <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
                             <b>
-                                <span t-field="product.price" style="white-space: nowrap;"  t-field-options='{
+                                <span t-field="product.unit_price" style="white-space: nowrap;"  t-field-options='{
                                        "widget": "monetary",
                                        "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
                                     }'>
                                 </span>
                                 <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                             </b>
+                            <t t-if="product.uom_id.uom_type == 'bigger'">
+                                <br/>
+                                <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
+                            </t>
                         </div>
-<!--
-                    </t>
--->
+                    </div>
+                </t>
+            </t>
+        </template>
+
+        <template id="no_campaign" name="No Campaign">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="oe_structure">
+                        <div class="mt64 mb64">
+                            <h1 class="text-center">There is campaign ongoing!</h1>
+                            <h2 class="text-center"><t t-esc="next_campaign_date"/></h2>
+                        </div>
+                    </div>
                 </div>
             </t>
         </template>

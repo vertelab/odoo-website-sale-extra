@@ -42,4 +42,10 @@ class current_campaign(http.Controller):
         if len(campaigns) > 0:
             return request.website.render('website_sale_cavarosa.current_campaign', {'campaigns': campaigns})
         else:
-            return request.website.render('website_sale_cavarosa.current_campaign', {})
+            campaigns = request.env['crm.tracking.campaign'].search([('date_start', '>=', fields.Date.today())])
+            if len(campaigns) > 0:
+                next_campaign_date = campaigns[0].date_start
+                for c in campaigns:
+                    if c.date_start < next_campaign_date:
+                        next_campaign_date = c.date_start
+                return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': next_campaign_date})

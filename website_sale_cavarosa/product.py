@@ -37,5 +37,5 @@ class product_template(models.Model):
     campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
     @api.one
     def _seller_id(self):
-        self.seller_id = self.seller_ids[0] if len(self.seller_ids) > 0 else None
+        self.seller_id = self.seller_ids[0].name if len(self.seller_ids) > 0 else None
     seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
