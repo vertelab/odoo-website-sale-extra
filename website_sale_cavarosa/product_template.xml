@@ -43,11 +43,11 @@
         <template id="product_grid" name="Product Grid">
             <t t-foreach="campaign.product_ids" t-as="product">
                 <t t-if="product.seller_id == partner">
-                    <div class="col-md-3 col-sm-6 col-xs-12 product_grid_div">
+                    <div class="col-md-3 col-sm-6 col-xs-12 campaign_product_div">
                         <h4 t-field="product.name" class="text-center"/>
                         <div class="oe_product_image">
                             <a itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
-                                <img itemprop="image" class="img img-responsive product_grid_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
+                                <img itemprop="image" class="img img-responsive campaign_product_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
                             </a>
                         </div>
                         <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">

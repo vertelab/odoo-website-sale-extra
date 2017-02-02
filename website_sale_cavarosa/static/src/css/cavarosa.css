@@ -1,10 +1,10 @@
-.product_grid_div {
+.campaign_product_div {
     padding: 10px;
     border: 1px solid #ddd;
     height: 300px;
 }
 
-.product_grid_img {
+.campaign_product_img {
     margin: auto;
     display: block;
     height: 200px;
