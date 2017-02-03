@@ -11,6 +11,12 @@
             </xpath>
         </template>
 
+        <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//form[@class='js_add_cart_variants']" position="inside">
+                <input name="campaign_id" t-att-value="int(request.params.get('campaign_id', 0))" type="hidden"/>
+            </xpath>
+        </template>
+
         <template id="cavarosa_css" inherit_id="website.layout">
             <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
                 <link rel="stylesheet" href="/website_sale_cavarosa/static/src/css/cavarosa.css"/>
@@ -44,7 +50,7 @@
                     <div class="col-md-3 col-sm-6 col-xs-12 campaign_product_div">
                         <h4 t-field="product.name" class="text-center"/>
                         <div class="oe_product_image">
-                            <a itemprop="url" t-att-href="'/shop/product/%s' % slug(product)">
+                            <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
                                 <img itemprop="image" class="img img-responsive campaign_product_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
                             </a>
                         </div>
@@ -73,7 +79,9 @@
                     <div class="oe_structure">
                         <div class="mt64 mb64">
                             <h1 class="text-center">There is campaign ongoing!</h1>
-                            <h2 class="text-center"><t t-esc="next_campaign_date"/></h2>
+                            <t t-if="next_campaign_date">
+                                <h2 class="text-center"><t t-esc="next_campaign_date"/></h2>
+                            </t>
                         </div>
                     </div>
                 </div>

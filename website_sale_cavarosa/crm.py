@@ -21,6 +21,7 @@
 from openerp import models, fields, api, _
 from openerp import http
 from openerp.http import request
+from openerp.addons.website_sale.controllers.main import website_sale
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -35,14 +36,16 @@ class crm_tracking_campaign(models.Model):
     description = fields.Html(string='Description', sanitize=False)
 
 
-class website(models.Model):
-    _inherit = 'website'
+class website_sale(website_sale):
 
-    def sale_get_order(self, cr, uid, ids, force_create=False, code=None, update_pricelist=None, context=None):
-        res = super(website, self).sale_get_order(cr, uid, ids, force_create, code, update_pricelist, context)
-        if res:
-            res[0].campaign_id = request.session.get('default_campaign_id')
-        return res
+    @http.route(['/shop/cart/update'], type='http', auth="public", methods=['POST'], website=True)
+    def cart_update(self, product_id, add_qty=1, set_qty=0, **kw):
+        cr, uid, context = request.cr, request.uid, request.context
+        order = request.website.sale_get_order(force_create=1)
+        order._cart_update(product_id=int(product_id), add_qty=float(add_qty), set_qty=float(set_qty))
+        if kw.get('campaign_id'):
+            order.write({'campaign_id': kw.get('campaign_id')})
+        return request.redirect("/shop/cart")
 
 
 class current_campaign(http.Controller):
@@ -51,8 +54,7 @@ class current_campaign(http.Controller):
     def campaign(self, **post):
         campaigns = request.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_end', '>=', fields.Date.today())])
         if len(campaigns) > 0:
-            request.session.update(default_campaign_id=campaigns[0].id)
-            return request.website.render('website_sale_cavarosa.current_campaign', {'campaigns': campaigns[0]})
+            return request.website.render('website_sale_cavarosa.current_campaign', {'campaign': campaigns[0]})
         else:
             campaigns = request.env['crm.tracking.campaign'].search([('date_start', '>=', fields.Date.today())])
             if len(campaigns) > 0:
@@ -61,3 +63,5 @@ class current_campaign(http.Controller):
                     if c.date_start < next_campaign_date:
                         next_campaign_date = c.date_start
                 return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': next_campaign_date})
+            else:
+                return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': None})
