@@ -19,6 +19,8 @@
 #
 ##############################################################################
 from openerp import models, fields, api, _
+from openerp import http
+from openerp.http import request
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -31,3 +33,20 @@ class res_partner(models.Model):
     def _product_ids(self):
         self.product_ids = [(6, 0, [s.product_tmpl_id.id for s in self.seller_ids])]
     product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')
+
+
+class product_snippet(http.Controller):
+
+    @http.route(['/cavarosa/get_products'], type='json', auth="user", website=True)
+    def get_products(self, partner_id=None, **kw):
+        supplier = request.env['res.partner'].browse(int(partner_id))
+        products = supplier.product_ids
+        products_list = {'supplier': supplier.name, 'products': {}}
+        if len(products) > 0:
+            for p in products:
+                products_list['products'][p.id] = {
+                'name': p.name,
+                'image': p.image_medium,
+                'description': p.description_sale if p.description_sale else ''
+                }
+        return products_list

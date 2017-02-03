@@ -1,3 +1,30 @@
+var website = openerp.website;
+website.add_template_file('/website_product_snippet/static/src/xml/product_snippet.xml');
+var QWeb = openerp.qweb;
+var template;
+
+website.ProductSnippet = openerp.Widget.extend({
+    //~ template: 'website_product_snippet.product_snippet',
+    events: {},
+    start: function () {
+        var self = this;
+        template = self.$el.append(QWeb.render('website_product_snippet.product_snippet'));
+        return this._super();
+    },
+    destroy: function() {
+        this._super();
+    },
+});
+
+website.ready().done(function() {
+    $(document).ready(function() {
+        var ps = new website.ProductSnippet().appendTo($(document.body));
+    });
+});
+
+
+
+
 /* option one: use snippet editor */
 function product_change(product){
     if (product != "") {
@@ -20,12 +47,6 @@ function product_change(product){
     }
 }
 
-function ind_col_change(col) {
-    $(".individual_product").attr({
-        "class": "individual_product col-md-" + col +" mb16 mt16"
-    });
-}
-
 function get_products_by_category(categ_id){
     if (categ_id != "") {
         openerp.jsonRpc("/product_snippet/get_products_by_category", "call", {
@@ -34,10 +55,17 @@ function get_products_by_category(categ_id){
             var counter = 1; // for some reason the first loop does not allowed to insert html
             $.each($(".products_by_category"), function() {
                 if(counter == 2){
-                    var product_content = "";
-                    $.each(data, function(key, info) {
-                        product_content += "<div class='pbc_outter'><div class='pbc_inner'><h3 class='text-center'>" + data[key]['name'] +"</h3><img src='data:image/png;base64," + data[key]['image'] + "' data-cke-saved-src='data:image/png;base64," + data[key]['image'] + "'/><p>" + data[key]['description'] + "</p></div></div>";
+                    var product_content = '';
+                    $.each(data['products'], function(key, info) {
+                        template.find(".ps_product_name").html(data['products'][key]['name']);
+                        template.find(".ps_product_image").attr({
+                                'src': 'data:image/png;base64,' + data['products'][key]['image'],
+                                'data-cke-saved-src': 'data:image/png;base64,' + data['products'][key]['image'],
+                            });
+                        template.find(".ps_product_description").html(data['products'][key]['description']);
+                        product_content += template.prop('outerHTML');
                     });
+                    $(this).find("h2").html(data['category']);
                     $(this).find(".products_by_category_content").html(product_content);
                 }
                 if(counter == 3){
@@ -49,12 +77,6 @@ function get_products_by_category(categ_id){
     }
 }
 
-function pbc_col_change(col) {
-    $(".pbc_outter").attr({
-        "class": "pbc_outter col-md-" + col
-    });
-}
-
 function get_products_by_partner(partner_id){
     if (partner_id != "") {
         openerp.jsonRpc("/product_snippet/get_products_by_partner", "call", {
@@ -64,9 +86,16 @@ function get_products_by_partner(partner_id){
             $.each($(".products_by_partner"), function() {
                 if(counter == 2){
                     var product_content = "";
-                    $.each(data, function(key, info) {
-                        product_content += "<div class='pbp_outter'><div class='pbp_inner'><h3 class='text-center'>" + data[key]['name'] +"</h3><img src='data:image/png;base64," + data[key]['image'] + "' data-cke-saved-src='data:image/png;base64," + data[key]['image'] + "'/><p>" + data[key]['description'] + "</p></div></div>";
+                    $.each(data['products'], function(key, info) {
+                        template.find(".ps_product_name").html(data['products'][key]['name']);
+                        template.find(".ps_product_image").attr({
+                                'src': 'data:image/png;base64,' + data['products'][key]['image'],
+                                'data-cke-saved-src': 'data:image/png;base64,' + data['products'][key]['image'],
+                            });
+                        template.find(".ps_product_description").html(data['products'][key]['description']);
+                        product_content += template.prop('outerHTML');
                     });
+                    $(this).find("h2").html(data['partner']);
                     $(this).find(".products_by_partner_content").html(product_content);
                 }
                 if(counter == 3){
@@ -78,12 +107,17 @@ function get_products_by_partner(partner_id){
     }
 }
 
-function pbp_col_change(col) {
-    $(".pbp_outter").attr({
-        "class": "pbp_outter col-md-" + col
+function ind_col_change(col) {
+    $(".individual_product").attr({
+        "class": "individual_product col-md-" + col +" mb16 mt16"
     });
 }
 
+function ps_col_change(col) {
+    $(".ps_outter").attr({
+        "class": "ps_outter col-md-" + col
+    });
+}
 
 
 /*

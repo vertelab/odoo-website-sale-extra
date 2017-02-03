@@ -7,11 +7,11 @@
     display: block;
 }
 
-.pbc_outter, .pbp_outter {
+.ps_outter {
     padding: 5px !important;
 }
 
-.pbc_inner, .pbp_inner {
+.ps_inner {
     border: 1px solid #ddd;
     padding: 0px 10px;
 }

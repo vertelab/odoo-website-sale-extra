@@ -13,7 +13,7 @@
                     </div>
                     <section class="oe_snippet_body products_by_category_snippet mb16 mt16">
                         <div class="container products_by_category col-md-12">
-                            <h3 class="text-center mt16 mb16">Category</h3>
+                            <h2 class="text-center mt16 mb16">Category</h2>
                             <div class="products_by_category_content"/>
                         </div>
                     </section>
@@ -27,7 +27,7 @@
                     </div>
                     <section class="oe_snippet_body products_by_partner_snippet mb16 mt16">
                         <div class="container products_by_partner col-md-12">
-                            <h3 class="text-center mt16 mb16">Supplier</h3>
+                            <h2 class="text-center mt16 mb16">Supplier</h2>
                             <div class="products_by_partner_content"/>
                         </div>
                     </section>
@@ -76,18 +76,18 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Columns</a>
                         <ul class="dropdown-menu">
-                            <li><a value="3" onclick="pbc_col_change(3)">Col-3</a></li>
-                            <li><a value="4" onclick="pbc_col_change(4)">Col-4</a></li>
-                            <li><a value="6" onclick="pbc_col_change(6)">Col-6</a></li>
-                            <li><a value="12" onclick="pbc_col_change(12)">Col-12</a></li>
+                            <li><a value="3" onclick="ps_col_change(3)">Col-3</a></li>
+                            <li><a value="4" onclick="ps_col_change(4)">Col-4</a></li>
+                            <li><a value="6" onclick="ps_col_change(6)">Col-6</a></li>
+                            <li><a value="12" onclick="ps_col_change(12)">Col-12</a></li>
                         </ul>
                     </li>
                 </div>
                 <!-- products by partner -->
                 <div data-snippet-option-id="products-by-partner-snippet" data-selector=".products_by_partner_snippet">
                     <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Product by Category</a>
-                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('website_product_ids', '!=', False)])" />
+                        <a tabindex="-1" href="#">Product by Supplier</a>
+                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('is_company', '=', True)])" />
                         <ul class="dropdown-menu">
                             <t t-if="len(partners) &gt; 0">
                                 <t t-foreach="partners" t-as="partner">
@@ -101,10 +101,10 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Columns</a>
                         <ul class="dropdown-menu">
-                            <li><a value="3" onclick="pbp_col_change(3)">Col-3</a></li>
-                            <li><a value="4" onclick="pbp_col_change(4)">Col-4</a></li>
-                            <li><a value="6" onclick="pbp_col_change(6)">Col-6</a></li>
-                            <li><a value="12" onclick="pbp_col_change(12)">Col-12</a></li>
+                            <li><a value="3" onclick="ps_col_change(3)">Col-3</a></li>
+                            <li><a value="4" onclick="ps_col_change(4)">Col-4</a></li>
+                            <li><a value="6" onclick="ps_col_change(6)">Col-6</a></li>
+                            <li><a value="12" onclick="ps_col_change(12)">Col-12</a></li>
                         </ul>
                     </li>
                 </div>
