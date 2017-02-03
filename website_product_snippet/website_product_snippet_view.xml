@@ -87,7 +87,7 @@
                 <div data-snippet-option-id="products-by-partner-snippet" data-selector=".products_by_partner_snippet">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product by Supplier</a>
-                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('is_company', '=', True)])" />
+                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('is_company', '=', True), ('website_product_ids', '!=', False)])" />
                         <ul class="dropdown-menu">
                             <t t-if="len(partners) &gt; 0">
                                 <t t-foreach="partners" t-as="partner">
