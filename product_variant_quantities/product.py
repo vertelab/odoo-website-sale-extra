@@ -32,3 +32,10 @@ class product_product(models.Model):
     weight = fields.Float('Gross Weight', digits=dp.get_precision('Stock Weight'), help="The gross weight in Kg.")
     weight_net = fields.Float('Net Weight', digits=dp.get_precision('Stock Weight'), help="The net weight in Kg.")
     categ_id = fields.Many2one(string='Category', comodel_name='product.category')
+
+    state = fields.Selection([('',''),
+            ('draft', 'In Development'),
+            ('sellable','Normal'),
+            ('end','End of Lifecycle'),
+            ('obsolete','Obsolete')], string="Status",)
+    product_manager = fields.Many2one(comodel_name="res.users",string='Product Manager')
