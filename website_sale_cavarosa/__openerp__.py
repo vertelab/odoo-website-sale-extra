@@ -20,19 +20,23 @@
 ##############################################################################
 
 {
-    'name': 'Website Product Snippet',
+    'name': 'Website Sale Cavarosa',
     'version': '0.1',
-    'category': 'Sales',
+    'category': '',
     'description': """
-Snippets for product presentation
-=================================
+Special sale configuration for Cavarosa AB
+==========================================
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['base', 'website_sale'],
-    'data': ['website_product_snippet_view.xml', 'res_partner_view.xml'
-    ],
-    'qweb': ['static/src/xml/product_snippet.xml'],
+    'depends': ['crm', 'website_sale'],
+    'data': [
+        'crm_view.xml',
+        'res_partner_view.xml',
+        'product_view.xml',
+        'product_template.xml',
+        'product_snippets.xml',
+        ],
     'application': False,
     'installable': True,
 }

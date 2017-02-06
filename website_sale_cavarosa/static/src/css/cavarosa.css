@@ -1,0 +1,11 @@
+.campaign_product_div {
+    padding: 10px;
+    border: 1px solid #ddd;
+    height: 300px;
+}
+
+.campaign_product_img {
+    margin: auto;
+    display: block;
+    height: 200px;
+}

@@ -18,22 +18,24 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, _
+import logging
+_logger = logging.getLogger(__name__)
 
-{
-    'name': 'Website Product Snippet',
-    'version': '0.1',
-    'category': 'Sales',
-    'description': """
-Snippets for product presentation
-=================================
-""",
-    'author': 'Vertel AB',
-    'website': 'http://www.vertel.se',
-    'depends': ['base', 'website_sale'],
-    'data': ['website_product_snippet_view.xml', 'res_partner_view.xml'
-    ],
-    'qweb': ['static/src/xml/product_snippet.xml'],
-    'application': False,
-    'installable': True,
-}
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+class product_template(models.Model):
+    _inherit = 'product.template'
+
+    @api.one
+    def _unit_price(self):
+        if self.uom_id.factor:
+            self.unit_price = self.list_price * self.uom_id.factor
+        elif self.uom_id.factor_inv:
+            self.unit_price = self.list_price / self.uom_id.factor_inv
+        else:
+            self.unit_price = self.list_price
+    unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
+    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
+    @api.one
+    def _seller_id(self):
+        self.seller_id = self.seller_ids[0].name if len(self.seller_ids) > 0 else None
+    seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
