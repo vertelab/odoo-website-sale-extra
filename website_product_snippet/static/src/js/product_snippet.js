@@ -8,7 +8,7 @@ website.ProductSnippet = openerp.Widget.extend({
     events: {},
     start: function () {
         var self = this;
-        template = self.$el.append(QWeb.render('website_product_snippet.product_snippet'));
+        template = self.$el.append(QWeb.render('product_snippet'));
         return this._super();
     },
     destroy: function() {
@@ -21,8 +21,6 @@ website.ready().done(function() {
         var ps = new website.ProductSnippet().appendTo($(document.body));
     });
 });
-
-
 
 
 /* option one: use snippet editor */
