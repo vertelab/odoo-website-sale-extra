@@ -1,37 +1,17 @@
-.individual_product img {
+.oe_individual_product img {
     margin: auto;
 }
 
-.products_by_category img, .products_by_partner img {
+.oe_ps_inner img {
     margin: auto;
     display: block;
 }
 
-.ps_outter {
+.oe_ps_outer {
     padding: 5px !important;
 }
 
-.ps_inner {
+.oe_ps_inner {
     border: 1px solid #ddd;
     padding: 0px 10px;
 }
-
-/*
-.product_snippet {
-    border: 1px solid #eee;
-}
-*/
-
-/*
-#product_selector {
-    position: absolute;
-    z-index: 1000;
-    display: none;
-}
-
-#col_selector {
-    position: absolute;
-    z-index: 1000;
-    display: none;
-}
-*/

@@ -11,10 +11,10 @@
                         <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
                         <span class="oe_snippet_thumbnail_title">Products By Category</span>
                     </div>
-                    <section class="oe_snippet_body products_by_category_snippet mb16 mt16">
+                    <section class="oe_snippet_body mb16 mt16" style="height: 320px;">
                         <div class="container products_by_category col-md-12">
-                            <h2 class="text-center mt16 mb16">Category</h2>
-                            <div class="products_by_category_content"/>
+                            <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
+                            <div class="product_content"/>
                         </div>
                     </section>
                 </div>
@@ -25,10 +25,10 @@
                         <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
                         <span class="oe_snippet_thumbnail_title">Products By Supplier</span>
                     </div>
-                    <section class="oe_snippet_body products_by_partner_snippet mb16 mt16">
+                    <section class="oe_snippet_body mb16 mt16" style="height: 320px;">
                         <div class="container products_by_partner col-md-12">
-                            <h2 class="text-center mt16 mb16">Supplier</h2>
-                            <div class="products_by_partner_content"/>
+                            <h2 class="text-center oe_ps_title mt16 mb16">Supplier</h2>
+                            <div class="product_content"/>
                         </div>
                     </section>
                 </div>
@@ -39,17 +39,11 @@
                 <!-- individual product -->
                 <div id="individual_product_snippet">
                     <div class="oe_snippet_thumbnail">
-                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_big_picture.png" />
+                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_big_picture.png"/>
                         <span class="oe_snippet_thumbnail_title">Individual Product</span>
                     </div>
-                    <div class="oe_snippet_body o_image_floating o_margin_l individual_product pull-right">
-                        <h3 class="text-center"/>
-                        <div class="o_container">
-                            <img class="img img-responsive" src="/website/static/src/img/library/imac.png" alt="Product Image" />
-                        </div>
-                        <div class="o_footer mb8">
-                            <small class="text-muted" style="text-align: justify;"/>
-                        </div>
+                    <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right" style="height: 200px;">
+                        <div class="product_content"/>
                     </div>
                 </div>
                 <!-- end of individual product -->
@@ -59,7 +53,7 @@
         <template id="product_snippet_options" inherit_id="website.snippet_options" name="Product Snippet Options">
             <xpath expr="." position="inside">
                 <!-- products by category -->
-                <div data-snippet-option-id="products-by-category-snippet" data-selector=".products_by_category_snippet">
+                <div data-snippet-option-id="products_by_category" data-selector=".products_by_category">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product by Category</a>
                         <t t-set="categories" t-value="request.env['product.template'].search([('categ_id', '!=', False)]).mapped('categ_id')" />
@@ -67,7 +61,7 @@
                             <t t-if="len(categories) &gt; 0">
                                 <t t-foreach="categories" t-as="category">
                                     <li>
-                                        <a t-att-data-value="category.id" t-att-onclick="'get_products_by_category(&quot;%s&quot;)' %category.id"><t t-esc="category.name"/></a>
+                                        <a t-att-data-value="category.id" class="oe_products_by_category"><t t-esc="category.name"/></a>
                                     </li>
                                 </t>
                             </t>
@@ -76,15 +70,15 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Columns</a>
                         <ul class="dropdown-menu">
-                            <li><a value="3" onclick="ps_col_change(3)">Col-3</a></li>
-                            <li><a value="4" onclick="ps_col_change(4)">Col-4</a></li>
-                            <li><a value="6" onclick="ps_col_change(6)">Col-6</a></li>
-                            <li><a value="12" onclick="ps_col_change(12)">Col-12</a></li>
+                            <li><a data-value="3" class="oe_ps_col_change">Col-3</a></li>
+                            <li><a data-value="4" class="oe_ps_col_change">Col-4</a></li>
+                            <li><a data-value="6" class="oe_ps_col_change">Col-6</a></li>
+                            <li><a data-value="12" class="oe_ps_col_change">Col-12</a></li>
                         </ul>
                     </li>
                 </div>
                 <!-- products by partner -->
-                <div data-snippet-option-id="products-by-partner-snippet" data-selector=".products_by_partner_snippet">
+                <div data-snippet-option-id="products_by_partner" data-selector=".products_by_partner">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product by Supplier</a>
                         <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('is_company', '=', True), ('website_product_ids', '!=', False)])" />
@@ -92,7 +86,7 @@
                             <t t-if="len(partners) &gt; 0">
                                 <t t-foreach="partners" t-as="partner">
                                     <li>
-                                        <a t-att-data-value="partner.id" t-att-onclick="'get_products_by_partner(&quot;%s&quot;)' %partner.id"><t t-esc="partner.name"/></a>
+                                        <a t-att-data-value="partner.id" class="oe_products_by_partner"><t t-esc="partner.name"/></a>
                                     </li>
                                 </t>
                             </t>
@@ -101,15 +95,15 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Columns</a>
                         <ul class="dropdown-menu">
-                            <li><a value="3" onclick="ps_col_change(3)">Col-3</a></li>
-                            <li><a value="4" onclick="ps_col_change(4)">Col-4</a></li>
-                            <li><a value="6" onclick="ps_col_change(6)">Col-6</a></li>
-                            <li><a value="12" onclick="ps_col_change(12)">Col-12</a></li>
+                            <li><a data-value="3" class="oe_ps_col_change">Col-3</a></li>
+                            <li><a data-value="4" class="oe_ps_col_change">Col-4</a></li>
+                            <li><a data-value="6" class="oe_ps_col_change">Col-6</a></li>
+                            <li><a data-value="12" class="oe_ps_col_change">Col-12</a></li>
                         </ul>
                     </li>
                 </div>
                 <!-- individual product -->
-                <div data-snippet-option-id="individual-product-snippet" data-selector=".individual_product">
+                <div data-snippet-option-id="individual_product" data-selector=".oe_individual_product">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product</a>
                         <t t-set="products" t-value="request.env['product.template'].search([('active', '=', True)])" />
@@ -117,7 +111,7 @@
                             <t t-if="len(products) &gt; 0">
                                 <t t-foreach="products" t-as="product">
                                     <li>
-                                        <a t-att-data-value="product.id" t-att-onclick="'product_change(&quot;%s&quot;)' %product.id"><t t-esc="product.name"/></a>
+                                        <a t-att-data-value="product.id" class="oe_individual_product"><t t-esc="product.name"/></a>
                                     </li>
                                 </t>
                             </t>
@@ -126,10 +120,10 @@
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Columns</a>
                         <ul class="dropdown-menu">
-                            <li><a value="3" onclick="ind_col_change(3)">Col-3</a></li>
-                            <li><a value="4" onclick="ind_col_change(4)">Col-4</a></li>
-                            <li><a value="6" onclick="ind_col_change(6)">Col-6</a></li>
-                            <li><a value="12" onclick="ind_col_change(12)">Col-12</a></li>
+                            <li><a data-value="3" class="oe_ind_col_change">Col-3</a></li>
+                            <li><a data-value="4" class="oe_ind_col_change">Col-4</a></li>
+                            <li><a data-value="6" class="oe_ind_col_change">Col-6</a></li>
+                            <li><a data-value="12" class="oe_ind_col_change">Col-12</a></li>
                         </ul>
                     </li>
                 </div>

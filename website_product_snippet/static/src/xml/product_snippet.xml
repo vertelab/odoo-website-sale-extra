@@ -3,16 +3,22 @@
 -->
 <templates id="template" xml:space="preserve">
     <t t-name="product_snippet">
-        <div class="ps_outter">
-            <div class="ps_inner">
-                <h3 class="text-center">
-                    <span class="ps_product_name"/>
-                </h3>
-                <img class="ps_product_image"/>
-                <p>
-                    <span class="ps_product_description"/>
-                </p>
+        <div class="oe_ps_outer">
+            <div class="oe_ps_inner">
+                <h3 class="text-center"><t t-esc="product_name"/></h3>
+                <img class="img img-responsive" t-att-src="product_image" t-att-data-cke-saved-src="product_image"/>
+                <p><t t-esc="product_description"/></p>
             </div>
         </div>
     </t>
+    <t t-name="product_snippet_individual">
+        <h3 class="text-center"><t t-esc="product_name"/></h3>
+        <div class="o_container">
+            <img class="img img-responsive" t-att-src="product_image"  t-att-data-cke-saved-src="product_image" alt="Product Image" />
+        </div>
+        <div class="o_footer mb8">
+            <small class="text-muted" style="text-align: justify;"><t t-esc="product_description"/></small>
+        </div>
+    </t>
 </templates>
+

@@ -19,7 +19,6 @@
 
         <template id="cavarosa_css" inherit_id="website.layout">
             <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
-                <link rel="stylesheet" href="/website_sale_cavarosa/static/src/css/cavarosa.css"/>
             </xpath>
         </template>
 
