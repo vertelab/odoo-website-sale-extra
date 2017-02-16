@@ -11,10 +11,10 @@
                         <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
                         <span class="oe_snippet_thumbnail_title">Products By Category</span>
                     </div>
-                    <section class="oe_snippet_body mb16 mt16" style="height: 320px;">
-                        <div class="container products_by_category col-md-12">
+                    <section class="oe_snippet_body products_by_category mb16 mt16">
+                        <div class="container">
                             <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
-                            <div class="product_content"/>
+                            <div class="product_div"/>
                         </div>
                     </section>
                 </div>
@@ -25,10 +25,10 @@
                         <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
                         <span class="oe_snippet_thumbnail_title">Products By Supplier</span>
                     </div>
-                    <section class="oe_snippet_body mb16 mt16" style="height: 320px;">
-                        <div class="container products_by_partner col-md-12">
+                    <section class="oe_snippet_body products_by_partner mb16 mt16">
+                        <div class="container">
                             <h2 class="text-center oe_ps_title mt16 mb16">Supplier</h2>
-                            <div class="product_content"/>
+                            <div class="product_div"/>
                         </div>
                     </section>
                 </div>
@@ -42,8 +42,8 @@
                         <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_big_picture.png"/>
                         <span class="oe_snippet_thumbnail_title">Individual Product</span>
                     </div>
-                    <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right" style="height: 200px;">
-                        <div class="product_content"/>
+                    <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right">
+                        <div class="product_div"/>
                     </div>
                 </div>
                 <!-- end of individual product -->

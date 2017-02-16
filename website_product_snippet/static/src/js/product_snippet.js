@@ -4,6 +4,7 @@ website.add_template_file('/website_product_snippet/static/src/xml/product_snipp
 website.snippet.options.products_by_category = website.snippet.Option.extend({
     start: function () {
         var self = this;
+        var div_height = 0;
         this._super();
         this.$el.find(".oe_products_by_category").on('click', function () {
             self.get_products_by_category($(this).attr("data-value"));
@@ -23,12 +24,12 @@ website.snippet.options.products_by_category = website.snippet.Option.extend({
                 $.each(data['products'], function(key, info) {
                     var content = openerp.qweb.render('product_snippet', {
                         'product_name': data['products'][key]['name'],
-                        'product_image': "data:image/png;base64," + data['products'][key]['image'],
+                        'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
                         'product_description': data['products'][key]['description'],
                     });
                     product_content += content;
                 });
-                self.$target.find(".product_content").html(product_content);
+                self.$target.find(".product_div").html(product_content);
             });
         }
     },
@@ -62,12 +63,12 @@ website.snippet.options.products_by_partner = website.snippet.Option.extend({
                 $.each(data['products'], function(key, info) {
                     var content = openerp.qweb.render('product_snippet', {
                         'product_name': data['products'][key]['name'],
-                        'product_image': "data:image/png;base64," + data['products'][key]['image'],
+                        'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
                         'product_description': data['products'][key]['description'],
                     });
                     product_content += content;
                 });
-                self.$target.find(".product_content").html(product_content);
+                self.$target.find(".product_div").html(product_content);
             });
         }
     },
@@ -103,7 +104,7 @@ website.snippet.options.individual_product = website.snippet.Option.extend({
                     'product_description': data['description'],
                 });
                 product_content += content;
-                self.$target.find(".product_content").html(product_content);
+                self.$target.find(".product_div").html(product_content);
             });
         }
     },
