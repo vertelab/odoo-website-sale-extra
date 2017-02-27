@@ -39,3 +39,6 @@ class product_product(models.Model):
             ('end','End of Lifecycle'),
             ('obsolete','Obsolete')], string="Status",)
     product_manager = fields.Many2one(comodel_name="res.users",string='Product Manager')
+    description_sale = fields.Text(string='Sale Description', translate=True,
+            help="A description of the Product that you want to communicate to your customers. "
+                 "This description will be copied to every Sale Order, Delivery Order and Customer Invoice/Refund")
