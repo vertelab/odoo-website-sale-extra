@@ -51,21 +51,20 @@ class res_partner(models.Model):
 
     @api.one
     def generate_new_customer_no(self):
-        self.ref = self._generate_new_customer_no()
+        self.ref = self._generate_new_customer_no(self.customer, self.supplier)
 
     @api.model
     def _generate_new_customer_no(self, customer=False, supplier=False):
-        _logger.warn(self.customer)
-        if customer or self.customer:
+        if customer:
             return self.env['ir.sequence'].get('res.partner.customer.no')
-        elif supplier or self.supplier:
+        elif supplier:
             return self.env['ir.sequence'].get('res.partner.supplier.no')
         return ''
 
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
-        if not (vals.get('parent_id') and vals.get('ref')) and vals.get('is_company'): #TODO: what about if this is a child company?
+        if not (vals.get('parent_id') and vals.get('ref')) and (not int(self.env['ir.config_parameter'].get_param('sale_customer_no.company_only', '1')) or vals.get('is_company')):
             vals['ref'] = self._generate_new_customer_no(vals.get('customer'), vals.get('supplier'))
         return super(res_partner, self).create(vals)
 
