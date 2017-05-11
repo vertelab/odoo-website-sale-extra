@@ -32,6 +32,25 @@ class sale_order_line(models.Model):
                                'confirmed': [('readonly', False)],
                                'exception': [('readonly', False)],
                                          })
+                                         
+    product_uom_qty = fields.Float(states={ 'draft': [('readonly', False)], 
+                                            'confirmed': [('readonly', False)],
+                                            'exception': [('readonly', False)],
+                                         })                                
+    product_uos_qty = fields.Float(states={ 'draft': [('readonly', False)], 
+                                            'confirmed': [('readonly', False)],
+                                            'exception': [('readonly', False)],
+                                         })
+    discount = fields.Float(states={    'draft': [('readonly', False)], 
+                                        'confirmed': [('readonly', False)],
+                                        'exception': [('readonly', False)],
+                                    })
+    price_unit = fields.Float(states={  'draft': [('readonly', False)], 
+                                        'confirmed': [('readonly', False)],
+                                        'exception': [('readonly', False)],
+                                    })
+    
+                                        
 class sale_order(models.Model):
     _inherit = 'sale.order'
     
