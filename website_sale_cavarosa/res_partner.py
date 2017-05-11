@@ -27,6 +27,7 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
+    district_id = fields.Many2one(comodel_name='res.district', string='District')
     campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
     seller_ids = fields.One2many(string='Suppliers', comodel_name='product.supplierinfo', inverse_name='name')
     @api.one
@@ -35,7 +36,7 @@ class res_partner(models.Model):
     product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')
 
 
-class product_snippet(http.Controller):
+class Main(http.Controller):
 
     @http.route(['/cavarosa/get_products'], type='json', auth="user", website=True)
     def get_products(self, partner_id=None, **kw):
@@ -50,3 +51,30 @@ class product_snippet(http.Controller):
                 'description': p.description_sale if p.description_sale else ''
                 }
         return products_list
+
+    @http.route(['/producers'], type='http', auth="public", website=True)
+    def producers(self, **post):
+        countries = request.env['res.district'].search([]).mapped('country_id')
+        if len(countries) > 0:
+            return request.website.render('website_sale_cavarosa.producers', {'countries': countries})
+        else:
+            return None
+
+    @http.route(['/producer/<model("res.partner"):partner>'], type='http', auth="public", website=True)
+    def producer_products(self, partner=None, **post):
+        products = partner.product_ids
+        if len(products) > 0:
+            return request.website.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
+        else:
+            return None
+
+    @http.route(['/country/<model("res.country"):country>'], type='http', auth="public", website=True)
+    def res_country(self, country=None, **post):
+        return request.website.render('website_sale_cavarosa.country', {'country': country})
+
+    @http.route(['/district/<int:district_id>'], type='http', auth="public", website=True)
+    def res_district(self, district_id=None, **post):
+        district = request.env['res.district'].with_context({
+            'pricelist': request.env.user.partner_id.property_product_pricelist.id
+        }).browse(district_id)
+        return request.website.render('website_sale_cavarosa.district', {'district': district})

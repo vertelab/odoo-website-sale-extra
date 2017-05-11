@@ -29,11 +29,12 @@ class crm_tracking_campaign(models.Model):
     _inherit = 'crm.tracking.campaign'
     _mail_mass_mailing = _('Campaign')
 
-    date_start = fields.Date(string='Start Date')
-    date_end = fields.Date(string='End Date')
-    partner_ids = fields.Many2many(string='Suppliers', comodel_name='res.partner')
-    product_ids = fields.Many2many(string='Products', comodel_name='product.template')
-    description = fields.Html(string='Description', sanitize=False)
+
+class website(models.Model):
+    _inherit = 'website'
+
+    def current_campaign(self):
+        return self.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())])
 
 
 class website_sale(website_sale):
@@ -52,7 +53,7 @@ class current_campaign(http.Controller):
 
     @http.route(['/shop/campaign'], type='http', auth="user", website=True)
     def campaign(self, **post):
-        campaigns = request.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_end', '>=', fields.Date.today())])
+        campaigns = request.website.current_campaign()
         if len(campaigns) > 0:
             return request.website.render('website_sale_cavarosa.current_campaign', {'campaign': campaigns[0]})
         else:

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
+
     <data>
 
         <record id="view_partner_form" model="ir.ui.view">
@@ -15,4 +16,151 @@
         </record>
 
     </data>
+
+    <data>
+
+        <template id="producers" name="Producers">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="oe_structure">
+                        <div class="mt64 mb64 container">
+                            <h2 class="text-center">Our Producers</h2>
+                            <div t-foreach="countries" t-as="country">
+                                <div class="col-md-4">
+                                    <a t-att-href="'/country/%s' %country.id" style="color: #000;">
+                                        <h3 t-field="country.name" class="text-center"/>
+                                        <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/300x300' %country.id"/>
+                                    </a>
+                                    <div t-foreach="country.district_ids" t-as="district">
+                                        <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                            <h4 t-field="district.name" class="text-center"/>
+                                        </a>
+                                        <div t-foreach="district.partner_ids" t-as="supplier">
+                                            <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="producer_products" name="Producer Products">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="oe_structure">
+                        <div class="mt64 mb64 container">
+                            <h2 t-field="supplier.name" class="text-center"/>
+                            <t t-set="current_campaign" t-value="website.current_campaign()"/>
+                            <div t-foreach="products" t-as="product">
+                                <t t-call="website_sale_cavarosa.products_grid"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="country" name="Country">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="mt64 mb64 container">
+                        <div class="col-sm-4">
+                            <ol class="breadcrumb">
+                                <li><a href="#" onclick="history.go(-1); return false;">Producers</a></li>
+                                <li class="active"><span t-field="country.name"/></li>
+                            </ol>
+                        </div>
+                        <div class="col-md-offset-8"/>
+                        <div class="col-md-12">
+                            <div class="o_image_floating o_margin_l pull-left">
+                                <div class="o_container">
+                                    <img class="img img-responsive mb16" t-att-src="'/website/image/res.country/%s/image/300x300' %country.id"/>
+                                </div>
+                            </div>
+                            <div t-field="country.website_description"/>
+                            <t t-if="len(country.district_ids) &gt; 0">
+                                <div t-foreach="country.district_ids" t-as="district">
+                                    <div class="col-md-4 col-sm-4 col-ms-3 col-xs-6">
+                                        <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                            <h4 t-field="district.name" class="text-center"/>
+                                        </a>
+                                        <div t-foreach="district.partner_ids" t-as="supplier">
+                                            <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="district" name="District">
+            <t t-call="website.layout">
+                <div id="wrap">
+                    <div class="mt64 mb64 container">
+                        <div class="col-sm-4">
+                            <ol class="breadcrumb">
+                                <li><a href="#" onclick="history.go(-1); return false;">Go Back</a></li>
+                                <li class="active"><span t-field="district.name"/></li>
+                            </ol>
+                        </div>
+                        <div class="col-md-offset-8"/>
+                        <div class="col-md-12">
+                            <div t-field="district.website_description"/>
+                            <t t-if="len(district.partner_ids) &gt; 0">
+                                <t t-set="current_campaign" t-value="website.current_campaign()"/>
+                                <div t-foreach="district.partner_ids" t-as="supplier">
+                                    <t t-if="len(supplier.product_ids) &gt; 0">
+                                        <div t-foreach="supplier.product_ids" t-as="product">
+                                            <t t-call="website_sale_cavarosa.products_grid"/>
+                                        </div>
+                                    </t>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <template id="products_grid" name="Products Grid">
+            <a t-att-href="'/shop/product/%s' %product.id">
+                <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
+                    <div class="oe_cr_inner">
+                        <h3 t-field="product.name" class="text-center" style="color: #000;"/>
+                        <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image_medium/150x150' %product.id"/>
+                        <div class="product_price_div" t-if="current_campaign and (product in current_campaign.product_ids)">
+                            <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                                <b>
+                                    <span t-field="product.price" style="white-space: nowrap;"  t-field-options='{
+                                        "widget": "monetary",
+                                        "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                    }'>
+                                    </span>
+                                    <span itemprop="price" style="display:none;" t-esc="product.price"/>
+                                    <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                              </b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </a>
+        </template>
+
+        <template id="cavarosa_css_js" inherit_id="website.layout" name="Cavarosa Css Js">
+            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
+                <link href="/website_sale_cavarosa/static/src/css/main.css" rel="stylesheet" type="text/css"/>
+            </xpath>
+            <xpath expr="//body" position="inside">
+                <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"/>
+            </xpath>
+        </template>
+
+    </data>
+
 </openerp>

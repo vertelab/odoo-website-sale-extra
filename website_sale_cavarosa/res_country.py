@@ -18,27 +18,12 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
+from openerp import models, fields, api, _
+import logging
+_logger = logging.getLogger(__name__)
 
-{
-    'name': 'Website Sale Cavarosa',
-    'version': '0.1',
-    'category': '',
-    'description': """
-Special sale configuration for Cavarosa AB
-==========================================
-""",
-    'author': 'Vertel AB',
-    'website': 'http://www.vertel.se',
-    'depends': ['crm_campaign_supplier', 'website_crm_campaign'],
-    'data': [
-        'crm_view.xml',
-        'res_district_view.xml',
-        'res_country_view.xml',
-        'res_partner_view.xml',
-        'product_view.xml',
-        'product_template.xml',
-        ],
-    'application': False,
-    'installable': True,
-}
-# vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:
+class Country(models.Model):
+    _inherit = 'res.country'
+
+    district_ids = fields.One2many(comodel_name='res.district', inverse_name='country_id', string='Districts')
+    website_description = fields.Html(string="Website Description")

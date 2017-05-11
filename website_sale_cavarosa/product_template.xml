@@ -31,12 +31,14 @@
                             <div class="oe_structure">
                                 <div t-field="campaign.description"/>
                             </div>
+<!--
                             <t t-foreach="campaign.partner_ids" t-as="partner">
                                 <div class="container">
                                     <h2 t-field="partner.name" class="text-left"/>
                                     <t t-call="website_sale_cavarosa.product_grid"/>
                                 </div>
                             </t>
+-->
                         </div>
                     </div>
                 </div>
