@@ -25,24 +25,26 @@
                     <div class="oe_structure">
                         <div class="mt64 mb64 container">
                             <h2 class="text-center">Our Producers</h2>
-                            <div t-foreach="countries" t-as="country">
-                                <div class="col-md-4">
-                                    <a t-att-href="'/country/%s' %country.id" style="color: #000;">
-                                        <h3 t-field="country.name" class="text-center"/>
-                                        <div style="height: 100px;">
-                                            <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
-                                        </div>
-                                    </a>
-                                    <div t-foreach="country.district_ids" t-as="district">
-                                        <a t-att-href="'/district/%s' %district.id" style="color: #000;">
-                                            <h4 t-field="district.name" class="text-center"/>
+                            <t t-if="countries">
+                                <div t-foreach="countries" t-as="country">
+                                    <div class="col-md-4">
+                                        <a t-att-href="'/country/%s' %country.id" style="color: #000;">
+                                            <h3 t-field="country.name" class="text-center"/>
+                                            <div style="height: 100px;">
+                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
+                                            </div>
                                         </a>
-                                        <div t-foreach="district.partner_ids" t-as="supplier">
-                                            <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                        <div t-foreach="country.district_ids" t-as="district">
+                                            <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                                <h4 t-field="district.name" class="text-center"/>
+                                            </a>
+                                            <div t-foreach="district.partner_ids" t-as="supplier">
+                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </t>
                         </div>
                     </div>
                 </div>
@@ -55,9 +57,14 @@
                     <div class="oe_structure">
                         <div class="mt64 mb64 container">
                             <h2 t-field="supplier.name" class="text-center"/>
-                            <div t-foreach="products" t-as="product">
-                                <t t-call="website_sale_cavarosa.products_grid"/>
-                            </div>
+                            <t t-if="products">
+                                <div t-foreach="products" t-as="product">
+                                    <t t-call="website_sale_cavarosa.products_grid"/>
+                                </div>
+                            </t>
+                            <t t-if="not products">
+                                <h3 class="text-center">No product to show</h3>
+                            </t>
                         </div>
                     </div>
                 </div>

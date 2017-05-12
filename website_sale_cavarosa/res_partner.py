@@ -55,19 +55,13 @@ class Main(http.Controller):
     @http.route(['/producers'], type='http', auth="public", website=True)
     def producers(self, **post):
         countries = request.env['res.district'].sudo().search([]).mapped('country_id')
-        if len(countries) > 0:
-            return request.website.render('website_sale_cavarosa.producers', {'countries': countries})
-        else:
-            return {}
+        return request.website.render('website_sale_cavarosa.producers', {'countries': countries})
 
     @http.route(['/producer/<int:partner_id>'], type='http', auth="public", website=True)
     def producer_products(self, partner_id=None, **post):
         partner = request.env['res.partner'].sudo().browse(partner_id)
         products = partner.product_ids
-        if len(products) > 0:
-            return request.website.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
-        else:
-            return {}
+        return request.website.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
 
     @http.route(['/country/<model("res.country"):country>'], type='http', auth="public", website=True)
     def res_country(self, country=None, **post):
