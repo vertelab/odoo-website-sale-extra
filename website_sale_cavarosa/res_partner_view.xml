@@ -62,9 +62,6 @@
                                     <t t-call="website_sale_cavarosa.products_grid"/>
                                 </div>
                             </t>
-                            <t t-if="not products">
-                                <h3 class="text-center">No product to show</h3>
-                            </t>
                         </div>
                     </div>
                 </div>
