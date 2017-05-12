@@ -58,7 +58,7 @@ class Main(http.Controller):
         if len(countries) > 0:
             return request.website.render('website_sale_cavarosa.producers', {'countries': countries})
         else:
-            return None
+            return {}
 
     @http.route(['/producer/<int:partner_id>'], type='http', auth="public", website=True)
     def producer_products(self, partner_id=None, **post):
@@ -67,7 +67,7 @@ class Main(http.Controller):
         if len(products) > 0:
             return request.website.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
         else:
-            return None
+            return {}
 
     @http.route(['/country/<model("res.country"):country>'], type='http', auth="public", website=True)
     def res_country(self, country=None, **post):
