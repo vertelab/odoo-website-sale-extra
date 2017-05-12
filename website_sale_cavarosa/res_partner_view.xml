@@ -29,7 +29,7 @@
                                 <div class="col-md-4">
                                     <a t-att-href="'/country/%s' %country.id" style="color: #000;">
                                         <h3 t-field="country.name" class="text-center"/>
-                                        <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/300x300' %country.id"/>
+                                        <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
                                     </a>
                                     <div t-foreach="country.district_ids" t-as="district">
                                         <a t-att-href="'/district/%s' %district.id" style="color: #000;">
@@ -76,7 +76,7 @@
                         <div class="col-md-12">
                             <div class="o_image_floating o_margin_l pull-left">
                                 <div class="o_container">
-                                    <img class="img img-responsive mb16" t-att-src="'/website/image/res.country/%s/image/300x300' %country.id"/>
+                                    <img class="img img-responsive mb16" t-att-src="'/website/image/res.country/%s/image/1' %country.id"/>
                                 </div>
                             </div>
                             <div t-field="country.website_description"/>
