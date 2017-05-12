@@ -26,6 +26,7 @@ website.snippet.options.products_by_category = website.snippet.Option.extend({
                         'product_name': data['products'][key]['name'],
                         'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
                         'product_description': data['products'][key]['description'],
+                        'product_url': '/shop/product/' + key,
                     });
                     product_content += content;
                 });
@@ -65,6 +66,7 @@ website.snippet.options.products_by_partner = website.snippet.Option.extend({
                         'product_name': data['products'][key]['name'],
                         'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
                         'product_description': data['products'][key]['description'],
+                        'product_url': '/shop/product/' + data['products'][key],
                     });
                     product_content += content;
                 });
@@ -102,6 +104,7 @@ website.snippet.options.individual_product = website.snippet.Option.extend({
                     'product_name': data['name'],
                     'product_image': "data:image/png;base64," + data['image'],
                     'product_description': data['description'],
+                    'product_url': '/shop/product/' + data['id'],
                 });
                 product_content += content;
                 self.$target.find(".product_div").html(product_content);

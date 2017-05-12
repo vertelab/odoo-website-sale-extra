@@ -3,24 +3,28 @@
 -->
 <templates id="template" xml:space="preserve">
     <t t-name="product_snippet">
-        <div class="oe_ps_outer">
-            <div class="oe_ps_inner">
-                <h3 class="text-center"><t t-esc="product_name"/></h3>
-                <t t-if="product_image != ''">
-                    <img class="img img-responsive" t-att-src="product_image" t-att-data-cke-saved-src="product_image"/>
-                </t>
-                <t t-if="product_image == ''">
-                    <img class="img img-responsive" src="/web/static/src/img/placeholder.png"/>
-                </t>
-                <p><t t-esc="product_description"/></p>
+        <a t-att-href="product_url" style="color: #000; text-decoration: none;">
+            <div class="oe_ps_outer">
+                <div class="oe_ps_inner">
+                    <h3 class="text-center"><t t-esc="product_name"/></h3>
+                    <t t-if="product_image != ''">
+                        <img class="img img-responsive" t-att-src="product_image" t-att-data-cke-saved-src="product_image"/>
+                    </t>
+                    <t t-if="product_image == ''">
+                        <img class="img img-responsive" src="/web/static/src/img/placeholder.png"/>
+                    </t>
+                    <p><t t-esc="product_description"/></p>
+                </div>
             </div>
-        </div>
+        </a>
     </t>
     <t t-name="product_snippet_individual">
-        <h3 class="text-center"><t t-esc="product_name"/></h3>
-        <div class="o_container">
-            <img class="img img-responsive" t-att-src="product_image" t-att-data-cke-saved-src="product_image" alt="Product Image"/>
-        </div>
+        <a t-att-href="product_url" style="color: #000; text-decoration: none;">
+            <h3 class="text-center"><t t-esc="product_name"/></h3>
+            <div class="o_container">
+                <img class="img img-responsive" t-att-src="product_image" t-att-data-cke-saved-src="product_image" alt="Product Image"/>
+            </div>
+        </a>
         <div class="o_footer mb8">
             <small class="text-muted" style="text-align: justify;"><t t-esc="product_description"/></small>
         </div>
