@@ -94,7 +94,14 @@
                                             </span>
                                             <span itemprop="price" style="display:none;" t-esc="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).price"/>
                                             <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
-                                      </b>
+                                        </b>
+                                        <br/>
+                                        <t t-if="product.uom_id.uom_type == 'bigger'">
+                                            <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
+                                        </t>
+                                        <t t-if="product.uom_id.uom_type != 'bigger'">
+                                            <br/>
+                                        </t>
                                     </div>
                                 </div>
                             </t>
