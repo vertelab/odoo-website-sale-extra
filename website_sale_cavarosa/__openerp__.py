@@ -29,7 +29,7 @@ Special sale configuration for Cavarosa AB
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['crm_campaign_supplier', 'website_crm_campaign'],
+    'depends': ['crm_campaign_supplier', 'website_crm_campaign', 'website_product_snippet'],
     'data': [
         'crm_view.xml',
         'res_district_view.xml',

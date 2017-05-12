@@ -29,11 +29,6 @@ class res_partner(models.Model):
 
     district_id = fields.Many2one(comodel_name='res.district', string='District')
     campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
-    seller_ids = fields.One2many(string='Suppliers', comodel_name='product.supplierinfo', inverse_name='name')
-    @api.one
-    def _product_ids(self):
-        self.product_ids = [(6, 0, [s.product_tmpl_id.id for s in self.seller_ids])]
-    product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')
 
 
 class Main(http.Controller):

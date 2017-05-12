@@ -35,7 +35,7 @@ class product_snippet(http.Controller):
 
     @http.route(['/product_snippet/get_products'], type='json', auth="user", website=True)
     def get_products(self, **kw):
-        products = request.env['product.template'].search([])
+        products = request.env['product.template'].search([('website_published', '=', True)])
         products_list = {}
         for p in products:
             products_list[p.id] = p.name
@@ -44,7 +44,7 @@ class product_snippet(http.Controller):
     @http.route(['/product_snippet/get_products_by_category'], type='json', auth="user", website=True)
     def get_products_by_category(self, categ_id=None, **kw):
         category = request.env['product.category'].browse(int(categ_id))
-        products = request.env['product.template'].search([('categ_id', '=', int(categ_id))])
+        products = request.env['product.template'].search([('categ_id', '=', int(categ_id)), ('website_published', '=', True)])
         products_list = {'category': category.name, 'products': {}}
         for p in products:
             products_list['products'][p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}
@@ -53,7 +53,7 @@ class product_snippet(http.Controller):
     @http.route(['/product_snippet/get_products_by_partner'], type='json', auth="user", website=True)
     def get_products_by_partner(self, partner_id=None, **kw):
         partner = request.env['res.partner'].browse(int(partner_id))
-        products = request.env['res.partner'].search([('id', '=', int(partner_id))]).website_product_ids
+        products = request.env['res.partner'].search([('id', '=', int(partner_id))]).product_ids.filtered(lambda p: p.website_published == True)
         products_list = {'partner': partner.name, 'products': {}}
         for p in products:
             products_list['products'][p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}
