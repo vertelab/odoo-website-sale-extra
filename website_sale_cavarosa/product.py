@@ -27,10 +27,10 @@ class product_template(models.Model):
 
     @api.one
     def _unit_price(self):
-        if self.uom_id.factor:
-            self.unit_price = self.list_price * self.uom_id.factor
-        elif self.uom_id.factor_inv:
-            self.unit_price = self.list_price / self.uom_id.factor_inv
+        if self.sudo().uom_id.factor:
+            self.unit_price = self.list_price * self.sudo().uom_id.factor
+        elif self.sudo().uom_id.factor_inv:
+            self.unit_price = self.list_price / self.sudo().uom_id.factor_inv
         else:
             self.unit_price = self.list_price
     unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
@@ -39,3 +39,11 @@ class product_template(models.Model):
     def _seller_id(self):
         self.seller_id = self.seller_ids[0].name if len(self.seller_ids) > 0 else None
     seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
+    @api.one
+    def _campaign_product(self):
+        campaign = self.env['website'].current_campaign()
+        if campaign and (self in campaign.product_ids):
+            self.campaign_product = True
+        else:
+            self.campaign_product = False
+    campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')

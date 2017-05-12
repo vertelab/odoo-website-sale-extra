@@ -53,7 +53,6 @@
                     <div class="oe_structure">
                         <div class="mt64 mb64 container">
                             <h2 t-field="supplier.name" class="text-center"/>
-                            <t t-set="current_campaign" t-value="website.current_campaign()"/>
                             <div t-foreach="products" t-as="product">
                                 <t t-call="website_sale_cavarosa.products_grid"/>
                             </div>
@@ -112,9 +111,8 @@
                         <div class="col-md-offset-8"/>
                         <div class="col-md-12">
                             <div t-field="district.website_description"/>
-                            <t t-if="len(district.partner_ids) &gt; 0">
-                                <t t-set="current_campaign" t-value="website.current_campaign()"/>
-                                <div t-foreach="district.partner_ids" t-as="supplier">
+                            <t t-if="len(district.sudo().partner_ids) &gt; 0">
+                                <div t-foreach="district.sudo().partner_ids" t-as="supplier">
                                     <t t-if="len(supplier.product_ids) &gt; 0">
                                         <div t-foreach="supplier.product_ids" t-as="product">
                                             <t t-call="website_sale_cavarosa.products_grid"/>
@@ -126,30 +124,6 @@
                     </div>
                 </div>
             </t>
-        </template>
-
-        <template id="products_grid" name="Products Grid">
-            <a t-att-href="'/shop/product/%s' %product.id">
-                <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
-                    <div class="oe_cr_inner">
-                        <h3 t-field="product.name" class="text-center" style="color: #000;"/>
-                        <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image_medium/150x150' %product.id"/>
-                        <div class="product_price_div" t-if="current_campaign and (product in current_campaign.product_ids)">
-                            <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
-                                <b>
-                                    <span t-field="product.price" style="white-space: nowrap;"  t-field-options='{
-                                        "widget": "monetary",
-                                        "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
-                                    }'>
-                                    </span>
-                                    <span itemprop="price" style="display:none;" t-esc="product.price"/>
-                                    <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
-                              </b>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </a>
         </template>
 
         <template id="cavarosa_css_js" inherit_id="website.layout" name="Cavarosa Css Js">

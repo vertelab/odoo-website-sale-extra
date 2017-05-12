@@ -15,10 +15,12 @@
             <xpath expr="//form[@class='js_add_cart_variants']" position="inside">
                 <input name="campaign_id" t-att-value="int(request.params.get('campaign_id', 0))" type="hidden"/>
             </xpath>
-        </template>
-
-        <template id="cavarosa_css" inherit_id="website.layout">
-            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
+            <xpath expr="//form[@class='js_add_cart_variants']" position="attributes">
+                <attribute name="t-if">product.campaign_product</attribute>
+            </xpath>
+            <xpath expr="//hr" position="replace"/>
+            <xpath expr="//p[@class='text-muted' and not(@t-field='product.description_sale')]" position="attributes">
+                <attribute name="class">text-muted hidden</attribute>
             </xpath>
         </template>
 
@@ -71,6 +73,34 @@
                         </div>
                     </div>
                 </t>
+            </t>
+        </template>
+
+        <template id="products_grid" name="Products Grid">
+            <t t-if="product.sudo().website_published">
+                <a t-att-href="'/shop/product/%s' %product.id">
+                    <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
+                        <div class="oe_cr_inner">
+                            <h3 t-field="product.name" class="text-center" style="color: #000;"/>
+                            <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image_medium/150x150' %product.id"/>
+                            <t t-if="product.campaign_product">
+                                <div class="product_price_div">
+                                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                                        <b>
+                                            <span t-field="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).price" style="white-space: nowrap; color: #000;"  t-field-options='{
+                                                "widget": "monetary",
+                                                "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                            }'>
+                                            </span>
+                                            <span itemprop="price" style="display:none;" t-esc="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).price"/>
+                                            <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                                      </b>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </a>
             </t>
         </template>
 
