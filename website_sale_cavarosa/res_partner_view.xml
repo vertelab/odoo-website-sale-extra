@@ -25,23 +25,25 @@
                         <div class="mt64 mb64 container">
                             <h2 class="text-center">Our Producers</h2>
                             <t t-if="countries">
-                                <div t-foreach="countries" t-as="country">
-                                    <div class="col-md-4">
-                                        <a t-att-href="'/country/%s' %country.id" style="color: #000;">
-                                            <h3 t-field="country.name" class="text-center"/>
-                                            <div style="height: 100px;">
-                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
-                                            </div>
-                                        </a>
-                                        <div t-foreach="country.district_ids" t-as="district">
-                                            <a t-att-href="'/district/%s' %district.id" style="color: #000;">
-                                                <h4 t-field="district.name" class="text-center"/>
+                                <div class="grid">
+                                    <t t-foreach="countries" t-as="country">
+                                        <div class="grid-item">
+                                            <a t-att-href="'/country/%s' %country.id" style="color: #000;">
+                                                <h3 t-field="country.name" class="text-center"/>
+                                                <div style="height: 100px;">
+                                                    <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
+                                                </div>
                                             </a>
-                                            <div t-foreach="district.partner_ids" t-as="supplier">
-                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                            <div t-foreach="country.district_ids" t-as="district">
+                                                <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                                    <h4 t-field="district.name" class="text-center"/>
+                                                </a>
+                                                <div t-foreach="district.partner_ids" t-as="supplier">
+                                                    <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </t>
                                 </div>
                             </t>
                         </div>
@@ -131,15 +133,13 @@
             </t>
         </template>
 
-        <template id="cavarosa_css_js" inherit_id="website.layout" name="Cavarosa Css Js">
-            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="after">
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Assets Frontend Cavarosa">
+            <xpath expr="." position="inside">
                 <link href="/website_sale_cavarosa/static/src/css/main.css" rel="stylesheet" type="text/css"/>
-            </xpath>
-            <xpath expr="//body" position="inside">
-                <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"/>
+                <script src="http://masonry.desandro.com/masonry.pkgd.js" type="text/javascript"></script>
+                <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"></script>
             </xpath>
         </template>
 
     </data>
-
 </openerp>
