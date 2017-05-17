@@ -2,7 +2,7 @@
 ##############################################################################
 #
 # OpenERP, Open Source Management Solution, third party addon
-# Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
+# Copyright (C) 2004-2017 Vertel AB (<http://vertel.se>).
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU Affero General Public License as
@@ -19,17 +19,17 @@
 #
 ##############################################################################
 {
-'name': 'Customer Number (Company only)',
-'version': '0.1',
-'summary': '',
-'category': 'Hidden',
-'description': """Show customer number on customers and sale orders.""",
-'author': 'Vertel AB',
-'website': 'http://www.vertel.se',
-'depends': ['sale'],
-'data': [
-'custom_num_view.xml',
-'custom_num_data.xml',
-],
-'installable': True,
+    'name': 'Sale Order Line Import',
+    'version': '0.1',
+    'summary': '',
+    'category': 'Hidden',
+    'description': """Import order lines from another erp system.""",
+    'author': 'Vertel AB',
+    'website': 'http://www.vertel.se',
+    'depends': ['sale', 'crm'],
+    'data': [
+        'sale_view.xml',
+        'security/ir.model.access.csv',
+    ],
+    'installable': True,
 }
