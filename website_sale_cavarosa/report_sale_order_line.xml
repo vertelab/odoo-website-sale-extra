@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+
+        <report string="Print Sale Order Line Tags" id="action_sol_glabels_tags_report" model="sale.order.line" report_type="glabels" name="website_sale_cavarosa.sol_glabels_tags_report" />
+
+        <record id="action_sol_glabels_tags_report" model="ir.actions.report.xml">
+            <field name="glabels_template" type="base64" file="website_sale_cavarosa/sol_tags.glabels" />
+        </record>
+
+    </data>
+</openerp>

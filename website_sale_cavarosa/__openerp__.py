@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2004-2017 Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2017- Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -21,7 +21,7 @@
 
 {
     'name': 'Website Sale Cavarosa',
-    'version': '0.1',
+    'version': '1.0',
     'category': '',
     'description': """
 Special sale configuration for Cavarosa AB
@@ -29,7 +29,7 @@ Special sale configuration for Cavarosa AB
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['crm_campaign_supplier', 'website_crm_campaign', 'website_product_snippet', 'website_masonry'],
+    'depends': ['crm_campaign_supplier', 'website_crm_campaign', 'website_product_snippet', 'website_masonry', 'cavarosa_delivery', 'delivery_pickup', 'sale_order_line_view'],
     'data': [
         'crm_view.xml',
         'res_district_view.xml',
@@ -37,6 +37,8 @@ Special sale configuration for Cavarosa AB
         'res_partner_view.xml',
         'product_view.xml',
         'product_template.xml',
+        'report_sale_order_line.xml',
+        'sale_order_line_data.xml',
         'security/ir.model.access.csv',
         ],
     'application': False,

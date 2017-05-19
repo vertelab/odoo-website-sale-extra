@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data noupdate="1">
+
+        <record id="sale_order_line_tags" model="ir.actions.server">
+            <field name="name">SO line tags</field>
+            <field name="model_id" ref="sale.model_sale_order_line"/>
+            <field name="state">code</field>
+            <field name="code">colis = env['sale.order.line'].browse([])
+for o in object.browse(context.get('active_ids', [])):
+    for _ in range(0, int(o.product_uom_qty)):
+        colis += o
+action = env['report'].get_action(colis, 'website_sale_cavarosa.sol_glabels_tags_report')
+            </field>
+        </record>
+
+        <record id="ir_values_so_line_tags" model="ir.values">
+            <field name="name">Run SO line tags</field>
+            <field name="model">sale.order.line</field>
+            <field name="key2">client_action_multi</field>
+            <field name="value" eval="'ir.actions.server,%s' %ref('website_sale_cavarosa.sale_order_line_tags')"/>
+        </record>
+
+    </data>
+
+    <data>
+        <record id="view_sales_order_line_filter" model="ir.ui.view">
+            <field name="name">sale.order.line.search.inherited.website_sale_cavarosa</field>
+            <field name="model">sale.order.line</field>
+            <field name="inherit_id" ref="sale.view_sales_order_line_filter" />
+            <field name="arch" type="xml">
+                <field name="salesman_id" position="after">
+                    <field name="campaign_id"/>
+                    <field name="supplier_id"/>
+                </field>
+                <filter string="Status" position="after">
+                    <filter string="Campaign" domain="[]" context="{'group_by':'campaign_id'}"/>
+                    <filter string="Supplier" domain="[]" context="{'group_by':'supplier_id'}"/>
+                </filter>
+            </field>
+        </record>
+    </data>
+</openerp>
