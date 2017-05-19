@@ -3,3 +3,4 @@ import res_district
 import res_partner
 import res_country
 import product
+import cavarosa_import

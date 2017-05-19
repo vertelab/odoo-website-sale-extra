@@ -37,6 +37,8 @@ Special sale configuration for Cavarosa AB
         'res_partner_view.xml',
         'product_view.xml',
         'product_template.xml',
+        'cavarosa_import_view.xml',
+        'cavarosa_data.xml',
         'security/ir.model.access.csv',
         ],
     'application': False,
