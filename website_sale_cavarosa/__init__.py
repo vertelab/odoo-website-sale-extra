@@ -4,3 +4,4 @@ import res_partner
 import res_country
 import product
 import sale
+import cavarosa_import
