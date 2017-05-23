@@ -22,21 +22,25 @@ from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 import urllib2
 import base64
-import unicodecsv as csv
 from cStringIO import StringIO
 
 import logging
 _logger = logging.getLogger(__name__)
 
+try:
+    import unicodecsv as csv
+except:
+    _logger.info('Missing unicodecsv. sudo pip install unicodecsv')
+
 class CavarosaImport(models.TransientModel):
     _name = 'sale.cavarosa.import.wizard'
-    
+
     commerce_product = fields.Binary('commerce_product.csv', required=True)
     produktvisningar = fields.Binary('Produktvisningar', required=True)
     suppliers = fields.Binary('Leverantörer', required=True)
     districts = fields.Binary('Distrikt', required=True)
 
-    
+
     @api.one
     def import_files(self):
         districts = {}
@@ -63,7 +67,7 @@ class CavarosaImport(models.TransientModel):
                     districts[row[0]] = self.env['res.district'].create(vals)
                 else:
                     districts[vals['name']].write(vals)
-        
+
         f = csv.reader(StringIO(base64.b64decode(self.suppliers)))
         for row in f:
             if row[0]:
@@ -85,7 +89,7 @@ class CavarosaImport(models.TransientModel):
                     suppliers[row[0]] = self.env['res.partner'].create(vals)
                 else:
                     suppliers[vals['name']].write(vals)
-        
+
         f = csv.DictReader(StringIO(base64.b64decode(self.commerce_product)))
         for row in f:
             if row[u'Product ID'] not in ignore:
@@ -95,7 +99,7 @@ class CavarosaImport(models.TransientModel):
                     'image': self.download_image(row[u'Bild']),
                     'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
                 }
-        
+
         f = csv.DictReader(StringIO(base64.b64decode(self.produktvisningar)))
         for row in f:
             if row[u'Produkt (vara)'] and (row[u'Produkt (vara)'] not in ignore):
@@ -105,11 +109,11 @@ class CavarosaImport(models.TransientModel):
                     'uom_id': uom.id,
                     'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
                 })
-        
+
         for id in products.keys():
             self.set_external_id(self.env['product.template'].create(products[id]), 'commerce_product_%s' % id)
-    
-    
+
+
     @api.model
     def find_uom(self, name):
         if name == '1-pack':
@@ -118,7 +122,7 @@ class CavarosaImport(models.TransientModel):
         if not uom:
             raise Warning("Couldn't find a unit of measure for %s." % name)
         return uom
-    
+
     @api.model
     def set_external_id(self, record, name):
         self.env['ir.model.data'].create({
@@ -127,14 +131,14 @@ class CavarosaImport(models.TransientModel):
             'module': '__cavarosa_import__',
             'res_id': record.id,
         })
-    
+
     @api.model
     def find_country(self, name):
         country = self.env['res.country'].search([('name', '=', name)])
         if not country and len(country) == 1:
             raise Warning("Couldn't find a match for country %s" % name)
         return country.id
-    
+
     @api.model
     def download_image(self, image_name):
         #TODO: Use Paramiko SFTP instead
