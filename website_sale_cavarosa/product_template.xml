@@ -36,7 +36,9 @@
                             <t t-foreach="campaign.object_ids" t-as="object">
                                 <div class="container">
                                     <t t-if="object.object_id._name == 'res.partner'">
-                                        <h2 t-field="object.name" class="text-left"/>
+                                        <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
+                                            <h2 t-field="object.name" class="text-left"/>
+                                        </a>
                                         <t t-call="website_sale_cavarosa.product_grid"/>
                                     </t>
                                 </div>

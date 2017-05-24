@@ -57,12 +57,21 @@
                 <div id="wrap">
                     <div class="oe_structure">
                         <div class="mt64 mb64 container">
-                            <h2 t-field="supplier.name" class="text-center"/>
-                            <t t-if="products">
-                                <div t-foreach="products" t-as="product">
-                                    <t t-call="website_sale_cavarosa.products_grid"/>
-                                </div>
-                            </t>
+                            <div class="col-sm-4">
+                                <ol class="breadcrumb">
+                                    <li><a href="#" onclick="history.go(-1); return false;">Go Back</a></li>
+                                    <li class="active"><span t-field="supplier.name"/></li>
+                                </ol>
+                            </div>
+                            <div class="col-md-offset-8"/>
+                            <div class="col-md-12">
+                                <h2 t-field="supplier.name" class="text-center"/>
+                                <t t-if="products">
+                                    <div t-foreach="products" t-as="product">
+                                        <t t-call="website_sale_cavarosa.products_grid"/>
+                                    </div>
+                                </t>
+                            </div>
                         </div>
                     </div>
                 </div>
