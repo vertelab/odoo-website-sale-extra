@@ -87,7 +87,9 @@
                     <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
                         <div class="oe_cr_inner">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
-                            <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image_medium/150x150' %product.id"/>
+                            <div class="oe_product_image">
+                                <img class="img img-responsive" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image/300x300' %product.id"/>
+                            </div>
                             <t t-if="product.campaign_product">
                                 <div class="product_price_div">
                                     <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
