@@ -31,7 +31,7 @@
                         <div class="mt64 mb64">
                             <h1 t-field="campaign.name" class="text-center"/>
                             <div class="oe_structure">
-                                <div t-field="campaign.description"/>
+                                <div t-field="campaign.website_description"/>
                             </div>
 <!--
                             <t t-foreach="campaign.partner_ids" t-as="partner">
