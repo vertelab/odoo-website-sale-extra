@@ -1,10 +1,10 @@
+.oe_cr_outer {
+    padding: 5px !important;
+}
+
 .oe_cr_inner img {
     margin: auto;
     display: block;
-}
-
-.oe_cr_outer {
-    padding: 5px !important;
 }
 
 .oe_cr_inner {
@@ -17,6 +17,7 @@
     overflow: hidden;
     position: relative;
     line-height: 1em;
+    color: #000;
 }
 
 .oe_cr_inner h3::after {
@@ -27,6 +28,10 @@
     width: 10%;
     height: 2em;
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
+}
+
+.oe_cr_inner b {
+    color: #000;
 }
 
 /* medium small device */

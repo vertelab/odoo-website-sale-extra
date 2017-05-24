@@ -33,14 +33,14 @@
                             <div class="oe_structure">
                                 <div t-field="campaign.website_description"/>
                             </div>
-<!--
-                            <t t-foreach="campaign.partner_ids" t-as="partner">
+                            <t t-foreach="campaign.object_ids" t-as="object">
                                 <div class="container">
-                                    <h2 t-field="partner.name" class="text-left"/>
-                                    <t t-call="website_sale_cavarosa.product_grid"/>
+                                    <t t-if="object.object_id._name == 'res.partner'">
+                                        <h2 t-field="object.name" class="text-left"/>
+                                        <t t-call="website_sale_cavarosa.product_grid"/>
+                                    </t>
                                 </div>
                             </t>
--->
                         </div>
                     </div>
                 </div>
@@ -48,31 +48,34 @@
         </template>
 
         <template id="product_grid" name="Product Grid">
-            <t t-foreach="campaign.product_ids" t-as="product">
-                <t t-if="product.seller_id == partner">
-                    <div class="col-md-3 col-sm-6 col-xs-12 campaign_product_div">
-                        <h4 t-field="product.name" class="text-center"/>
-                        <div class="oe_product_image">
-                            <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
+            <t t-foreach="object.object_id.product_ids" t-as="product">
+                <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
+                    <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
+                        <div class="oe_cr_inner">
+                            <h3 t-field="product.name" class="text-center"/>
+                            <div class="oe_product_image">
                                 <img itemprop="image" class="img img-responsive campaign_product_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
-                            </a>
-                        </div>
-                        <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
-                            <b>
-                                <span t-field="product.unit_price" style="white-space: nowrap;"  t-field-options='{
-                                       "widget": "monetary",
-                                       "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
-                                    }'>
-                                </span>
-                                <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
-                            </b>
-                            <t t-if="product.uom_id.uom_type == 'bigger'">
+                            </div>
+                            <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                                <b>
+                                    <span t-field="product.unit_price" style="white-space: nowrap;"  t-field-options='{
+                                           "widget": "monetary",
+                                           "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                        }'>
+                                    </span>
+                                    <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                                </b>
                                 <br/>
-                                <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
-                            </t>
+                                <t t-if="product.uom_id.uom_type == 'bigger'">
+                                    <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
+                                </t>
+                                <t t-if="product.uom_id.uom_type != 'bigger'">
+                                    <br/>
+                                </t>
+                            </div>
                         </div>
                     </div>
-                </t>
+                </a>
             </t>
         </template>
 
