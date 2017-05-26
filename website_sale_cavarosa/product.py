@@ -34,7 +34,6 @@ class product_template(models.Model):
         else:
             self.unit_price = self.list_price
     unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
-    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
     @api.one
     def _seller_id(self):
         self.seller_id = self.seller_ids[0].name if len(self.seller_ids) > 0 else None
@@ -42,7 +41,7 @@ class product_template(models.Model):
     @api.one
     def _campaign_product(self):
         campaign = self.env['website'].current_campaign()
-        if campaign and (self in campaign.product_ids):
+        if campaign and (self in campaign[0].campaign_product_ids.mapped('product_id')):
             self.campaign_product = True
         else:
             self.campaign_product = False

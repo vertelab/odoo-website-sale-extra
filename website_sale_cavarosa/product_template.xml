@@ -39,7 +39,9 @@
                                         <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
                                             <h2 t-field="object.name" class="text-left"/>
                                         </a>
-                                        <t t-call="website_sale_cavarosa.product_grid"/>
+                                        <t t-call="website_sale_cavarosa.product_grid">
+                                            <t t-set="products" t-value="object.object_id.product_ids"/>
+                                        </t>
                                     </t>
                                 </div>
                             </t>
@@ -50,7 +52,7 @@
         </template>
 
         <template id="product_grid" name="Product Grid">
-            <t t-foreach="object.object_id.product_ids" t-as="product">
+            <t t-foreach="products" t-as="product">
                 <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
                     <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
                         <div class="oe_cr_inner">
