@@ -55,7 +55,7 @@
                                             <h2 t-field="object.name" class="text-left"/>
                                         </a>
                                         <t t-call="website_sale_cavarosa.product_grid">
-                                            <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].search([('campaign_id', '=', campaign.id), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
+                                            <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                         </t>
                                     </t>
                                 </div>
@@ -147,7 +147,7 @@
                         <div class="mt64 mb64">
                             <h1 class="text-center">There is no campaign ongoing!</h1>
                             <t t-if="next_campaign_date">
-                                <h2 class="text-center"><t t-esc="next_campaign_date"/></h2>
+                                <h2 class="text-center">Next campaign starts <t t-esc="next_campaign_date"/></h2>
                             </t>
                         </div>
                     </div>

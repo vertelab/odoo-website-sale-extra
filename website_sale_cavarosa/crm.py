@@ -34,7 +34,7 @@ class website(models.Model):
     _inherit = 'website'
 
     def current_campaign(self):
-        return self.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())])
+        return self.env['crm.tracking.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today()), ('website_published', '=', True)])
 
 
 class website_sale(website_sale):
@@ -51,13 +51,14 @@ class website_sale(website_sale):
 
 class current_campaign(http.Controller):
 
-    @http.route(['/shop/campaign'], type='http', auth="public", website=True)
-    def campaign(self, **post):
-        campaigns = request.website.current_campaign()
+    @http.route(['/campaign', '/campaign/<model("crm.tracking.campaign"):campaigns>'], type='http', auth="public", website=True)
+    def campaign(self, campaigns=None, **post):
+        if not campaigns:
+            campaigns = request.website.sudo().current_campaign()
         if len(campaigns) > 0:
             return request.website.render('website_sale_cavarosa.current_campaign', {'campaign': campaigns[0]})
         else:
-            campaigns = request.env['crm.tracking.campaign'].search([('date_start', '>=', fields.Date.today())])
+            campaigns = request.env['crm.tracking.campaign'].sudo().search([('date_start', '>=', fields.Date.today())])
             if len(campaigns) > 0:
                 next_campaign_date = campaigns[0].date_start
                 for c in campaigns:
