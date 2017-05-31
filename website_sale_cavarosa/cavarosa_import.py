@@ -20,7 +20,6 @@
 ##############################################################################
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
-import urllib2
 import base64
 from cStringIO import StringIO
 
@@ -35,12 +34,13 @@ except:
 class CavarosaImport(models.TransientModel):
     _name = 'sale.cavarosa.import.wizard'
 
-    commerce_product = fields.Binary('commerce_product.csv', required=True)
-    produktvisningar = fields.Binary('Produktvisningar', required=True)
-    suppliers = fields.Binary('Leverantörer', required=True)
-    districts = fields.Binary('Distrikt', required=True)
-
-
+    commerce_product = fields.Binary('commerce_product.csv')
+    produktvisningar = fields.Binary('Produktvisningar')
+    suppliers = fields.Binary('Leverantörer')
+    districts = fields.Binary('Distrikt')
+    username = fields.Char(string='Username', required=True, help="Your username on wiggum.vertel.se")
+    password = fields.Char(string='Password', required=True, help="Your password on wiggum.vertel.se")
+    
     @api.one
     def import_files(self):
         districts = {}
@@ -53,66 +53,72 @@ class CavarosaImport(models.TransientModel):
         #~ for r in self.env['product.template'].search():
             #~ products[r.name] = r
         ignore = ('10', '18', '57')
-        f = csv.reader(StringIO(base64.b64decode(self.districts)))
-        for row in f:
-            if row[0]:
-                _logger.warn(row)
-                image = self.download_image(row[1])
-                vals = {
-                    'name': row[0],
-                    'country_id': self.find_country(row[2]),
-                    'website_description': (image and '<img src="data:image/png;base64,%s" />' % image) or '',
-                }
-                if not vals['name'] in districts:
-                    districts[row[0]] = self.env['res.district'].create(vals)
-                else:
-                    districts[vals['name']].write(vals)
-
-        f = csv.reader(StringIO(base64.b64decode(self.suppliers)))
-        for row in f:
-            if row[0]:
-                district = districts.get(row[1])
-                if not district:
-                    district = districts[row[1]] = districts[row[0]] = self.env['res.district'].create({
+        if self.districts:
+            f = csv.reader(StringIO(base64.b64decode(self.districts)))
+            for row in f:
+                if row[0]:
+                    _logger.warn(row)
+                    image = self.download_image(row[1])
+                    vals = {
                         'name': row[0],
+                        'country_id': self.find_country(row[2]),
+                        'website_description': (image and '<img src="data:image/png;base64,%s" />' % image) or '',
+                    }
+                    if not vals['name'] in districts:
+                        districts[row[0]] = self.env['res.district'].create(vals)
+                    else:
+                        districts[vals['name']].write(vals)
+        if self.suppliers:
+            f = csv.reader(StringIO(base64.b64decode(self.suppliers)))
+            for row in f:
+                if row[0]:
+                    district = districts.get(row[1])
+                    if not district:
+                        district = districts[row[1]] = self.env['res.district'].create({
+                            'name': row[1],
+                        })
+                    vals = {
+                        'customer': False,
+                        'supplier': True,
+                        'name': row[0],
+                        'district_id': district.id,
+                        'image': self.download_image(row[2], '/var/lib/drupal7/files/cavarosawine_se/'),
+                        'country_id': self.find_country(row[3]),
+                        'comment': row[4],
+                    }
+                    if not vals['name'] in suppliers:
+                        suppliers[vals['name']] = self.env['res.partner'].create(vals)
+                    else:
+                        suppliers[vals['name']].write(vals)
+        if self.commerce_product and self.produktvisningar:
+            f = csv.DictReader(StringIO(base64.b64decode(self.commerce_product)))
+            for row in f:
+                if row[u'Product ID'] not in ignore:
+                    products[row[u'Product ID']] = {
+                        'list_price': float(row.get(u'Pris', '0').split(' ')[0]) / 100,
+                        'name': row[u'Titel'],
+                        'image': self.download_image(row[u'Bild']),
+                        'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
+                    }
+            
+            f = csv.DictReader(StringIO(base64.b64decode(self.produktvisningar)))
+            for row in f:
+                if row[u'Produkt (vara)'] and (row[u'Produkt (vara)'] not in ignore):
+                    uom = self.find_uom(row[u'Typ'].split(' ')[1])
+                    products[row[u'Produkt (vara)']].update({
+                        'description_sale': row[u'Beskrivning'],
+                        'uom_id': uom.id,
+                        'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
                     })
-                vals = {
-                    'customer': False,
-                    'supplier': True,
-                    'name': row[0],
-                    'district_id': district.id,
-                    'image': self.download_image(row[2]),
-                    'country_id': self.find_country(row[3]),
-                    'comment': row[4],
-                }
-                if not vals['name'] in suppliers:
-                    suppliers[row[0]] = self.env['res.partner'].create(vals)
-                else:
-                    suppliers[vals['name']].write(vals)
-
-        f = csv.DictReader(StringIO(base64.b64decode(self.commerce_product)))
-        for row in f:
-            if row[u'Product ID'] not in ignore:
-                products[row[u'Product ID']] = {
-                    'list_price': float(row.get(u'Pris', '0').split(' ')[0]) / 100,
-                    'name': row[u'Titel'],
-                    'image': self.download_image(row[u'Bild']),
-                    'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
-                }
-
-        f = csv.DictReader(StringIO(base64.b64decode(self.produktvisningar)))
-        for row in f:
-            if row[u'Produkt (vara)'] and (row[u'Produkt (vara)'] not in ignore):
-                uom = self.find_uom(row[u'Typ'].split(' ')[1])
-                products[row[u'Produkt (vara)']].update({
-                    'description_sale': row[u'Beskrivning'],
-                    'uom_id': uom.id,
-                    'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
-                })
-
-        for id in products.keys():
-            self.set_external_id(self.env['product.template'].create(products[id]), 'commerce_product_%s' % id)
-
+            
+            for id in products.keys():
+                self.set_external_id(self.env['product.template'].create(products[id]), 'commerce_product_%s' % id)
+        try:
+            self.session.close()
+            self.transport.close()
+        except:
+            pass
+        self.password = ''
 
     @api.model
     def find_uom(self, name):
@@ -140,14 +146,18 @@ class CavarosaImport(models.TransientModel):
         return country.id
 
     @api.model
-    def download_image(self, image_name):
+    def download_image(self, image_name, dir='/var/lib/drupal7/files/cavarosawine_se/'):
         #TODO: Use Paramiko SFTP instead
+        if not (hasattr(self, 'session') and self.session):
+            import paramiko
+            self.transport = paramiko.Transport(('wiggum.vertel.se', 22))
+            self.transport.connect(username=self.username, password=self.password)
+            self.session = paramiko.SFTPClient.from_transport(self.transport)
         image = ''
         if image_name:
-            url = 'http://www.cavarosawine.se/sites/default/files/cavarosawine_se/%s' % image_name.split(' (')[0].strip()
-            _logger.warn(url)
             try:
-                image = base64.b64encode(urllib2.urlopen(url).read())
+                with self.session.open(dir + image_name.split(' (')[0].strip(), 'r') as f:
+                    image = base64.b64encode(f.read())
             except:
-                _logger.warn("Couldn't get %s." % url)
+                _logger.warn("Couldn't get %s" % dir + image_name.split(' (')[0].strip())
         return image

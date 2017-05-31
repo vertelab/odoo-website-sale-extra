@@ -14,6 +14,8 @@
                             <field name="produktvisningar"/>
                             <field name="suppliers"/>
                             <field name="districts"/>
+                            <field name="username"/>
+                            <field name="password" password="True"/>
                         </group>
                     </sheet>
                     <footer>
@@ -37,7 +39,7 @@
             <field name="domain"></field>
         </record>
 
-        <menuitem id="menu_cavarosa_import" parent="base.menu_custom" sequence="100"/>
+        <menuitem id="menu_cavarosa_import" name="Cavarosa Import" parent="base.menu_custom" sequence="100"/>
         
         <menuitem action="action_cavarosa_import_products" id="menu_cavarosa_product_import" parent="menu_cavarosa_import" sequence="10"/>
 
