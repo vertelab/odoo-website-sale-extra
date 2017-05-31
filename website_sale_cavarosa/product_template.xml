@@ -24,6 +24,21 @@
             </xpath>
         </template>
 
+        <template id="products_item" inherit_id="website_sale.products_item">
+            <xpath expr="//div[@t-if='product.product_variant_ids']" position="attributes">
+                <attribute name="t-if">product.product_variant_ids and product.campaign_product</attribute>
+            </xpath>
+        </template>
+
+        <template id="products_item_extend" inherit_id="website_crm_campaign.products_item">
+            <xpath expr="//b[@t-if='product.sudo().qty_available &gt; 0.0']" position="attributes">
+                <attribute name="t-if">product.sudo().qty_available &gt; 0.0 and product.campaign_product</attribute>
+            </xpath>
+            <xpath expr="//b[@t-if='product.sudo().qty_available &lt;= 0.0']" position="attributes">
+                <attribute name="t-if">product.sudo().qty_available &lt;= 0.0 and product.campaign_product</attribute>
+            </xpath>
+        </template>
+
         <template id="current_campaign" name="Current Campaign">
             <t t-call="website.layout">
                 <div id="wrap">
