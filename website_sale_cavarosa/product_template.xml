@@ -130,7 +130,7 @@
                 <div id="wrap">
                     <div class="oe_structure">
                         <div class="mt64 mb64">
-                            <h1 class="text-center">There is campaign ongoing!</h1>
+                            <h1 class="text-center">There is no campaign ongoing!</h1>
                             <t t-if="next_campaign_date">
                                 <h2 class="text-center"><t t-esc="next_campaign_date"/></h2>
                             </t>
