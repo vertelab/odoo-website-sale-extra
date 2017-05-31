@@ -40,7 +40,7 @@
                                             <h2 t-field="object.name" class="text-left"/>
                                         </a>
                                         <t t-call="website_sale_cavarosa.product_grid">
-                                            <t t-set="products" t-value="request.env['crm.campaign.product'].search([('campaign_id', '=', campaign.id), ('product_id', 'in', object.object_id.product_ids.mapped('id'))]).sorted(key=lambda p: p.sequence).mapped('product_id')"/>
+                                            <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].search([('campaign_id', '=', campaign.id), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                         </t>
                                     </t>
                                 </div>
@@ -52,7 +52,8 @@
         </template>
 
         <template id="product_grid" name="Product Grid">
-            <t t-foreach="products" t-as="product">
+            <t t-foreach="campaign_products" t-as="campaign_product">
+                <t t-set="product" t-value="campaign_product.product_id"/>
                 <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
                     <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
                         <div class="oe_cr_inner">
