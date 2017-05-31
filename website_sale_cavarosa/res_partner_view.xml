@@ -59,13 +59,16 @@
                         <div class="mt64 mb64 container">
                             <div class="col-sm-4">
                                 <ol class="breadcrumb">
-                                    <li><a href="#" onclick="history.go(-1); return false;">Go Back</a></li>
+                                    <li><a href="/producers">Producers</a></li>
+                                    <li><a t-att-href="'/country/%s' %supplier.district_id.country_id.id"><span t-field="supplier.district_id.country_id.name"/></a></li>
+                                    <li><a t-att-href="'/district/%s' %supplier.district_id.id"><span t-field="supplier.district_id.name"/></a></li>
                                     <li class="active"><span t-field="supplier.name"/></li>
                                 </ol>
                             </div>
                             <div class="col-md-offset-8"/>
                             <div class="col-md-12">
                                 <h2 t-field="supplier.name" class="text-center"/>
+                                <div t-field="supplier.website_description"/>
                                 <t t-if="products">
                                     <div t-foreach="products" t-as="product">
                                         <t t-call="website_sale_cavarosa.products_grid"/>
@@ -84,7 +87,7 @@
                     <div class="mt64 mb64 container">
                         <div class="col-sm-4">
                             <ol class="breadcrumb">
-                                <li><a href="#" onclick="history.go(-1); return false;">Producers</a></li>
+                                <li><a href="/producers">Producers</a></li>
                                 <li class="active"><span t-field="country.name"/></li>
                             </ol>
                         </div>
@@ -120,7 +123,8 @@
                     <div class="mt64 mb64 container">
                         <div class="col-sm-4">
                             <ol class="breadcrumb">
-                                <li><a href="#" onclick="history.go(-1); return false;">Go Back</a></li>
+                                <li><a href="/producers">Producers</a></li>
+                                <li><a t-att-href="'/country/%s' %district.country_id.id"><span t-field="district.country_id.name"/></a></li>
                                 <li class="active"><span t-field="district.name"/></li>
                             </ol>
                         </div>
@@ -129,11 +133,17 @@
                             <div t-field="district.website_description"/>
                             <t t-if="len(district.sudo().partner_ids) &gt; 0">
                                 <div t-foreach="district.sudo().partner_ids" t-as="supplier">
+                                    <div class="col-md-4">
+                                        <a t-att-href="'/producer/%s' %supplier.id" style="color: #000;"><h3 t-field="supplier.name"/></a>
+                                        <div t-field="supplier.website_short_description"/>
+                                    </div>
+<!--
                                     <t t-if="len(supplier.product_ids) &gt; 0">
                                         <div t-foreach="supplier.product_ids" t-as="product">
                                             <t t-call="website_sale_cavarosa.products_grid"/>
                                         </div>
                                     </t>
+-->
                                 </div>
                             </t>
                         </div>
