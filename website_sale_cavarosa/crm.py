@@ -51,7 +51,7 @@ class website_sale(website_sale):
 
 class current_campaign(http.Controller):
 
-    @http.route(['/shop/campaign'], type='http', auth="user", website=True)
+    @http.route(['/shop/campaign'], type='http', auth="public", website=True)
     def campaign(self, **post):
         campaigns = request.website.current_campaign()
         if len(campaigns) > 0:
