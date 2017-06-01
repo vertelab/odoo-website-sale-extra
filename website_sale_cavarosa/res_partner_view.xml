@@ -68,7 +68,9 @@
                             <div class="col-md-offset-8"/>
                             <div class="col-md-12">
                                 <h2 t-field="supplier.name" class="text-center"/>
+<!--
                                 <div t-field="supplier.website_description"/>
+-->
                                 <div class="col-md-12 mb16 mt16">
                                     <div class="o_image_floating o_margin_l pull-left">
                                         <t t-if="supplier.image">
