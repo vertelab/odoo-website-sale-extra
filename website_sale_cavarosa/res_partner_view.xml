@@ -75,7 +75,7 @@
                                     <div class="o_image_floating o_margin_l pull-left">
                                         <t t-if="supplier.image">
                                             <div class="o_container">
-                                                <img alt="Partner Image" class="img img-rounded img-responsive" t-att-src="'/website/image/res.partner/%s/image/1024x1024' %supplier.id"/>
+                                                <span itemprop="image" t-field="supplier.image" t-field-options='{"widget": "image", "class": "img-rounded", "alt-field": "name"}'/>
                                             </div>
                                         </t>
                                     </div>
