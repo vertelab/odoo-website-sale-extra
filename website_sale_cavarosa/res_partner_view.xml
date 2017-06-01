@@ -69,18 +69,6 @@
                             <div class="col-md-12">
                                 <h2 t-field="supplier.name" class="text-center"/>
                                 <div t-field="supplier.website_description"/>
-<!--
-                                <div class="col-md-12 mb16 mt16">
-                                    <div class="o_image_floating o_margin_l pull-left">
-                                        <t t-if="supplier.image">
-                                            <div class="o_container">
-                                                <span itemprop="image" t-field="supplier.image" t-field-options='{"widget": "image", "class": "img-rounded", "alt-field": "name"}'/>
-                                            </div>
-                                        </t>
-                                    </div>
-                                    <p t-field="supplier.comment"/>
-                                </div>
--->
                                 <t t-if="products">
                                     <div t-foreach="products" t-as="product">
                                         <t t-call="website_sale_cavarosa.products_grid"/>
@@ -112,15 +100,17 @@
                             </div>
                             <div t-field="country.website_description"/>
                             <t t-if="len(country.district_ids) &gt; 0">
-                                <div t-foreach="country.district_ids" t-as="district">
-                                    <div class="col-md-4 col-sm-4 col-ms-3 col-xs-6">
-                                        <a t-att-href="'/district/%s' %district.id" style="color: #000;">
-                                            <h4 t-field="district.name" class="text-center"/>
-                                        </a>
-                                        <div t-foreach="district.partner_ids" t-as="supplier">
-                                            <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                <div class="grid">
+                                    <t t-foreach="country.district_ids" t-as="district">
+                                        <div class="grid-item">
+                                            <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                                <h4 t-field="district.name" class="text-center"/>
+                                            </a>
+                                            <div t-foreach="district.partner_ids" t-as="supplier">
+                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </t>
                                 </div>
                             </t>
                         </div>
@@ -141,21 +131,34 @@
                             </ol>
                         </div>
                         <div class="col-md-offset-8"/>
+                        <div class="col-md-12 district_description" t-field="district.website_description"/>
                         <div class="col-md-12">
-                            <div t-field="district.website_description"/>
                             <t t-if="len(district.sudo().partner_ids) &gt; 0">
-                                <div t-foreach="district.sudo().partner_ids" t-as="supplier">
-                                    <div class="col-md-4">
-                                        <a t-att-href="'/producer/%s' %supplier.id" style="color: #000;"><h3 t-field="supplier.name"/></a>
-                                        <div t-field="supplier.website_short_description"/>
-                                    </div>
-<!--
-                                    <t t-if="len(supplier.product_ids) &gt; 0">
-                                        <div t-foreach="supplier.product_ids" t-as="product">
-                                            <t t-call="website_sale_cavarosa.products_grid"/>
+                                <div class="grid">
+                                    <t t-foreach="district.sudo().partner_ids" t-as="supplier">
+                                        <div class="grid-item grid-item--width2">
+                                            <a t-att-href="'/producer/%s' %supplier.id" style="color: #000;">
+                                                <h3 t-field="supplier.name"/>
+                                            </a>
+                                            <div class="col-md-12" style="padding: 0px;">
+                                                <div class="col-md-12 mb8" style="padding: 0px;" t-field="supplier.website_short_description"/>
+                                                <t t-if="supplier.image">
+                                                    <div class="col-md-12" style="padding: 0px;">
+                                                        <div class="o_container">
+                                                            <span itemprop="image" t-field="supplier.image" t-field-options='{"widget": "image", "class": "img-rounded", "alt-field": "name"}'/>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
                                         </div>
-                                    </t>
+<!--
+                                        <t t-if="len(supplier.product_ids) &gt; 0">
+                                            <div t-foreach="supplier.product_ids" t-as="product">
+                                                <t t-call="website_sale_cavarosa.products_grid"/>
+                                            </div>
+                                        </t>
 -->
+                                    </t>
                                 </div>
                             </t>
                         </div>
