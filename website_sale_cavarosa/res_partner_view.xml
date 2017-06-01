@@ -69,6 +69,16 @@
                             <div class="col-md-12">
                                 <h2 t-field="supplier.name" class="text-center"/>
                                 <div t-field="supplier.website_description"/>
+                                <div class="col-md-12 mb16 mt16">
+                                    <div class="o_image_floating o_margin_l pull-left">
+                                        <t t-if="supplier.image">
+                                            <div class="o_container">
+                                                <img alt="Partner Image" class="img img-rounded img-responsive" t-att-src="'/website/image/res.partner/%s/image/1024x1024' %supplier.id"/>
+                                            </div>
+                                        </t>
+                                    </div>
+                                    <p t-field="supplier.comment"/>
+                                </div>
                                 <t t-if="products">
                                     <div t-foreach="products" t-as="product">
                                         <t t-call="website_sale_cavarosa.products_grid"/>
