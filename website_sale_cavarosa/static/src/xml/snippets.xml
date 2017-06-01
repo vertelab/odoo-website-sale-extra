@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- vim:fdl=1:
+-->
+<templates id="template" xml:space="preserve">
+    <t t-name="supplier_content">
+        <div class="col-md-3 col-xs-12">
+            <div style="margin: auto; position: relative; background-image: url('image_url'); background-repeat: no-repeat; background-size: cover; min-height: 185px;">
+                <h4 class="mt16 text-center" style="color: #fff !important; position: absolute; left: 0; bottom: 10px; width: 100%; padding: 7px; background-color: rgba(0,0,0,0.4)"><a t-att-href="supplier_url" style="color: #fff !important;"><t t-esc="supplier_name"/></a></h4>
+            </div>
+        </div>
+    </t>
+</templates>
+

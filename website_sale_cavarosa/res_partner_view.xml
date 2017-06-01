@@ -57,7 +57,7 @@
                 <div id="wrap">
                     <div class="oe_structure">
                         <div class="mt64 mb64 container">
-                            <div class="col-sm-4">
+                            <div class="col-md-12">
                                 <ol class="breadcrumb">
                                     <li><a href="/producers">Producers</a></li>
                                     <li><a t-att-href="'/country/%s' %supplier.district_id.country_id.id"><span t-field="supplier.district_id.country_id.name"/></a></li>
@@ -65,7 +65,6 @@
                                     <li class="active"><span t-field="supplier.name"/></li>
                                 </ol>
                             </div>
-                            <div class="col-md-offset-8"/>
                             <div class="col-md-12">
                                 <h2 t-field="supplier.name" class="text-center"/>
                                 <div t-field="supplier.website_description"/>
@@ -85,13 +84,12 @@
             <t t-call="website.layout">
                 <div id="wrap">
                     <div class="mt64 mb64 container">
-                        <div class="col-sm-4">
+                        <div class="col-md-12">
                             <ol class="breadcrumb">
                                 <li><a href="/producers">Producers</a></li>
                                 <li class="active"><span t-field="country.name"/></li>
                             </ol>
                         </div>
-                        <div class="col-md-offset-8"/>
                         <div class="col-md-12">
                             <div class="o_image_floating o_margin_l pull-left" style="width: 25% !important;">
                                 <div class="o_container">
@@ -123,14 +121,13 @@
             <t t-call="website.layout">
                 <div id="wrap">
                     <div class="mt64 mb64 container">
-                        <div class="col-sm-4">
+                        <div class="col-md-12">
                             <ol class="breadcrumb">
                                 <li><a href="/producers">Producers</a></li>
                                 <li><a t-att-href="'/country/%s' %district.country_id.id"><span t-field="district.country_id.name"/></a></li>
                                 <li class="active"><span t-field="district.name"/></li>
                             </ol>
                         </div>
-                        <div class="col-md-offset-8"/>
                         <div class="col-md-12 district_description" t-field="district.website_description"/>
                         <div class="col-md-12">
                             <t t-if="len(district.sudo().partner_ids) &gt; 0">
@@ -172,6 +169,12 @@
                 <link href="/website_sale_cavarosa/static/src/css/main.css" rel="stylesheet" type="text/css"/>
                 <script src="http://masonry.desandro.com/masonry.pkgd.js" type="text/javascript"></script>
                 <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"></script>
+            </xpath>
+        </template>
+
+        <template id="snippet_js" inherit_id="website.layout">
+            <xpath expr="//body" position="inside">
+                <script src="/website_sale_cavarosa/static/src/js/snippet.js" type="text/javascript"></script>
             </xpath>
         </template>
 

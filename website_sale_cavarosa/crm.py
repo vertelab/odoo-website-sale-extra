@@ -67,3 +67,16 @@ class current_campaign(http.Controller):
                 return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': next_campaign_date})
             else:
                 return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': None})
+
+    @http.route(['/snippet/get_campaign'], type='json', auth="user", website=True)
+    def get_campaign(self, campaign_id=None, **kw):
+        campaign = request.env['crm.tracking.campaign'].browse(int(campaign_id))
+        supplier_list = []
+        for o in campaign.object_ids:
+            if o.object_id._name == 'res.partner':
+                s = {}
+                s['supplier_url'] = '#supplier_%s' %o.object_id.id
+                s['supplier_name'] = o.object_id.name
+                s['supplier_image'] = '/website/imagemagick/res.partner/image/%s/%s' %(o.object_id.id, request.env.ref('website_sale_cavarosa.img_supplier_nav').id)
+                supplier_list.append(s)
+        return supplier_list

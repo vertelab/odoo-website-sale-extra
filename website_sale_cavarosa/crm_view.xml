@@ -1,6 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <template id="custom_snippets" inherit_id="website.snippets" name="Custom Snippets">
+            <xpath expr="//div[@id='snippet_structure']" position="inside">
+                <div id="current_campaign_navigator">
+                    <div class="oe_snippet_thumbnail">
+                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_text_block.png"/>
+                        <span class="oe_snippet_thumbnail_title">Current Campaign Navigator</span>
+                    </div>
+                    <section class="oe_snippet_body current_campaign_navigator">
+                        <div class="container">
+                            <h2 class="text-center">Current Campaign</h2>
+                            <div class="supplier_content col-md-12 col-xs-12"/>
+                        </div>
+                    </section>
+                </div>
+            </xpath>
+        </template>
+        <template id="more_snippet_options" inherit_id="website.snippet_options" name="More Snippet Options">
+            <xpath expr="." position="inside">
+                <div data-snippet-option-id="current_campaign_navigator_option" data-selector=".current_campaign_navigator">
+                    <li class="dropdown-submenu">
+                        <t t-set="ongoing_campaigns" t-value="request.env['website'].current_campaign()"/>
+                        <t t-if="len(ongoing_campaigns) &gt; 0">
+                            <a tabindex="-1" href="#">Get Campaign</a>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <a t-att-data-value="ongoing_campaigns[0].id" class="oe_get_campaign">
+                                        <t t-esc="ongoing_campaigns[0].name"/>
+                                    </a>
+                                </li>
+                            </ul>
+                        </t>
+                    </li>
+                </div>
+            </xpath>
+        </template>
+    </data>
 
+    <data noupdate="1">
+        <record id="img_supplier_nav" model="image.recipe">
+            <field name="name">Supplier Navigator</field>
+            <field name="description">Define the canvas size to limit the image maximum size.</field>
+            <field name="recipe">if float(image.width)/image.height >= float(horizontal)/float(vertical):
+    image.transform(resize='%sx>' %int(float(image.width)/image.height*image.width))
+    image.crop(width=int(float(horizontal)/float(vertical)*image.height), height=image.height, gravity='center')
+    image.resize(int(canvas_size), int(float(canvas_size)*float(vertical)/float(horizontal)))
+else:
+    image.transform(resize='%sx>' %int(float(horizontal)/float(vertical)*image.width))
+    image.crop(width=image.width, height=int(float(vertical)/float(horizontal)*image.width), gravity='center')
+    image.resize(int(float(canvas_size)*float(horizontal)/float(vertical)), int(canvas_size))
+            </field>
+        </record>
+
+        <record id="img_supplier_nav_param_canvas_height" model="image.recipe.param">
+            <field name="name">canvas_size</field>
+            <field name="value">300</field>
+            <field name="recipe_id" ref="website_sale_cavarosa.img_supplier_nav"/>
+        </record>
+
+        <record id="img_supplier_nav_param_canvas_ratio_horizontal" model="image.recipe.param">
+            <field name="name">horizontal</field>
+            <field name="value">4</field>
+            <field name="recipe_id" ref="website_sale_cavarosa.img_supplier_nav"/>
+        </record>
+
+        <record id="img_supplier_nav_param_canvas_ratio_vertical" model="image.recipe.param">
+            <field name="name">vertical</field>
+            <field name="value">3</field>
+            <field name="recipe_id" ref="website_sale_cavarosa.img_supplier_nav"/>
+        </record>
     </data>
 </openerp>
