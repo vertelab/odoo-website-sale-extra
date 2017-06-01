@@ -93,7 +93,7 @@
                         </div>
                         <div class="col-md-offset-8"/>
                         <div class="col-md-12">
-                            <div class="o_image_floating o_margin_l pull-left" style="width: 30% !important;">
+                            <div class="o_image_floating o_margin_l pull-left" style="width: 25% !important;">
                                 <div class="o_container">
                                     <img class="img img-responsive mb16" t-att-src="'/website/image/res.country/%s/image' %country.id"/>
                                 </div>
