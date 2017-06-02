@@ -21,32 +21,30 @@
         <template id="producers" name="Producers">
             <t t-call="website.layout">
                 <div id="wrap">
-                    <div class="oe_structure">
-                        <div class="mt64 mb64 container">
-                            <h2 class="text-center">Our Producers</h2>
-                            <t t-if="countries">
-                                <div class="grid">
-                                    <t t-foreach="countries" t-as="country">
-                                        <div class="grid-item">
-                                            <a t-att-href="'/country/%s' %country.id" style="color: #000;">
-                                                <h3 t-field="country.name" class="text-center"/>
-                                                <div style="height: 100px;">
-                                                    <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
-                                                </div>
+                    <div class="mt64 mb64 container">
+                        <h2 class="text-center">Our Producers</h2>
+                        <t t-if="countries">
+                            <div class="grid">
+                                <t t-foreach="countries" t-as="country">
+                                    <div class="grid-item">
+                                        <a t-att-href="'/country/%s' %country.id" style="color: #000;">
+                                            <h3 t-field="country.name" class="text-center"/>
+                                            <div style="height: 100px;">
+                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
+                                            </div>
+                                        </a>
+                                        <div t-foreach="country.district_ids" t-as="district">
+                                            <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                                <h4 t-field="district.name" class="text-center"/>
                                             </a>
-                                            <div t-foreach="country.district_ids" t-as="district">
-                                                <a t-att-href="'/district/%s' %district.id" style="color: #000;">
-                                                    <h4 t-field="district.name" class="text-center"/>
-                                                </a>
-                                                <div t-foreach="district.partner_ids" t-as="supplier">
-                                                    <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
-                                                </div>
+                                            <div t-foreach="district.partner_ids" t-as="supplier">
+                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
                                             </div>
                                         </div>
-                                    </t>
-                                </div>
-                            </t>
-                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
                     </div>
                 </div>
             </t>
@@ -55,25 +53,23 @@
         <template id="producer_products" name="Producer Products">
             <t t-call="website.layout">
                 <div id="wrap">
-                    <div class="oe_structure">
-                        <div class="mt64 mb64 container">
-                            <div class="col-md-12">
-                                <ol class="breadcrumb">
-                                    <li><a href="/producers">Producers</a></li>
-                                    <li><a t-att-href="'/country/%s' %supplier.district_id.country_id.id"><span t-field="supplier.district_id.country_id.name"/></a></li>
-                                    <li><a t-att-href="'/district/%s' %supplier.district_id.id"><span t-field="supplier.district_id.name"/></a></li>
-                                    <li class="active"><span t-field="supplier.name"/></li>
-                                </ol>
-                            </div>
-                            <div class="col-md-12">
-                                <h2 t-field="supplier.name" class="text-center"/>
-                                <div t-field="supplier.website_description"/>
-                                <t t-if="products">
-                                    <div t-foreach="products" t-as="product">
-                                        <t t-call="website_sale_cavarosa.products_grid"/>
-                                    </div>
-                                </t>
-                            </div>
+                    <div class="mt64 mb64 container">
+                        <div class="col-md-12">
+                            <ol class="breadcrumb">
+                                <li><a href="/producers">Producers</a></li>
+                                <li><a t-att-href="'/country/%s' %supplier.district_id.country_id.id"><span t-field="supplier.district_id.country_id.name"/></a></li>
+                                <li><a t-att-href="'/district/%s' %supplier.district_id.id"><span t-field="supplier.district_id.name"/></a></li>
+                                <li class="active"><span t-field="supplier.name"/></li>
+                            </ol>
+                        </div>
+                        <div class="col-md-12">
+                            <h2 t-field="supplier.name" class="text-center"/>
+                            <div t-field="supplier.website_description"/>
+                            <t t-if="products">
+                                <div t-foreach="products" t-as="product">
+                                    <t t-call="website_sale_cavarosa.products_grid"/>
+                                </div>
+                            </t>
                         </div>
                     </div>
                 </div>
@@ -97,6 +93,8 @@
                                 </div>
                             </div>
                             <div t-field="country.website_description"/>
+                        </div>
+                        <div class="col-md-12">
                             <t t-if="len(country.district_ids) &gt; 0">
                                 <div class="grid">
                                     <t t-foreach="country.district_ids" t-as="district">

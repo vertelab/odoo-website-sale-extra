@@ -1,6 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <record id="crm_tracking_campaign_form" model="ir.ui.view">
+            <field name="name">crm.tracking.campaign.form.inherited.website_sale_cavarosa</field>
+            <field name="model">crm.tracking.campaign</field>
+            <field name="inherit_id" ref="crm_campaign_addons.crm_tracking_campaign_form"/>
+            <field name="arch" type="xml">
+                <field name="date_stop" position="after">
+                    <field name="estimated_delivery"/>
+                </field>
+            </field>
+        </record>
+    </data>
+
+    <data>
         <template id="popup_modal" inherit_id="website.layout">
             <xpath expr="//body" position="inside">
                 <div id="limit_modal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">

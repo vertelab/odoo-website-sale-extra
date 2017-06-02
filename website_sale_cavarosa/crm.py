@@ -29,6 +29,8 @@ class crm_tracking_campaign(models.Model):
     _inherit = 'crm.tracking.campaign'
     _mail_mass_mailing = _('Campaign')
 
+    estimated_delivery = fields.Date(string='Estimated delivery')
+
 
 class website(models.Model):
     _inherit = 'website'
