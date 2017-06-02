@@ -144,13 +144,6 @@
                                                 </t>
                                             </div>
                                         </div>
-<!--
-                                        <t t-if="len(supplier.product_ids) &gt; 0">
-                                            <div t-foreach="supplier.product_ids" t-as="product">
-                                                <t t-call="website_sale_cavarosa.products_grid"/>
-                                            </div>
-                                        </t>
--->
                                     </t>
                                 </div>
                             </t>
