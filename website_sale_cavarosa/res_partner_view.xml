@@ -66,9 +66,7 @@
                             <h2 t-field="supplier.name" class="text-center"/>
                             <div t-field="supplier.website_description"/>
                             <t t-if="products">
-                                <div t-foreach="products" t-as="product">
-                                    <t t-call="website_sale_cavarosa.products_grid"/>
-                                </div>
+                                <t t-call="website_sale_cavarosa.products_grid"/>
                             </t>
                         </div>
                     </div>
