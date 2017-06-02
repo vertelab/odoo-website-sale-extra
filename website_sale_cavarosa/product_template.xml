@@ -14,8 +14,10 @@
         <template id="product" inherit_id="website_sale.product">
             <xpath expr="//h1[@t-field='product.name']" position="after">
                 <p t-field="product.default_code" class="text-muted"/>
-                <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</b>
-                <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</b>
+                <t t-if="product.type == 'product'">
+                    <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</b>
+                    <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</b>
+                </t>
             </xpath>
             <xpath expr="//form[@class='js_add_cart_variants']" position="inside">
                 <input name="campaign_id" t-att-value="int(request.params.get('campaign_id', 0))" type="hidden"/>
@@ -109,8 +111,10 @@
                                             <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                                         </b>
                                         <br/>
-                                        <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</b>
-                                        <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</b>
+                                        <t t-if="product.type == 'product'">
+                                            <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</b>
+                                            <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</b>
+                                        </t>
                                         <t t-if="product.uom_id.uom_type == 'bigger'">
                                             <p style="height: 36px;">You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</p>
                                         </t>
