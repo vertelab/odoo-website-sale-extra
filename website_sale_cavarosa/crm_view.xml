@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <openerp>
     <data>
+        <template id="popup_modal" inherit_id="website.layout">
+            <xpath expr="//body" position="inside">
+                <div id="limit_modal" class="modal fade" role="dialog" data-keyboard="false" data-backdrop="static">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Är du under 20 år?</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <a href="https://www.systembolaget.se/under-20/" id="under20" type="button" class="btn btn-danger pull-left">Jag är under 20 år</a>
+                                <a href="#" id="elder20" type="button" class="btn btn-success pull-right" data-dismiss="modal">Jag är 20 år eller äldre</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </xpath>
+        </template>
         <template id="custom_snippets" inherit_id="website.snippets" name="Custom Snippets">
             <xpath expr="//div[@id='snippet_structure']" position="inside">
                 <div id="current_campaign_navigator">
