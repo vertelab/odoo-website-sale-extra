@@ -87,15 +87,6 @@
             </t>
         </template>
 
-        <template id="products_grid" name="Products Grid">
-            <t t-foreach="campaign_products" t-as="campaign_product">
-                <t t-set="product" t-value="campaign_product.product_id"/>
-                <t t-if="product.sudo().website_published">
-                    <t t-call="website_sale_cavarosa.product_grid"/>
-                </t>
-            </t>
-        </template>
-
         <template id="product_grid" name="Product Grid">
             <form action="/shop/cart/update" method="post">
                 <a t-att-href="'/shop/product/%s' %product.id">
@@ -133,6 +124,16 @@
                     </div>
                 </a>
             </form>
+        </template>
+
+        <template id="products_grid" name="Products Grid">
+            <t t-foreach="campaign_products" t-as="campaign_product">
+                <t t-if="campaign_product.product_id.sudo().website_published">
+                    <t t-call="website_sale_cavarosa.product_grid">
+                        <t t-set="product" t-value="campaign_product.product_id"/>
+                    </t>
+                </t>
+            </t>
         </template>
 
         <template id="no_campaign" name="No Campaign">
