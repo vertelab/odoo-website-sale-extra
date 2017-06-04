@@ -46,3 +46,16 @@ class product_template(models.Model):
         else:
             self.campaign_product = False
     campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')
+
+    @api.model
+    def products_list(self, domain, order, row):
+        domain += [('website_published', '=', True)]
+        products = self.env['product.template'].sudo().search(domain, order=order)
+        products_list = []
+        products_tmp = []
+        for i, product in enumerate(list(products)):
+            products_tmp.append(product)
+            if (i+1)%row == 0:
+                products_list.append(products_tmp)
+                products_tmp = []
+        return products_list
