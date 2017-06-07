@@ -29,7 +29,7 @@ Full address for delivery
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['sale'],
+    'depends': ['partner_show_contact_type', 'sale_customer_no'],
     'data': ['sale_delivery_address.xml',
     ],
     'application': False,
