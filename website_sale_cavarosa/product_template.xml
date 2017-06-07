@@ -12,6 +12,17 @@
         </template>
 
         <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//h1[@t-field='product.name']" position="after">
+                <p t-field="product.default_code" class="text-muted"/>
+                <t t-if="product.type == 'product'">
+                    <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807; height: 20px;">In stock</b>
+                    <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00; height: 20px;">Not in stock</b>
+                </t>
+                <t t-if="product.type != 'product'">
+                    <br/>
+                    <b style="height: 20px;"/>
+                </t>
+            </xpath>
             <xpath expr="//form[@class='js_add_cart_variants']" position="inside">
                 <input name="campaign_id" t-att-value="int(request.params.get('campaign_id', 0))" type="hidden"/>
             </xpath>
@@ -24,87 +35,66 @@
             </xpath>
         </template>
 
-        <template id="products_item" inherit_id="website_sale.products_item">
-            <xpath expr="//div[@t-if='product.product_variant_ids']" position="attributes">
-                <attribute name="t-if">product.product_variant_ids and product.campaign_product</attribute>
+        <template id="cart" inherit_id="website_sale.cart">
+            <xpath expr="//th[@class='decimal_precision']" position="before">
+                <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>
+                <t t-if="has_bigger">
+                    <th style="width: 70px;"/>
+                </t>
+            </xpath>
+            <xpath expr="//td[@name='price']" position="before">
+                <t t-if="line.product_id.uom_id.uom_type == 'bigger'">
+                    <td>
+                        <span>
+                            <t t-esc="int(line.product_id.uom_id.factor_inv)"/>x<t t-esc="int(line.product_id.unit_price)"/>
+                        </span>
+                    </td>
+                </t>
+            </xpath>
+            <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div[@class='text-muted']" position="attributes">
+                <attribute name="class">text-muted hidden</attribute>
             </xpath>
         </template>
 
-        <template id="products_item_extend" inherit_id="website_crm_campaign.products_item">
-            <xpath expr="//b[@t-if='product.sudo().qty_available &gt; 0.0']" position="attributes">
-                <attribute name="t-if">product.sudo().qty_available &gt; 0.0 and product.campaign_product</attribute>
+        <template id="continue_shopping" inherit_id="website_sale.continue_shopping">
+            <xpath expr="//a[@href='/shop']" position="attributes">
+                <attribute name="href">/campaign</attribute>
             </xpath>
-            <xpath expr="//b[@t-if='product.sudo().qty_available &lt;= 0.0']" position="attributes">
-                <attribute name="t-if">product.sudo().qty_available &lt;= 0.0 and product.campaign_product</attribute>
+        </template>
+
+        <template id="product_quantity" inherit_id="website_sale.product_quantity">
+            <xpath expr="//div[@class='css_quantity input-group oe_website_spinner']" position="attributes">
+                <attribute name="class">css_quantity input-group oe_website_spinner hidden</attribute>
             </xpath>
         </template>
 
         <template id="current_campaign" name="Current Campaign">
             <t t-call="website.layout">
                 <div id="wrap">
-                    <div class="oe_structure">
-                        <div class="mt64 mb64">
-                            <h1 t-field="campaign.name" class="text-center"/>
-                            <div class="oe_structure">
-                                <div t-field="campaign.website_description"/>
-                            </div>
-                            <t t-foreach="campaign.object_ids" t-as="object">
-                                <div class="container">
-                                    <t t-if="object.object_id._name == 'res.partner'">
-                                        <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
-                                            <h2 t-field="object.name" class="text-left"/>
-                                        </a>
-                                        <t t-call="website_sale_cavarosa.product_grid">
-                                            <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
-                                        </t>
+                    <div class="mt64 mb64">
+                        <h1 t-field="campaign.name" class="text-center"/>
+                        <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
+                        <div t-field="campaign.website_description"/>
+                        <t t-foreach="campaign.object_ids" t-as="object">
+                            <div class="container">
+                                <t t-if="object.object_id._name == 'res.partner'">
+                                    <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
+                                        <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
+                                    </a>
+                                    <p class="text-muted" t-field="object.object_id.website_short_description"/>
+                                    <t t-call="website_sale_cavarosa.products_grid">
+                                        <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                     </t>
-                                </div>
-                            </t>
-                        </div>
+                                </t>
+                            </div>
+                        </t>
                     </div>
                 </div>
             </t>
         </template>
 
         <template id="product_grid" name="Product Grid">
-            <t t-foreach="campaign_products" t-as="campaign_product">
-                <t t-set="product" t-value="campaign_product.product_id"/>
-                <a itemprop="url" t-att-href="'/shop/product/%s?campaign_id=%s' % (slug(product), campaign.id)">
-                    <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
-                        <div class="oe_cr_inner">
-                            <h3 t-field="product.name" class="text-center"/>
-                            <div class="oe_product_image">
-                                <img itemprop="image" class="img img-responsive campaign_product_img" t-att-src="website.image_url(product, 'image', None if product_image_big else '300x300')" t-att-alt="product.name"/>
-                            </div>
-                            <t t-if="product.campaign_product">
-                                <div class="product_price_div">
-                                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
-                                        <b>
-                                            <span t-field="product.unit_price" style="white-space: nowrap;"  t-field-options='{
-                                                   "widget": "monetary",
-                                                   "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
-                                                }'>
-                                            </span>
-                                            <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
-                                        </b>
-                                        <br/>
-                                        <t t-if="product.uom_id.uom_type == 'bigger'">
-                                            <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
-                                        </t>
-                                        <t t-if="product.uom_id.uom_type != 'bigger'">
-                                            <br/>
-                                        </t>
-                                    </div>
-                                </div>
-                            </t>
-                        </div>
-                    </div>
-                </a>
-            </t>
-        </template>
-
-        <template id="products_grid" name="Products Grid">
-            <t t-if="product.sudo().website_published">
+            <form action="/shop/cart/update" method="post">
                 <a t-att-href="'/shop/product/%s' %product.id">
                     <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
                         <div class="oe_cr_inner">
@@ -114,7 +104,7 @@
                             </div>
                             <t t-if="product.campaign_product">
                                 <div class="product_price_div">
-                                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids">
+                                    <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids and product.campaign_product">
                                         <b>
                                             <span t-field="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).price" style="white-space: nowrap; color: #000;"  t-field-options='{
                                                 "widget": "monetary",
@@ -125,11 +115,19 @@
                                             <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                                         </b>
                                         <br/>
+                                        <t t-if="product.type == 'product'">
+                                            <b t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807; height: 20px;">In stock</b>
+                                            <b t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00; height: 20px;">Not in stock</b>
+                                        </t>
+                                        <t t-if="product.type != 'product'">
+                                            <br/>
+                                            <b style="height: 20px;"/>
+                                        </t>
                                         <t t-if="product.uom_id.uom_type == 'bigger'">
-                                            <span>You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</span>
+                                            <p style="height: 36px;">You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</p>
                                         </t>
                                         <t t-if="product.uom_id.uom_type != 'bigger'">
-                                            <br/>
+                                            <p style="height: 36px;"/>
                                         </t>
                                     </div>
                                 </div>
@@ -137,19 +135,36 @@
                         </div>
                     </div>
                 </a>
+            </form>
+        </template>
+
+        <template id="products_grid" name="Products Grid">
+            <t t-if="products">
+                <t t-foreach="products" t-as="product">
+                    <t t-if="product.sudo().website_published">
+                        <t t-call="website_sale_cavarosa.product_grid"/>
+                    </t>
+                </t>
+            </t>
+            <t t-if="campaign_products">
+                <t t-foreach="campaign_products" t-as="campaign_product">
+                    <t t-if="campaign_product.product_id.sudo().website_published">
+                        <t t-call="website_sale_cavarosa.product_grid">
+                            <t t-set="product" t-value="campaign_product.product_id"/>
+                        </t>
+                    </t>
+                </t>
             </t>
         </template>
 
         <template id="no_campaign" name="No Campaign">
             <t t-call="website.layout">
                 <div id="wrap">
-                    <div class="oe_structure">
-                        <div class="mt64 mb64">
-                            <h1 class="text-center">There is no campaign ongoing!</h1>
-                            <t t-if="next_campaign_date">
-                                <h2 class="text-center">Next campaign starts <t t-esc="next_campaign_date"/></h2>
-                            </t>
-                        </div>
+                    <div class="mt64 mb64">
+                        <h1 class="text-center">There is no campaign ongoing!</h1>
+                        <t t-if="next_campaign_date">
+                            <h2 class="text-center">Next campaign starts <t t-esc="next_campaign_date"/></h2>
+                        </t>
                     </div>
                 </div>
             </t>
