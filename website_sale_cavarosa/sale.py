@@ -45,8 +45,10 @@ class sale_order_line(models.Model):
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
     @api.one
+    @api.depends('product_id')
     def _supplier_id(self):
-        self.supplier_id = self.procurement_ids.mapped('purchase_id.partner_id')[0]
+        self.supplier_id = self.product_id.seller_ids.mapped('name')[0] if len(self.product_id.seller_ids.mapped('name')) > 0 else None
+        self.campaign_id = self.order_id.campaign_id
 
     @api.one
     def _unit_qty(self):
@@ -55,7 +57,7 @@ class sale_order_line(models.Model):
     @api.one
     def _carrier_info(self):
         if self.order_id.carrier_id == self.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
-            self.carrier_info = self.order_id.carrier_id.name + ': ' + self.order_id.cavarosa_box
+            self.carrier_info = self.order_id.carrier_id.name if self.order_id.carrier_id else '' + ': ' + self.order_id.cavarosa_box or ''
         elif self.order_id.carrier_id.pickup_location: #utlämningsställe
             self.carrier_info = self.order_id.carrier_id.name + ': ' + self.order_id.partner_shipping_id.name
         else:   #hemleverans
