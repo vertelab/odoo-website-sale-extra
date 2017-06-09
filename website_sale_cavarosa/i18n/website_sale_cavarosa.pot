@@ -1,0 +1,475 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+#	* website_sale_cavarosa
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 8.0-20170508\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2017-06-09 12:46+0000\n"
+"PO-Revision-Date: 2017-06-09 12:46+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.cart
+msgid "/campaign"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:product.uom,name:website_sale_cavarosa.uom_12_pack
+msgid "12-pack"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:product.uom,name:website_sale_cavarosa.uom_3_pack
+msgid "3-pack"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:product.uom,name:website_sale_cavarosa.uom_6_pack
+msgid "6-pack"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: code:addons/website_sale_cavarosa/crm.py:30
+#: model:ir.model,name:website_sale_cavarosa.model_crm_tracking_campaign
+#: view:sale.order.line:website_sale_cavarosa.view_sales_order_line_filter
+#: field:sale.order.line,campaign_id:0
+#, python-format
+msgid "Campaign"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.partner,campaign_ids:0
+msgid "Campaigns"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.cavarosa.import.wizard:website_sale_cavarosa.view_cavarosa_import_form
+msgid "Cancel"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,carrier_info:0
+msgid "Carrier info"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.ui.menu,name:website_sale_cavarosa.menu_cavarosa_import
+msgid "Cavarosa Import"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.cavarosa.import.wizard:website_sale_cavarosa.view_cavarosa_import_form
+msgid "Cavarosa PRoduct Import"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.actions.act_window,name:website_sale_cavarosa.action_cavarosa_import_products
+#: model:ir.ui.menu,name:website_sale_cavarosa.menu_cavarosa_product_import
+msgid "Cavarosa Product Import"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,city:0
+#: field:sale.order.line,shipping_city:0
+#: view:website:website_sale.checkout
+msgid "City"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.model,name:website_sale_cavarosa.model_res_country
+#: view:res.district:website_sale_cavarosa.view_district_filter
+#: field:res.district,country_id:0
+msgid "Country"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,create_uid:0
+#: field:sale.cavarosa.import.wizard,create_uid:0
+msgid "Created by"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,create_date:0
+#: field:sale.cavarosa.import.wizard,create_date:0
+msgid "Created on"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.snippets
+msgid "Current Campaign"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.snippets
+msgid "Current Campaign Navigator"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,customers:0
+msgid "Customers"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.layout
+msgid "Denna webbsida innehåller information om alkoholdrycker. För inköp och besök på denna webbplats måste du vara 20 år eller äldre."
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,display_name:0
+#: field:sale.cavarosa.import.wizard,display_name:0
+msgid "Display Name"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.actions.act_window,name:website_sale_cavarosa.action_district_form
+#: model:ir.ui.menu,name:website_sale_cavarosa.menu_district_form
+#: view:res.district:website_sale_cavarosa.view_district_form
+#: field:res.partner,district_id:0
+msgid "District"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.country,district_ids:0
+msgid "Districts"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,districts:0
+msgid "Distrikt"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.partner,drupal_parent_ids:0
+msgid "Drupal Parents"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:crm.tracking.campaign,estimated_delivery:0
+msgid "Estimated delivery"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.snippet_options
+msgid "Get Campaign"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:res.district:website_sale_cavarosa.view_district_filter
+msgid "Group By"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,id:0
+#: field:sale.cavarosa.import.wizard,id:0
+msgid "ID"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.cavarosa.import.wizard:website_sale_cavarosa.view_cavarosa_import_form
+msgid "Import"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+#: view:website:website_sale_cavarosa.product_grid
+msgid "In stock"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:product.template,campaign_product:0
+msgid "Is Campaign Product"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.layout
+msgid "Jag är 20 år eller äldre"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.layout
+msgid "Jag är under 20 år"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,__last_update:0
+#: field:sale.cavarosa.import.wizard,__last_update:0
+msgid "Last Modified on"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,write_uid:0
+#: field:sale.cavarosa.import.wizard,write_uid:0
+msgid "Last Updated by"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,write_date:0
+#: field:sale.cavarosa.import.wizard,write_date:0
+msgid "Last Updated on"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,suppliers:0
+msgid "Leverantörer"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,mobile:0
+msgid "Mobile"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:res.district:website_sale_cavarosa.view_district_form
+#: field:res.district,name:0
+#: field:sale.order.line,partner:0
+#: field:sale.order.line,product_name:0
+#: field:sale.order.line,shipping_name:0
+msgid "Name"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.no_campaign
+msgid "Next campaign starts"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+#: view:website:website_sale_cavarosa.product_grid
+msgid "Not in stock"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,order_lines:0
+msgid "Order Lines"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,order_name:0
+msgid "Order Reference"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.producers
+msgid "Our Producers"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.model,name:website_sale_cavarosa.model_res_partner
+msgid "Partner"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,password:0
+msgid "Password"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.actions.report.xml,name:website_sale_cavarosa.action_sol_glabels_tags_report
+msgid "Print Sale Order Line Tags"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.country
+#: view:website:website_sale_cavarosa.district
+#: view:website:website_sale_cavarosa.producer_products
+msgid "Producers"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.model,name:website_sale_cavarosa.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,produktvisningar:0
+msgid "Produktvisningar"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.actions.server,name:website_sale_cavarosa.sale_order_line_tags
+msgid "SO line tags"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.model,name:website_sale_cavarosa.model_sale_order_line
+msgid "Sales Order Line"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:res.district:website_sale_cavarosa.view_district_filter
+msgid "Search District"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:res.district:website_sale_cavarosa.view_district_tree
+msgid "State"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.order.line:website_sale_cavarosa.view_sales_order_line_filter
+msgid "Status"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,shipping_street:0
+#: field:sale.order.line,street:0
+msgid "Street"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.order.line:website_sale_cavarosa.view_sales_order_line_filter
+msgid "Supplier"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,supplier_id:0
+msgid "Supplier id"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.district,partner_ids:0
+msgid "Suppliers"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.no_campaign
+msgid "There is no campaign ongoing!"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: help:product.template,website_short_description:0
+msgid "This description only shows in product grid view"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: help:sale.order.line,campaign_id:0
+msgid "This is a name that helps you keep track of your different campaign efforts Ex: Fall_Drive, Christmas_Special"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:product.template,unit_price:0
+msgid "Unit Price"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,unit_qty:0
+msgid "Unit qty"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,username:0
+msgid "Username"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,users:0
+msgid "Users"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: model:ir.model,name:website_sale_cavarosa.model_website
+msgid "Website"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:res.country,website_description:0
+#: field:res.district,website_description:0
+msgid "Website Description"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:product.template,website_short_description:0
+msgid "Website Short Description"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+#: view:website:website_sale_cavarosa.product_grid
+msgid "You buy this product"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: help:sale.cavarosa.import.wizard,password:0
+msgid "Your password on wiggum.vertel.se"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: help:sale.cavarosa.import.wizard,username:0
+msgid "Your username on wiggum.vertel.se"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.order.line,shipping_zip:0
+#: field:sale.order.line,zip:0
+msgid "Zip"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: field:sale.cavarosa.import.wizard,commerce_product:0
+msgid "commerce_product.csv"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+msgid "css_quantity input-group oe_website_spinner hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.checkout
+msgid "form-group #{error.get('state_id') and 'has-error' or ''} col-lg-6 hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.checkout
+msgid "form-group #{error.get('street') and 'has-error' or ''} col-lg-6 hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.checkout
+msgid "form-group #{error.get('vat') and 'has-error' or ''} col-lg-6 hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+msgid "hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+#: view:website:website_sale_cavarosa.product_grid
+msgid "in a package"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:sale.cavarosa.import.wizard:website_sale_cavarosa.view_cavarosa_import_form
+msgid "or"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product
+msgid "product.campaign_product"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.product_price
+msgid "product.unit_price"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale.cart
+#: view:website:website_sale.product
+msgid "text-muted hidden"
+msgstr ""
+
+#. module: website_sale_cavarosa
+#: view:website:website.layout
+msgid "Är du under 20 år?"
+msgstr ""
+

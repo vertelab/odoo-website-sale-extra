@@ -10,6 +10,10 @@
                 <field name="list_price" position="after">
                     <field name="unit_price"/>
                 </field>
+                <field name="description_sale" position="before">
+                    <label for="website_short_description"/>
+                    <field name="website_short_description"/>
+                </field>
             </field>
         </record>
 
