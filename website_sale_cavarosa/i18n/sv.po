@@ -1,6 +1,6 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-# 	* website_sale_cavarosa
+#   * website_sale_cavarosa
 #
 msgid ""
 msgstr ""
@@ -303,6 +303,12 @@ msgstr "Orderrader"
 #: view:res.district:website_sale_cavarosa.view_district_filter
 msgid "Search District"
 msgstr "Sök i distriktet"
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.current_campaign
+#: view:website:website_sale_cavarosa.district
+msgid "Short Description for"
+msgstr "Kortbeskrivning för"
 
 #. module: website_sale_cavarosa
 #: view:res.district:website_sale_cavarosa.view_district_tree

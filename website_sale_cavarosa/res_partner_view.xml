@@ -134,7 +134,8 @@
                                                 <h3 t-field="supplier.name"/>
                                             </a>
                                             <div class="col-md-12" style="padding: 0px;">
-                                                <div class="col-md-12 mb8" style="padding: 0px;" t-field="supplier.website_short_description"/>
+                                                <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
+                                                <div class="text-muted col-md-12 mb8" style="padding: 0px;" t-field="supplier.website_short_description"/>
                                                 <t t-if="supplier.image">
                                                     <div class="col-md-12" style="padding: 0px;">
                                                         <div class="o_container">

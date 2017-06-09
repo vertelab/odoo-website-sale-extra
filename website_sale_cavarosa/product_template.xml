@@ -92,7 +92,8 @@
                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
                                         <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
                                     </a>
-                                    <p class="text-muted" t-field="object.object_id.website_short_description"/>
+                                    <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="object.object_id.name"/></b></h3>
+                                    <div class="text-muted" t-field="object.object_id.website_short_description"/>
                                     <t t-call="website_sale_cavarosa.products_grid">
                                         <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                     </t>
