@@ -70,6 +70,27 @@
             </xpath>
         </template>
 
+        <template id="payment" inherit_id="website_sale.payment">
+            <xpath expr="//th[@width='100']" position="before">
+                <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>
+                <t t-if="has_bigger">
+                    <th style="width: 70px;"/>
+                </t>
+            </xpath>
+            <xpath expr="//td[@class='text-center']" position="before">
+                <t t-if="line.product_id.uom_id.uom_type == 'bigger'">
+                    <td>
+                        <span>
+                            <t t-esc="int(line.product_id.uom_id.factor_inv)"/>x<t t-esc="int(line.product_id.unit_price)"/>
+                        </span>
+                    </td>
+                </t>
+            </xpath>
+            <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+                <span t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded", "style": "width: 64px; height: 64px;"}'/>
+            </xpath>
+        </template>
+
         <template id="continue_shopping" inherit_id="website_sale.continue_shopping">
             <xpath expr="//a[@href='/shop']" position="attributes">
                 <attribute name="href">/campaign</attribute>
