@@ -62,6 +62,9 @@
                     </td>
                 </t>
             </xpath>
+            <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+                <span t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded", "style": "width: 64px; height: 64px;"}'/>
+            </xpath>
             <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div[@class='text-muted']" position="attributes">
                 <attribute name="class">text-muted hidden</attribute>
             </xpath>
