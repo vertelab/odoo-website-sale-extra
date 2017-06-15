@@ -2,6 +2,50 @@
 <openerp>
     <data>
 
+        <template id="shop_menu" name="Shop Menu">
+            <div class="dropdown">
+                <button class="btn btn-default dropdown-toggle" type="button" id="shopmenus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Shop Menu <span class="caret"></span>
+                </button>
+                <ul id="shopmenus_dropdown" class="dropdown-menu" aria-labelledby="shopmenus">
+                    <li>
+                        <a href="/page/fragor-svar">
+                            <span>Frågor &amp; svar</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/om-shopen">
+                            <span>Om shopen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/villkor">
+                            <span>Villkor</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/personuppgifter">
+                            <span>Personuppgifter</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/uthamtningsstallen">
+                            <span>Uthämtningsställen</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/hemleverans-ovriga-sverige">
+                            <span>Hemleverans övriga Sverige</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/page/prenumerationer">
+                            <span>Prenumerationer</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </template>
+
         <template id="product_price" inherit_id="website_sale.product_price">
             <xpath expr="//b[@class='oe_price']" position="attributes">
                 <attribute name="t-field">product.unit_price</attribute>
@@ -12,6 +56,7 @@
         </template>
 
         <template id="product" inherit_id="website_sale.product">
+            <xpath expr="//t[@t-call='website_sale.search']" position="replce"/>
             <xpath expr="//h1[@t-field='product.name']" position="after">
                 <p t-field="product.default_code" class="text-muted"/>
                 <t t-if="product.type == 'product'">
@@ -125,6 +170,7 @@
                             </div>
                         </t>
                     </div>
+                    <t t-call="website_sale_cavarosa.shop_menu"/>
                 </div>
             </t>
         </template>

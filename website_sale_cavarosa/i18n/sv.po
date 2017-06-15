@@ -312,6 +312,16 @@ msgid "Short Description for"
 msgstr "Kortbeskrivning för"
 
 #. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.producer_products
+msgid "Description for"
+msgstr "Beskrivning för"
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.producer_products
+msgid "Image for"
+msgstr "Bild för"
+
+#. module: website_sale_cavarosa
 #: view:res.district:website_sale_cavarosa.view_district_tree
 msgid "State"
 msgstr "State"
@@ -473,3 +483,8 @@ msgstr "text-muted hidden"
 #: view:website:website.layout
 msgid "Är du under 20 år?"
 msgstr "Är du under 20 år?"
+
+#. module: website_sale_cavarosa
+#: view:website:website_sale_cavarosa.shop_menu
+msgid "Shop Menu"
+msgstr "Shopmeny"

@@ -64,9 +64,12 @@
                         </div>
                         <div class="col-md-12">
                             <h2 t-field="supplier.name" class="text-center"/>
+                            <h3 class="css_non_editable_mode_hidden">Description for <b><t t-esc="supplier.name"/></b></h3>
                             <div t-field="supplier.website_description"/>
                             <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
                             <div class="text-muted css_non_editable_mode_hidden mb32" t-field="supplier.website_short_description"/>
+                            <h3 class="css_non_editable_mode_hidden">Image for <b><t t-esc="supplier.name"/></b></h3>
+                            <span itemprop="image" contenteditable="true" t-field="supplier.image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;css_non_editable_mode_hidden&quot;, &quot;alt-field&quot;: &quot;name&quot;}"/>
                             <t t-if="products">
                                 <t t-call="website_sale_cavarosa.products_grid"/>
                             </t>
