@@ -65,6 +65,8 @@
                         <div class="col-md-12">
                             <h2 t-field="supplier.name" class="text-center"/>
                             <div t-field="supplier.website_description"/>
+                            <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
+                            <div class="text-muted css_non_editable_mode_hidden mb32" t-field="supplier.website_short_description"/>
                             <t t-if="products">
                                 <t t-call="website_sale_cavarosa.products_grid"/>
                             </t>

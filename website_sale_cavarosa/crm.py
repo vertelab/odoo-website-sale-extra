@@ -77,7 +77,7 @@ class current_campaign(http.Controller):
         for o in campaign.object_ids:
             if o.object_id._name == 'res.partner':
                 s = {}
-                s['supplier_url'] = '#supplier_%s' %o.object_id.id
+                s['supplier_url'] = '/producer/%s' %o.object_id.id
                 s['supplier_name'] = o.object_id.name
                 s['supplier_image'] = '/website/imagemagick/res.partner/image/%s/%s' %(o.object_id.id, request.env.ref('website_sale_cavarosa.img_supplier_nav').id)
                 supplier_list.append(s)

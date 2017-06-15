@@ -24,7 +24,7 @@ website.snippet.options.current_campaign_navigator_option = website.snippet.Opti
                     content = content.replace("image_url", data[key]['supplier_image']);
                     supplier_content += content;
                 });
-                self.$target.find(".supplier_content").html(supplier_content);
+                self.$target.find(".supplier_content").html(supplier_content + "<t t-esc='user_id'/>");
             });
         }
     }

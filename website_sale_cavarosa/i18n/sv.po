@@ -307,6 +307,7 @@ msgstr "Sök i distriktet"
 #. module: website_sale_cavarosa
 #: view:website:website_sale_cavarosa.current_campaign
 #: view:website:website_sale_cavarosa.district
+#: view:website:website_sale_cavarosa.producer_products
 msgid "Short Description for"
 msgstr "Kortbeskrivning för"
 
