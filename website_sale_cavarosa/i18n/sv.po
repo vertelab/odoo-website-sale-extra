@@ -25,17 +25,17 @@ msgstr "/campaign"
 #. module: website_sale_cavarosa
 #: model:product.uom,name:website_sale_cavarosa.uom_12_pack
 msgid "12-pack"
-msgstr "12-paket"
+msgstr "12-pack"
 
 #. module: website_sale_cavarosa
 #: model:product.uom,name:website_sale_cavarosa.uom_3_pack
 msgid "3-pack"
-msgstr "3-paket"
+msgstr "3-pack"
 
 #. module: website_sale_cavarosa
 #: model:product.uom,name:website_sale_cavarosa.uom_6_pack
 msgid "6-pack"
-msgstr "6-paket"
+msgstr "6-pack"
 
 #. module: website_sale_cavarosa
 #: code:addons/website_sale_cavarosa/crm.py:30

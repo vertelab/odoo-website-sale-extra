@@ -15,8 +15,8 @@
             <xpath expr="//h1[@t-field='product.name']" position="after">
                 <p t-field="product.default_code" class="text-muted"/>
                 <t t-if="product.type == 'product'">
-                    <b><p t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
-                    <b><p t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</p></b>
+                    <b><p t-if="product.sudo().virtual_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
+                    <b><p t-if="product.sudo().virtual_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</p></b>
                 </t>
                 <t t-if="product.type != 'product'">
                     <b><p/></b>
