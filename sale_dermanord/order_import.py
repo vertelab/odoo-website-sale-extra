@@ -149,12 +149,13 @@ class DermanordImport(models.TransientModel):
                 })
                 for i,art in enumerate(artnr):
                     _logger.warn('products: %s %s' % (i,art))
-                    product = self.env['product.product'].search([('default_code','=',art)])
+                    product = self.env['product.product'].search_read([('default_code','=',art)],['name'])
+                    _logger.warn('product %s' % product)
                     if product:
                         self.env['sale.order.line'].create({
                             'order_id': order.id,
-                            'product_id': product.id,
-                            'product_uom_qty': antal[i],
+                            'product_id': product[0]['id'],
+                            'product_uom_qty': antal[i-1],
                         })
                                 
 #
