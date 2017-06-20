@@ -31,7 +31,7 @@ try:
     from xlrd.book import Book
     from xlrd.sheet import Sheet
 except:
-    _logger.info('xlrd not installed.')
+    _logger.info('xlrd not installed. sudo pip install xlrd')
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -197,7 +197,7 @@ class DermanordImport(models.TransientModel):
                         self.env['sale.order.line'].create({
                             'order_id': order.id,
                             'product_id': product.id,
-                            'product_uom_qty': antal[i],
+                            'product_uom_qty': antal[i-1],
                         })
 
 
