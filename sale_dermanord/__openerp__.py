@@ -30,6 +30,9 @@ Special order imports for Dermanord AB
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
     'depends': ['sale',],
+    'external_dependencies': {
+        'python': ['xlrd','pdfminer','unicodecsv'],
+    },
     'data': [
         'order_import_view.xml',
         ],
