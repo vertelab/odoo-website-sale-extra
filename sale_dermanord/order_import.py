@@ -147,16 +147,18 @@ class DermanordImport(models.TransientModel):
                     'client_order_ref': ordernummer,
                     'date_order': orderdatum,
                 })
+                missing_products = []
                 for i,art in enumerate(artnr):
-                    _logger.warn('products: %s %s' % (i,art))
-                    product = self.env['product.product'].search_read([('default_code','=',art)],['name'])
-                    _logger.warn('product %s' % product)
+                    product = self.env['product.product'].search([('default_code','=',art)],['name'])
                     if product:
                         self.env['sale.order.line'].create({
                             'order_id': order.id,
-                            'product_id': product[0]['id'],
-                            'product_uom_qty': antal[i-1],
+                            'product_id': product.id,
+                            'product_uom_qty': antal[i] if i <= len(antal) else 0,
                         })
+                    else:
+                        missing_products.append(art)
+                    
                                 
 #
 #    Skincity   
@@ -241,7 +243,7 @@ class DermanordImport(models.TransientModel):
                     'res_name': order.name,
                     'res_model': 'sale.order',
                     'res_id': order.id,
-                    'datas': base64.encodestring(self.import_file),
+                    'datas': base64.encodestring(self.order_file),
                     'datas_fname': order.client_order_ref,
                 })
             #~ if attachment.mimetype == 'application/pdf':
