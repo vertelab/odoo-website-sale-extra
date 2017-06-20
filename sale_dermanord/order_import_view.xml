@@ -11,6 +11,10 @@
                     <sheet>
                         <group>
                             <field name="order_file"/>
+                            <field name="info" readonly="1"/>
+                            <field name="mime" invisible="1"/>
+                            <field name="import_type" invisible="1"/>
+                            <field name="tmp_file" invisible="1"/>
                         </group>
                     </sheet>
                     <footer>
