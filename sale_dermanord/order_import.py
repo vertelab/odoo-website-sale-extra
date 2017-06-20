@@ -80,7 +80,7 @@ class DermanordImport(models.TransientModel):
                     pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', self.tmp_file, '-'], shell=False, stdout=PIPE)
                     (content, _) = pop.communicate()
                 except OSError,e:
-                    _logger.warning("Failed attempt to execute pdftotext. This program is necessary to index the file %s of MIME type %s. Detailed error available at DEBUG level.", self.tmp_file, self._getMimeTypes()[0])
+                    _logger.warning("Failed attempt to execute pdftotext. This program is necessary to index the file %s of MIME type %s. Detailed error available at DEBUG level.", self.tmp_file, self.mime)
                     _logger.debug("Trace of the failed file indexing attempt.", exc_info=True)
                     raise Warning(e)
                 lines = content.splitlines()
@@ -108,9 +108,10 @@ class DermanordImport(models.TransientModel):
                 #~ pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', fname, '-'], shell=False, stdout=PIPE)
                 pop = Popen(['pdf2txt.py', self.tmp_file], shell=False, stdout=PIPE)
                 (content, _) = pop.communicate()
-            except OSError:
-                _logger.warning("Failed attempt to execute pdftotext. This program is necessary to index the file %s of MIME type %s. Detailed error available at DEBUG level.", self.tmp_file, self._getMimeTypes()[0])
+            except OSError,e:
+                _logger.warning("Failed attempt to execute pdf2txt.py. This program is necessary to decode the file %s of MIME type %s. Detailed error available at DEBUG level.", self.tmp_file, self.mime)
                 _logger.debug("Trace of the failed file indexing attempt.", exc_info=True)
+                raise Warning(e)
             lines = content.splitlines()
 #
 #   Fina mig i Hedemora AB
@@ -233,6 +234,18 @@ class DermanordImport(models.TransientModel):
 #
 # END
 #
+        if order:
+            attachment = self.env['ir.attachment'].create({
+                    'name': order.client_order_ref,
+                    'res_name': order.name,
+                    'res_model': 'sale.order',
+                    'res_id': order.id,
+                    'datas': base64.encodestring(self.import_file),
+                    'datas_fname': order.client_order_ref,
+                })
+            #~ if attachment.mimetype == 'application/pdf':
+                #~ attachment.pdf2image(800,1200)
+
         return {'type': 'ir.actions.act_window',
                 'res_model': 'sale.order',
                 'view_type': 'form',
