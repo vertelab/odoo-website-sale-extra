@@ -46,7 +46,7 @@ class DermanordImport(models.TransientModel):
     _name = 'sale.dermanord.import.wizard'
 
     order_file = fields.Binary(string='Order file')
-    mime = fields.Selection([('pdf','application/pdf'),('excel','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
+    mime = fields.Selection([('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
     import_type = fields.Selection([('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','SKINCITY SWEDEN AB')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
@@ -88,7 +88,7 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'finamig'
                 elif 'SKINCITY SWEDEN AB' in content:
                     self.import_type = 'skincity'
-            elif self.mime == 'excel':
+            elif self.mime == 'xls':
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
                 except XLRDError, e:
@@ -100,9 +100,12 @@ class DermanordImport(models.TransientModel):
 
 
         
-    @api.one
+    @api.multi
     def import_files(self):
         order = None
+        missing_products = []                
+        ordernummer = ''
+        orderdatum = ''
         if self[0].mime == 'pdf':
             try:
                 #~ pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', fname, '-'], shell=False, stdout=PIPE)
@@ -131,7 +134,7 @@ class DermanordImport(models.TransientModel):
                             _logger.warn('Art Nr %s' % lines[art])
                             artnr.append(lines[art].replace('(cid:160)',''))
                     if lines[line] == 'Antal':
-                        for ant in range(line+1,len(artnr)+line):
+                        for ant in range(line+1,len(artnr)+line+1):
                             _logger.warn('Antal %s' % lines[ant])
                             antal.append(int(lines[ant].replace(' st','')))
                         line += len(antal)
@@ -147,18 +150,16 @@ class DermanordImport(models.TransientModel):
                     'client_order_ref': ordernummer,
                     'date_order': orderdatum,
                 })
-                missing_products = []
                 for i,art in enumerate(artnr):
-                    product = self.env['product.product'].search([('default_code','=',art)],['name'])
+                    product = self.env['product.product'].search([('default_code','=',art)])
                     if product:
                         self.env['sale.order.line'].create({
                             'order_id': order.id,
                             'product_id': product.id,
-                            'product_uom_qty': antal[i] if i <= len(antal) else 0,
+                            'product_uom_qty': antal[i] if i < len(antal) else 0,
                         })
                     else:
                         missing_products.append(art)
-                    
                                 
 #
 #    Skincity   
@@ -178,15 +179,17 @@ class DermanordImport(models.TransientModel):
                             _logger.warn('Art Nr %s' % lines[art].split()[0])
                             artnr.append(lines[art].split()[0])
                     if lines[line] == 'Antal':
-                        for ant in range(line+1,len(artnr)+line):
-                            _logger.warn('Antal %s' % lines[ant])
-                            antal.append(int(lines[ant]))
-                        line += len(antal)
+                        for ant in range(line+1,len(artnr)+line+1):
+                            _logger.warn('Antal %s | %s (%s)' % (lines[ant],line,len(lines)))
+                            if lines[ant] == 'Belopp':
+                                break
+                            antal.append(int(lines[ant] or 0))
+                            line += 1
+                        _logger.warn('After antal %s | %s %s %s' % (antal,line,len(antal),len(lines)))
                     if lines[line] == 'Inköpsorder':
                         ordernummer = lines[line].split()[1]
                     if lines[line] == 'Orderdatum':
-                        line += 5
-                        orderdatum = lines[line]
+                        orderdatum = lines[line+5]
                     line += 1
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
@@ -200,14 +203,12 @@ class DermanordImport(models.TransientModel):
                         self.env['sale.order.line'].create({
                             'order_id': order.id,
                             'product_id': product.id,
-                            'product_uom_qty': antal[i-1],
+                            'product_uom_qty': antal[i],
                         })
-
-
-
-
-                
-        elif self[0].mime == 'excel':
+                    else:
+                        missing_products.append(art)
+                    
+        elif self[0].mime == 'xls':
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
             except XLRDError, e:
@@ -233,17 +234,22 @@ class DermanordImport(models.TransientModel):
                                         'product_id': product.id,
                                         'product_uom_qty': int(wb.cell_value(line,6)),
                                     })
+                        else:
+                            missing_products.append(wb.cell_value(line,4))
                                     
 #
 # END
 #
+        
+        if missing_products and order:
+            order.note = 'Saknade produkter: ' + ','.join(missing_products)
         if order:
             attachment = self.env['ir.attachment'].create({
-                    'name': order.client_order_ref,
+                    'name': order.client_order_ref  + '.' + self.mime,
                     'res_name': order.name,
                     'res_model': 'sale.order',
                     'res_id': order.id,
-                    'datas': base64.encodestring(self.order_file),
+                    'datas': self.order_file,
                     'datas_fname': order.client_order_ref,
                 })
             #~ if attachment.mimetype == 'application/pdf':
@@ -255,7 +261,7 @@ class DermanordImport(models.TransientModel):
                 'view_mode': 'form',
                  'view_id': self.env.ref('sale.view_order_form').id,
                  'res_id': order.id if order else None,
-                 'target': 'new',
+                 'target': 'current',
                  'context': {},
                  }
 

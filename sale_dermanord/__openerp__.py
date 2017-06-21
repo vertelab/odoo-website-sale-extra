@@ -26,6 +26,10 @@
     'description': """
 Special order imports for Dermanord AB
 ======================================
+* Fina mig i Hedemora AB (pdf)
+* Lyko Online AB (Excel)
+* SKINCITY SWEDEN AB (pdf)
+
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
