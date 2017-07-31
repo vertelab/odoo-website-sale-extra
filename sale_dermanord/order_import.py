@@ -33,6 +33,8 @@ try:
 except:
     _logger.info('xlrd not installed. sudo pip install xlrd')
 
+import urllib2
+
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -47,7 +49,7 @@ class DermanordImport(models.TransientModel):
 
     order_file = fields.Binary(string='Order file')
     mime = fields.Selection([('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
-    import_type = fields.Selection([('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','SKINCITY SWEDEN AB')])
+    import_type = fields.Selection([('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','SKINCITY SWEDEN AB')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     
@@ -96,6 +98,11 @@ class DermanordImport(models.TransientModel):
 
                 if wb.cell_value(0,2) == u'Lyko Artikelnr':
                     self.import_type = 'lyko'
+                if wb.cell_value(0,0) == u'Isaksen & CO AS ':
+                    self.import_type = 'isaksen'
+                if wb.cell_value(2,1) == u'13610404':
+                    self.import_type = 'nordicfeel'
+                                        
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
 
@@ -236,7 +243,50 @@ class DermanordImport(models.TransientModel):
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,4))
-                                    
+#
+# Isaksen
+#
+            if self[0].import_type == 'isaksen':
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': wb.cell_value(1,8),
+                })
+                l = 18
+                for line in range(l,wb.nrows):
+                    if wb.cell_value(line,0) not in [u'Item#','']:
+                        product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,0))])
+                        if product:
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,0),wb.cell_value(line,5)))
+                            self.env['sale.order.line'].create({
+                                        'order_id': order.id,
+                                        'product_id': product.id,
+                                        'product_uom_qty': int(wb.cell_value(line,5)),
+                                    })
+                        else:
+                            missing_products.append(wb.cell_value(line,0))
+#
+# Nordic Feel
+#
+            if self[0].import_type == 'nordicfeel':
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': wb.cell_value(2,0),
+                })
+                l = 6
+                for line in range(l,wb.nrows):
+                    if wb.cell_value(line,1) not in [u'Your ProductNo','']:
+                        product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,1))])
+                        if product:
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,1),wb.cell_value(line,6)))
+                            self.env['sale.order.line'].create({
+                                        'order_id': order.id,
+                                        'product_id': product.id,
+                                        'product_uom_qty': int(wb.cell_value(line,6)),
+                                    })
+                        else:
+                            missing_products.append(wb.cell_value(line,1))
 #
 # END
 #
