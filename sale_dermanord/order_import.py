@@ -33,7 +33,10 @@ try:
 except:
     _logger.info('xlrd not installed. sudo pip install xlrd')
 
-import urllib2
+from lxml import html
+import requests
+
+import re
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -48,8 +51,9 @@ class DermanordImport(models.TransientModel):
     _name = 'sale.dermanord.import.wizard'
 
     order_file = fields.Binary(string='Order file')
-    mime = fields.Selection([('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
-    import_type = fields.Selection([('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','SKINCITY SWEDEN AB')])
+    order_url = fields.Char(string='Url')
+    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
+    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'Eckerö Group - Rederiaktiebolaget Eckerö'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     
@@ -75,8 +79,8 @@ class DermanordImport(models.TransientModel):
                 _logger.debug("Trace of the failed MIME file attempt.", exc_info=True)
                 raise Warning(e)
 
-
             self.mime = self.get_selection_text('mime',read_mime)
+            
             if self.mime == 'pdf':
                 try:
                     pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', self.tmp_file, '-'], shell=False, stdout=PIPE)
@@ -102,9 +106,37 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'isaksen'
                 if wb.cell_value(2,1) == u'13610404':
                     self.import_type = 'nordicfeel'
+            elif self.mime == 'text':
+                birka = re.compile(u'(Rederi Ab Eckerö)')
+                if len(birka.findall(self.order_file.decode('base64')))>0:
+                    self.import_type = 'birka'
+
                                         
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
+
+    @api.one
+    @api.onchange('order_url')
+    def check_url(self):
+        self.mime = None
+        self.import_type = None
+        self.info = None
+        self.tmp_file = None
+        
+        if self.order_url:
+            self.mime = 'url'
+            try:
+                page = requests.get(self.order_url.strip())
+            except requests.exceptions.RequestException as e:
+                raise Warning(e)
+            tree = html.fromstring(page.content)
+            specter_head = tree.xpath('//tr/td/font/text()')
+            specter_lines = tree.xpath('//tr/td/nobr/text()')
+            
+            if specter_head and specter_head[6] == 'Naturligt Snygg':
+                self.import_type = 'tailwide'
+
+            self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
         
     @api.multi
@@ -113,6 +145,7 @@ class DermanordImport(models.TransientModel):
         missing_products = []                
         ordernummer = ''
         orderdatum = ''
+        prodnr = re.compile('(\d{4}-\d{5})')
         if self[0].mime == 'pdf':
             try:
                 #~ pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', fname, '-'], shell=False, stdout=PIPE)
@@ -190,6 +223,8 @@ class DermanordImport(models.TransientModel):
                             _logger.warn('Antal %s | %s (%s)' % (lines[ant],line,len(lines)))
                             if lines[ant] == 'Belopp':
                                 break
+                            if lines[ant] == 'Dermanord-Svensk Hudv\xc3\xa5rd AB':
+                                break
                             antal.append(int(lines[ant] or 0))
                             line += 1
                         _logger.warn('After antal %s | %s %s %s' % (antal,line,len(antal),len(lines)))
@@ -205,15 +240,16 @@ class DermanordImport(models.TransientModel):
                 })
                 for i,art in enumerate(artnr):
                     _logger.warn('products: %s %s' % (i,art))
-                    product = self.env['product.product'].search([('default_code','=',art)])
-                    if product:
-                        self.env['sale.order.line'].create({
-                            'order_id': order.id,
-                            'product_id': product.id,
-                            'product_uom_qty': antal[i],
-                        })
-                    else:
-                        missing_products.append(art)
+                    if len(prodnr.findall(art)) > 0:
+                        product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
+                        if product:
+                            self.env['sale.order.line'].create({
+                                'order_id': order.id,
+                                'product_id': product.id,
+                                'product_uom_qty': antal[i],
+                            })
+                        else:
+                            missing_products.append(art)
                     
         elif self[0].mime == 'xls':
             try:
@@ -287,6 +323,66 @@ class DermanordImport(models.TransientModel):
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,1))
+
+        elif self[0].mime == 'text':
+#
+# Birka
+#
+            if self[0].import_type == 'birka':
+                rp = re.compile('(\d{4}-\d{5}).* (\d+) \(ST\)')
+                bnr = re.compile(u'beställ. nr: (\d+)')
+
+                _logger.warn('bnr %s' % bnr.findall(self.order_file.decode('base64')))
+				
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': bnr.findall(self.order_file.decode('base64'))[0] if len(bnr.findall(self.order_file.decode('base64'))) > 0 else '',
+                })
+                
+                for (prod,qty) in rp.findall(self.order_file.decode('base64')):
+                    product = self.env['product.product'].search([('default_code','=',prod)])
+                    if product:
+                        self.env['sale.order.line'].create({
+                                    'order_id': order.id,
+                                    'product_id': product.id,
+                                    'product_uom_qty': int(qty),
+                                })
+                    else:
+                        missing_products.append(prod)
+        elif self[0].mime == 'url':
+
+            page = requests.get(self.order_url)
+            tree = html.fromstring(page.content)
+            specter_head = tree.xpath('//tr/td/font/text()')
+            specter_lines = tree.xpath('//tr/td/nobr/text()')
+            specter_qty = re.compile('(\d+) st')
+#
+# Tailwide
+#
+            if self.import_type == 'tailwide':
+ 				
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': specter_head[3] if len(specter_head) > 3 else '',
+                })
+                i = 0
+                while i < len(specter_lines):
+                    prod = specter_lines[i][:-1]
+                    qty  = specter_qty.findall(specter_lines[i+1])[0] if len(specter_qty.findall(specter_lines[i+1])) > 0 else 0
+                    product = self.env['product.product'].search([('default_code','=',prod)])
+                    if product:
+                        self.env['sale.order.line'].create({
+                                    'order_id': order.id,
+                                    'product_id': product.id,
+                                    'product_uom_qty': int(qty),
+                                })
+                    else:
+                        missing_products.append(prod)
+                    i += 4
+                    
+                
 #
 # END
 #

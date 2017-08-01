@@ -29,6 +29,10 @@ Special order imports for Dermanord AB
 * Fina mig i Hedemora AB (pdf)
 * Lyko Online AB (Excel)
 * SKINCITY SWEDEN AB (pdf)
+* Isaksen & CO AS (Excel)
+* Nordic Web Trading AB (Excel)
+* Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)
+* Tailwide AB (Narutligt snygg) (Url)
 
 """,
     'author': 'Vertel AB',

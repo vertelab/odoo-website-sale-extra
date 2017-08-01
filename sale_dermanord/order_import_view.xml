@@ -11,6 +11,7 @@
                     <sheet>
                         <group>
                             <field name="order_file"/>
+                            <field name="order_url"/>
                             <field name="info" readonly="1"/>
                             <field name="mime" invisible="1"/>
                             <field name="import_type" invisible="1"/>
@@ -21,10 +22,14 @@
                         <span> </span><span>Fina mig i Hedemora AB (pdf)</span>
                         <span> </span><span>Lyko Online AB (Excel)</span>
                         <span> </span><span>SKINCITY SWEDEN AB (pdf)</span>
+                        <span> </span><span>Isaksen &amp; CO AS (Excel)</span>
+                        <span> </span><span>Nordic Web Trading AB (Excel)</span>
+                        <span> </span><span>Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)</span>
+                        <span> </span><span>Tailwide AB (Naturligt snygg) (Url)</span>
                         </group>
                     </sheet>
                     <footer>
-                        <button name="import_files" type="object" string="Import" class="oe_highlight"/>
+                        <button name="import_files" type="object" string="Import" class="oe_highlight" />
                         or
                         <button string="Cancel" class="oe_link" special="cancel" />
                     </footer>
