@@ -53,7 +53,7 @@ class DermanordImport(models.TransientModel):
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
-    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'Eckerö Group - Rederiaktiebolaget Eckerö'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
+    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     
