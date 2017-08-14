@@ -52,11 +52,11 @@ class DermanordImport(models.TransientModel):
 
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
-    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xls','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')])
+    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel')])
     import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
-    
+
     @api.one
     @api.onchange('order_file')
     def check_file(self):
@@ -64,7 +64,7 @@ class DermanordImport(models.TransientModel):
         self.import_type = None
         self.info = None
         self.tmp_file = None
-        
+
         if self.order_file:
             fd, self.tmp_file = tempfile.mkstemp()
             os.write(fd, base64.b64decode(self.order_file))
@@ -80,7 +80,7 @@ class DermanordImport(models.TransientModel):
                 raise Warning(e)
 
             self.mime = self.get_selection_text('mime',read_mime)
-            
+
             if self.mime == 'pdf':
                 try:
                     pop = Popen(['pdftotext', '-enc', 'UTF-8', '-nopgbrk', self.tmp_file, '-'], shell=False, stdout=PIPE)
@@ -94,7 +94,7 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'finamig'
                 elif 'SKINCITY SWEDEN AB' in content:
                     self.import_type = 'skincity'
-            elif self.mime == 'xls':
+            elif self.mime == 'xlsx' or self.mime == 'xls':
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
                 except XLRDError, e:
@@ -104,14 +104,14 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'lyko'
                 if wb.cell_value(0,0) == u'Isaksen & CO AS ':
                     self.import_type = 'isaksen'
-                if wb.cell_value(2,1) == u'13610404':
+                if str(int(wb.cell_value(2,1))) == u'13610404':
                     self.import_type = 'nordicfeel'
             elif self.mime == 'text':
                 birka = re.compile(u'(Rederi Ab Eckerö)')
                 if len(birka.findall(self.order_file.decode('base64')))>0:
                     self.import_type = 'birka'
 
-                                        
+
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
 
@@ -122,7 +122,7 @@ class DermanordImport(models.TransientModel):
         self.import_type = None
         self.info = None
         self.tmp_file = None
-        
+
         if self.order_url:
             self.mime = 'url'
             try:
@@ -132,17 +132,17 @@ class DermanordImport(models.TransientModel):
             tree = html.fromstring(page.content)
             specter_head = tree.xpath('//tr/td/font/text()')
             specter_lines = tree.xpath('//tr/td/nobr/text()')
-            
+
             if specter_head and specter_head[6] == 'Naturligt Snygg':
                 self.import_type = 'tailwide'
 
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
-        
+
     @api.multi
     def import_files(self):
         order = None
-        missing_products = []                
+        missing_products = []
         ordernummer = ''
         orderdatum = ''
         prodnr = re.compile('(\d{4}-\d{5})')
@@ -200,9 +200,9 @@ class DermanordImport(models.TransientModel):
                         })
                     else:
                         missing_products.append(art)
-                                
+
 #
-#    Skincity   
+#    Skincity
 #
             elif self[0].import_type == 'skincity':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
@@ -250,8 +250,8 @@ class DermanordImport(models.TransientModel):
                             })
                         else:
                             missing_products.append(art)
-                    
-        elif self[0].mime == 'xls':
+
+        elif self[0].mime == 'xls' or self.mime == 'xls':
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
             except XLRDError, e:
@@ -333,13 +333,13 @@ class DermanordImport(models.TransientModel):
                 bnr = re.compile(u'beställ. nr: (\d+)')
 
                 _logger.warn('bnr %s' % bnr.findall(self.order_file.decode('base64')))
-				
+
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
                     'client_order_ref': bnr.findall(self.order_file.decode('base64'))[0] if len(bnr.findall(self.order_file.decode('base64'))) > 0 else '',
                 })
-                
+
                 for (prod,qty) in rp.findall(self.order_file.decode('base64')):
                     product = self.env['product.product'].search([('default_code','=',prod)])
                     if product:
@@ -361,7 +361,7 @@ class DermanordImport(models.TransientModel):
 # Tailwide
 #
             if self.import_type == 'tailwide':
- 				
+
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
@@ -381,12 +381,12 @@ class DermanordImport(models.TransientModel):
                     else:
                         missing_products.append(prod)
                     i += 4
-                    
-                
+
+
 #
 # END
 #
-        
+
         if missing_products and order:
             order.note = 'Saknade produkter: ' + ','.join(missing_products)
         if order:
@@ -412,15 +412,15 @@ class DermanordImport(models.TransientModel):
                  }
 
 
-                                    
+
     def get_selection_text(self,field,value):
         for type,text in self.fields_get([field])[field]['selection']:
-                if text == value:
-                    return type
+            if text == value:
+                return type
         return None
 
     def get_selection_value(self,field,value):
         for type,text in self.fields_get([field])[field]['selection']:
-                if type == value:
-                    return text
+            if type == value:
+                return text
         return None
