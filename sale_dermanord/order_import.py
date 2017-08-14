@@ -104,7 +104,7 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'lyko'
                 if wb.cell_value(0,0) == u'Isaksen & CO AS ':
                     self.import_type = 'isaksen'
-                if str(int(wb.cell_value(2,1))) == u'13610404':
+                if wb.cell_value(2,1) == 13610404.0:
                     self.import_type = 'nordicfeel'
             elif self.mime == 'text':
                 birka = re.compile(u'(Rederi Ab Eckerö)')
