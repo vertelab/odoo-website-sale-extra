@@ -52,7 +52,7 @@ class DermanordImport(models.TransientModel):
 
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
-    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel')])
+    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
     import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
@@ -94,7 +94,7 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'finamig'
                 elif 'SKINCITY SWEDEN AB' in content:
                     self.import_type = 'skincity'
-            elif self.mime == 'xlsx' or self.mime == 'xls':
+            elif self.mime == 'xlsx' or self.mime == 'xls' or self.mime == 'xlm':
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
                 except XLRDError, e:
@@ -251,7 +251,7 @@ class DermanordImport(models.TransientModel):
                         else:
                             missing_products.append(art)
 
-        elif self[0].mime == 'xls' or self.mime == 'xls':
+        elif self[0].mime == 'xls' or self.mime == 'xls' or self.mime == 'xlm':
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
             except XLRDError, e:
