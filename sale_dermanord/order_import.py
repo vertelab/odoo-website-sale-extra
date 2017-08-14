@@ -94,7 +94,7 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'finamig'
                 elif 'SKINCITY SWEDEN AB' in content:
                     self.import_type = 'skincity'
-            elif self.mime == 'xlsx' or self.mime == 'xls' or self.mime == 'xlm':
+            elif self.mime in ['xlsx', 'xls', 'xlm']:
                 try:
                     wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
                 except XLRDError, e:
@@ -251,7 +251,7 @@ class DermanordImport(models.TransientModel):
                         else:
                             missing_products.append(art)
 
-        elif self[0].mime == 'xls' or self.mime == 'xls' or self.mime == 'xlm':
+        elif self[0].mime in ['xlsx', 'xls', 'xlm']:
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
             except XLRDError, e:
@@ -286,7 +286,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
-                    'client_order_ref': wb.cell_value(1,8),
+                    'client_order_ref': str(int(wb.cell_value(1,8))),
                 })
                 l = 18
                 for line in range(l,wb.nrows):
@@ -308,7 +308,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
-                    'client_order_ref': wb.cell_value(2,0),
+                    'client_order_ref': str(int(wb.cell_value(2,0))),
                 })
                 l = 6
                 for line in range(l,wb.nrows):
