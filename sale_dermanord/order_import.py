@@ -227,7 +227,6 @@ class DermanordImport(models.TransientModel):
                                 break
                             try:
                                 antal.append(int(lines[ant].decode('utf-8').replace(u'\xa0', u'') or 0))
-                                _logger.warn('heeeeeeeeej: %s' %ant)
                             except Exception, e:
                                 raise Warning(e)
                             line += 1
@@ -395,7 +394,7 @@ class DermanordImport(models.TransientModel):
             order.note = 'Saknade produkter: ' + ','.join(missing_products)
         if order:
             attachment = self.env['ir.attachment'].create({
-                    'name': order.client_order_ref  + '.' + self.mime,
+                    'name': order.client_order_ref or 'Order'  + '.' + self.mime,
                     'res_name': order.name,
                     'res_model': 'sale.order',
                     'res_id': order.id,
