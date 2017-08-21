@@ -225,7 +225,11 @@ class DermanordImport(models.TransientModel):
                                 break
                             if lines[ant] == 'Dermanord-Svensk Hudv\xc3\xa5rd AB':
                                 break
-                            antal.append(int(lines[ant] or 0))
+                            try:
+                                antal.append(int(lines[ant].decode('utf-8').replace(u'\xa0', u'') or 0))
+                                _logger.warn('heeeeeeeeej: %s' %ant)
+                            except Exception, e:
+                                raise Warning(e)
                             line += 1
                         _logger.warn('After antal %s | %s %s %s' % (antal,line,len(antal),len(lines)))
                     if lines[line] == 'Inköpsorder':
