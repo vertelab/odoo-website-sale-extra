@@ -206,7 +206,6 @@ class DermanordImport(models.TransientModel):
 #
             elif self[0].import_type == 'skincity':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                raise Warning(customer,customer.name,customer.id)
                 artnr =  []
                 antal = []
                 for line in range(0,len(lines)):
@@ -217,6 +216,8 @@ class DermanordImport(models.TransientModel):
                             if lines[art] == '':
                                 line = art
                                 break
+                            if lines[art] == 'gram':
+                                continue
                             _logger.warn('Art Nr %s' % lines[art].split()[0])
                             artnr.append(lines[art].split()[0])
                     if lines[line] == 'Antal':
@@ -240,18 +241,24 @@ class DermanordImport(models.TransientModel):
                     'client_order_ref': ordernummer,
                     'date_order': orderdatum,
                 })
+                #~ _logger.warn('SKINCITY ARTNR %s' % artnr)
+                #~ _logger.warn('SKINCITY ANTAL %s' % antal)
+                ai = 0
                 for i,art in enumerate(artnr):
-                    _logger.warn('products: %s %s' % (i,art))
+                    _logger.warn('products: %s %s %s' % (i,art,ai))
+                    if antal[ai] == 0:
+                        ai += 1
                     if len(prodnr.findall(art)) > 0:
                         product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
                         if product:
                             self.env['sale.order.line'].create({
                                 'order_id': order.id,
                                 'product_id': product.id,
-                                'product_uom_qty': antal[i],
+                                'product_uom_qty': antal[ai],
                             })
                         else:
                             missing_products.append(art)
+                    ai += 1
 ##
 ##  Excel
 ##
