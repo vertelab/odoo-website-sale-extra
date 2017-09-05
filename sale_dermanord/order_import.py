@@ -206,6 +206,7 @@ class DermanordImport(models.TransientModel):
 #
             elif self[0].import_type == 'skincity':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                raise Warning(customer,customer.name,customer.id)
                 artnr =  []
                 antal = []
                 for line in range(0,len(lines)):
@@ -221,9 +222,7 @@ class DermanordImport(models.TransientModel):
                     if lines[line] == 'Antal':
                         for ant in range(line+1,len(artnr)+line+1):
                             _logger.warn('Antal %s | %s (%s)' % (lines[ant],line,len(lines)))
-                            if lines[ant] == 'Belopp':
-                                break
-                            if lines[ant] == 'Dermanord-Svensk Hudv\xc3\xa5rd AB':
+                            if lines[ant] in ['Belopp','Pris / st','Dermanord-Svensk Hudv\xc3\xa5rd AB','Rabatt']:
                                 break
                             try:
                                 antal.append(int(lines[ant].decode('utf-8').replace(u'\xa0', u'') or 0))
@@ -253,7 +252,9 @@ class DermanordImport(models.TransientModel):
                             })
                         else:
                             missing_products.append(art)
-
+##
+##  Excel
+##
         elif self[0].mime in ['xlsx', 'xls', 'xlm']:
             try:
                 wb = open_workbook(file_contents=base64.b64decode(self.order_file)).sheet_by_index(0)
