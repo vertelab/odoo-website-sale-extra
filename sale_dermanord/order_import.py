@@ -289,7 +289,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
-                    'client_order_ref': str(wb.cell_value(1,8))+str(wb.cell_value(1,9)),
+                    'client_order_ref': int(float('%s%s' % (wb.cell_value(1,8),wb.cell_value(1,9)))),
                 })
                 l = 18
                 for line in range(l,wb.nrows):
