@@ -290,7 +290,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
-                    'client_order_ref': str(int(wb.cell_value(1,8))),
+                    'client_order_ref': str(wb.cell_value(1,8))+str(wb.cell_value(1,9)),
                 })
                 l = 18
                 for line in range(l,wb.nrows):
@@ -301,7 +301,7 @@ class DermanordImport(models.TransientModel):
                             self.env['sale.order.line'].create({
                                         'order_id': order.id,
                                         'product_id': product.id,
-                                        'product_uom_qty': int(wb.cell_value(line,5)),
+                                        'product_uom_qty': float('%s%s' % (wb.cell_value(line,5),wb.cell_value(line,6))),
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,0))
