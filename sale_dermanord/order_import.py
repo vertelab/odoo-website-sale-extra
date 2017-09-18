@@ -322,15 +322,18 @@ class DermanordImport(models.TransientModel):
                     'client_order_ref': str(int(wb.cell_value(2,0))),
                 })
                 l = 6
+                qty_col = 6
+                if not wb.cell_value(l-1, qty_col) == 'Quantity':
+                    qty_col = 8
                 for line in range(l,wb.nrows):
                     if wb.cell_value(line,1) not in [u'Your ProductNo','']:
                         product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,1))])
                         if product:
-                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,1),wb.cell_value(line,6)))
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,1),wb.cell_value(line,qty_col)))
                             self.env['sale.order.line'].create({
                                         'order_id': order.id,
                                         'product_id': product.id,
-                                        'product_uom_qty': int(wb.cell_value(line,6)),
+                                        'product_uom_qty': int(wb.cell_value(line,qty_col)),
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,1))
