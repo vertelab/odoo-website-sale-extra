@@ -294,7 +294,8 @@ class DermanordImport(models.TransientModel):
 # Isaksen
 #
             if self[0].import_type == 'isaksen':
-                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                #~ customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type)),('is_company','=',True)])
+                customer = self.env['res.partner'].search([('customer_no','=','515'),('is_company','=',True),('customer','=',True)])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
                     'client_order_ref': int(float('%s%s' % (wb.cell_value(1,8),wb.cell_value(1,9)))),
