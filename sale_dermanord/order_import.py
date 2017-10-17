@@ -208,6 +208,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 artnr =  []
                 antal = []
+                _logger.warn('content %s|' % lines)
                 for line in range(0,len(lines)):
                     _logger.warn('Line %s|' % lines[line])
                     if lines[line] == 'Beskrivning':
@@ -223,7 +224,7 @@ class DermanordImport(models.TransientModel):
                     if lines[line] == 'Antal':
                         for ant in range(line+1,len(artnr)+line+1):
                             _logger.warn('Antal %s | %s (%s)' % (lines[ant],line,len(lines)))
-                            if lines[ant] in ['Belopp','Pris / st','Dermanord-Svensk Hudv\xc3\xa5rd AB','Rabatt']:
+                            if lines[ant] in ['Belopp','Pris / st','Dermanord-Svensk Hudv\xc3\xa5rd AB','Rabatt','Nr.']:
                                 break
                             try:
                                 antal.append(int(lines[ant].decode('utf-8').replace(u'\xa0', u'') or 0))
@@ -245,16 +246,17 @@ class DermanordImport(models.TransientModel):
                 #~ _logger.warn('SKINCITY ANTAL %s' % antal)
                 ai = 0
                 for i,art in enumerate(artnr):
-                    _logger.warn('products: %s %s %s' % (i,art,ai))
-                    if antal[ai] == 0:
-                        ai += 1
+                    _logger.warn('products: %s %s %s (%s)' % (i,art,ai,len(antal)))
+                    if ai <= len(antal):
+                        if antal[ai] == 0:
+                            ai += 1
                     if len(prodnr.findall(art)) > 0:
                         product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
                         if product:
                             self.env['sale.order.line'].create({
                                 'order_id': order.id,
                                 'product_id': product.id,
-                                'product_uom_qty': antal[ai],
+                                'product_uom_qty': antal[ai] if len(antal) > ai else 9.9,
                             })
                         else:
                             missing_products.append(art)
