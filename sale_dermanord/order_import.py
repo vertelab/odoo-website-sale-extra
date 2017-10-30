@@ -53,9 +53,10 @@ class DermanordImport(models.TransientModel):
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
+    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
+    file_name = fields.Char(string='File Name')
 
     @api.one
     @api.onchange('order_file')
@@ -106,6 +107,9 @@ class DermanordImport(models.TransientModel):
                     self.import_type = 'isaksen'
                 if wb.cell_value(2,1) == 13610404.0:
                     self.import_type = 'nordicfeel'
+                if wb.cell_value(0,0) == 'Art nb' and wb.cell_value(0,2) == 'Colour' and wb.cell_value(0,3) == 'Size':
+                    self.import_type = 'skincity_xl'
+
             elif self.mime == 'text':
                 birka = re.compile(u'(Rederi Ab Eckerö)')
                 if len(birka.findall(self.order_file.decode('base64')))>0:
@@ -327,6 +331,30 @@ class DermanordImport(models.TransientModel):
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,1))
+                            
+                            
+#
+# Skin City XL
+#
+            if self[0].import_type == 'skincity_xl':
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': wb.cell_value(1,0),
+                })
+                l = 1
+                for line in range(l,wb.nrows):
+                    if wb.cell_value(line,5) not in [u'Supplier art.nb','']:
+                        product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,5))])
+                        if product:
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,5),wb.cell_value(line,6)))
+                            self.env['sale.order.line'].create({
+                                        'order_id': order.id,
+                                        'product_id': product.id,
+                                        'product_uom_qty': int(wb.cell_value(line,6)),
+                                    })
+                        else:
+                            missing_products.append(wb.cell_value(line,5))
 
         elif self[0].mime == 'text':
 #
