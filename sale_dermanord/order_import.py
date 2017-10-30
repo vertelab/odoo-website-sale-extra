@@ -353,7 +353,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
-                    'client_order_ref': wb.cell_value(1,0),
+                    'client_order_ref': self.file_name.replace('.xlsx',''),
                 })
                 l = 1
                 for line in range(l,wb.nrows):

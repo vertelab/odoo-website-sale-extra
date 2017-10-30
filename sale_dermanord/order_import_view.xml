@@ -10,7 +10,8 @@
                 <form string="Cavarosa PRoduct Import">
                     <sheet>
                         <group>
-                            <field name="order_file"/>
+                            <field name="order_file"  filename="file_name" />
+                            <field name="file_name" invisible="1"/>
                             <field name="order_url"/>
                             <field name="info" readonly="1"/>
                             <field name="mime" invisible="1"/>
@@ -21,7 +22,7 @@
                         <span>Filer vi har stöd för</span><br/>
                         <span> </span><span>Fina mig i Hedemora AB (pdf)</span>
                         <span> </span><span>Lyko Online AB (Excel)</span>
-                        <span> </span><span>SKINCITY SWEDEN AB (pdf)</span>
+                        <span> </span><span>SKINCITY SWEDEN AB (pdf/Excel)</span>
                         <span> </span><span>Isaksen &amp; CO AS (Excel)</span>
                         <span> </span><span>Nordic Web Trading AB (Excel)</span>
                         <span> </span><span>Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)</span>
