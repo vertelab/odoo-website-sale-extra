@@ -360,11 +360,11 @@ class DermanordImport(models.TransientModel):
                     if wb.cell_value(line,5) not in [u'Supplier art.nb','']:
                         product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,5))])
                         if product:
-                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,5),wb.cell_value(line,6)))
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,5),wb.cell_value(line,7)))
                             self.env['sale.order.line'].create({
                                         'order_id': order.id,
                                         'product_id': product.id,
-                                        'product_uom_qty': int(wb.cell_value(line,6)),
+                                        'product_uom_qty': int(wb.cell_value(line,7)),
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,5))
