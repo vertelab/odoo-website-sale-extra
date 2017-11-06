@@ -101,7 +101,7 @@ class DermanordImport(models.TransientModel):
                 except XLRDError, e:
                     raise Warning(e)
 
-                if wb.cell_value(0,2) == u'Lyko Artikelnr':
+                if wb.cell_value(0,2) in (u'Lyko Artikelnr', u'Lyko Art no'):
                     self.import_type = 'lyko'
                 if wb.cell_value(0,0) == u'Isaksen & CO AS ':
                     self.import_type = 'isaksen'
@@ -285,7 +285,7 @@ class DermanordImport(models.TransientModel):
                 })
                 l = 1
                 for line in range(l,wb.nrows):
-                    if wb.cell_value(line,4) not in [u'Ert artikelnr','']:
+                    if wb.cell_value(line,4) not in [u'Ert artikelnr', 'Art no', '']:
                         product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,4))])
                         if product:
                             _logger.warn('Rad %s  %s' % (wb.cell_value(line,4),wb.cell_value(line,6)))
@@ -293,6 +293,7 @@ class DermanordImport(models.TransientModel):
                                         'order_id': order.id,
                                         'product_id': product.id,
                                         'product_uom_qty': int(wb.cell_value(line,6)),
+                                        'discount': abs(float(wb.cell_value(line,8)))
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,4))
