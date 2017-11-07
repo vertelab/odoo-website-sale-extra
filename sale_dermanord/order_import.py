@@ -293,7 +293,7 @@ class DermanordImport(models.TransientModel):
                                         'order_id': order.id,
                                         'product_id': product.id,
                                         'product_uom_qty': int(wb.cell_value(line,6)),
-                                        'discount': abs(float(wb.cell_value(line,8)))
+                                        #'discount': abs(float(wb.cell_value(line,8)))
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,4))
