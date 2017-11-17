@@ -178,10 +178,12 @@ class DermanordImport(models.TransientModel):
                             _logger.warn('Art Nr %s' % lines[art])
                             artnr.append(lines[art].replace('(cid:160)',''))
                     if lines[line] == 'Antal':
-                        for ant in range(line+1,len(artnr)+line+1):
+                        for ant in range(line+1,len(lines)):
+                            if lines[ant] == '':
+                                line = ant
+                                break
                             _logger.warn('Antal %s' % lines[ant])
                             antal.append(int(lines[ant].replace(' st','')))
-                        line += len(antal)
                     if lines[line] == 'Ordernummer':
                         line += 1
                         ordernummer = lines[line]
