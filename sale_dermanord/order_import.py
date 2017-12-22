@@ -53,9 +53,10 @@ class DermanordImport(models.TransientModel):
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden')])
+    import_type = fields.Selection([('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
+    file_name = fields.Char(string='File Name')
 
     @api.one
     @api.onchange('order_file')
@@ -100,12 +101,15 @@ class DermanordImport(models.TransientModel):
                 except XLRDError, e:
                     raise Warning(e)
 
-                if wb.cell_value(0,2) == u'Lyko Artikelnr':
+                if wb.cell_value(0,2) in (u'Lyko Artikelnr', u'Lyko Art no'):
                     self.import_type = 'lyko'
                 if wb.cell_value(0,0) == u'Isaksen & CO AS ':
                     self.import_type = 'isaksen'
                 if wb.cell_value(2,1) == 13610404.0:
                     self.import_type = 'nordicfeel'
+                if wb.cell_value(0,0) == 'Art nb' and wb.cell_value(0,2) == 'Colour' and wb.cell_value(0,3) == 'Size':
+                    self.import_type = 'skincity_xl'
+
             elif self.mime == 'text':
                 birka = re.compile(u'(Rederi Ab Eckerö)')
                 if len(birka.findall(self.order_file.decode('base64')))>0:
@@ -174,10 +178,12 @@ class DermanordImport(models.TransientModel):
                             _logger.warn('Art Nr %s' % lines[art])
                             artnr.append(lines[art].replace('(cid:160)',''))
                     if lines[line] == 'Antal':
-                        for ant in range(line+1,len(artnr)+line+1):
+                        for ant in range(line+1,len(lines)):
+                            if lines[ant] == '':
+                                line = ant
+                                break
                             _logger.warn('Antal %s' % lines[ant])
                             antal.append(int(lines[ant].replace(' st','')))
-                        line += len(antal)
                     if lines[line] == 'Ordernummer':
                         line += 1
                         ordernummer = lines[line]
@@ -208,6 +214,7 @@ class DermanordImport(models.TransientModel):
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 artnr =  []
                 antal = []
+                _logger.warn('content %s|' % lines)
                 for line in range(0,len(lines)):
                     _logger.warn('Line %s|' % lines[line])
                     if lines[line] == 'Beskrivning':
@@ -223,7 +230,7 @@ class DermanordImport(models.TransientModel):
                     if lines[line] == 'Antal':
                         for ant in range(line+1,len(artnr)+line+1):
                             _logger.warn('Antal %s | %s (%s)' % (lines[ant],line,len(lines)))
-                            if lines[ant] in ['Belopp','Pris / st','Dermanord-Svensk Hudv\xc3\xa5rd AB','Rabatt']:
+                            if lines[ant] in ['Belopp','Pris / st','Dermanord-Svensk Hudv\xc3\xa5rd AB','Rabatt','Nr.']:
                                 break
                             try:
                                 antal.append(int(lines[ant].decode('utf-8').replace(u'\xa0', u'') or 0))
@@ -245,16 +252,17 @@ class DermanordImport(models.TransientModel):
                 #~ _logger.warn('SKINCITY ANTAL %s' % antal)
                 ai = 0
                 for i,art in enumerate(artnr):
-                    _logger.warn('products: %s %s %s' % (i,art,ai))
-                    if antal[ai] == 0:
-                        ai += 1
+                    _logger.warn('products: %s %s %s (%s)' % (i,art,ai,len(antal)))
+                    if ai <= len(antal):
+                        if antal[ai] == 0:
+                            ai += 1
                     if len(prodnr.findall(art)) > 0:
                         product = self.env['product.product'].search([('default_code','=',prodnr.findall(art)[0])])
                         if product:
                             self.env['sale.order.line'].create({
                                 'order_id': order.id,
                                 'product_id': product.id,
-                                'product_uom_qty': antal[ai],
+                                'product_uom_qty': antal[ai] if len(antal) > ai else 9.9,
                             })
                         else:
                             missing_products.append(art)
@@ -279,7 +287,7 @@ class DermanordImport(models.TransientModel):
                 })
                 l = 1
                 for line in range(l,wb.nrows):
-                    if wb.cell_value(line,4) not in [u'Ert artikelnr','']:
+                    if wb.cell_value(line,4) not in [u'Ert artikelnr', 'Art no', '']:
                         product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,4))])
                         if product:
                             _logger.warn('Rad %s  %s' % (wb.cell_value(line,4),wb.cell_value(line,6)))
@@ -287,6 +295,7 @@ class DermanordImport(models.TransientModel):
                                         'order_id': order.id,
                                         'product_id': product.id,
                                         'product_uom_qty': int(wb.cell_value(line,6)),
+                                        #'discount': abs(float(wb.cell_value(line,8)))
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,4))
@@ -294,7 +303,8 @@ class DermanordImport(models.TransientModel):
 # Isaksen
 #
             if self[0].import_type == 'isaksen':
-                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                #~ customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type)),('is_company','=',True)])
+                customer = self.env['res.partner'].search([('customer_no','=','515'),('is_company','=',True),('customer','=',True)])
                 order = self.env['sale.order'].create({
                     'partner_id': customer.id,
                     'client_order_ref': int(float('%s%s' % (wb.cell_value(1,8),wb.cell_value(1,9)))),
@@ -337,6 +347,30 @@ class DermanordImport(models.TransientModel):
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,1))
+                            
+                            
+#
+# Skin City XL
+#
+            if self[0].import_type == 'skincity_xl':
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = self.env['sale.order'].create({
+                    'partner_id': customer.id,
+                    'client_order_ref': self.file_name.replace('.xlsx',''),
+                })
+                l = 1
+                for line in range(l,wb.nrows):
+                    if wb.cell_value(line,5) not in [u'Supplier art.nb','']:
+                        product = self.env['product.product'].search([('default_code','=',wb.cell_value(line,5))])
+                        if product:
+                            _logger.warn('Rad %s  %s' % (wb.cell_value(line,5),wb.cell_value(line,7)))
+                            self.env['sale.order.line'].create({
+                                        'order_id': order.id,
+                                        'product_id': product.id,
+                                        'product_uom_qty': int(wb.cell_value(line,7)),
+                                    })
+                        else:
+                            missing_products.append(wb.cell_value(line,5))
 
         elif self[0].mime == 'text':
 #
