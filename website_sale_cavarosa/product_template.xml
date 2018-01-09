@@ -106,6 +106,9 @@
                         </span>
                     </td>
                 </t>
+                <t t-if="line.product_id.uom_id.uom_type != 'bigger'">
+                    <td/>
+                </t>
             </xpath>
             <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
                 <span t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded", "style": "width: 64px; height: 64px;"}'/>
@@ -156,7 +159,7 @@
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
                         <div t-field="campaign.website_description"/>
                         <t t-foreach="campaign.object_ids" t-as="object">
-                            <div class="container">
+                            <div class="container oe_website_sale">
                                 <t t-if="object.object_id._name == 'res.partner'">
                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
                                         <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
@@ -217,6 +220,18 @@
                     </div>
                 </a>
             </form>
+        </template>
+
+        <template id="products_add_to_cart" inherit_id="website_sale_cavarosa.product_grid" active="False" customize_show="True" name="Add to Cart">
+            <xpath expr="//span[@itemprop='priceCurrency']" position="after">
+                <input name="product_id" t-att-value="product.product_variant_ids[0].id" type="hidden"/>
+                <t t-if="len(product.product_variant_ids) == 1">
+                  <a class="btn btn-default btn-xs fa fa-shopping-cart a-submit"/>
+                </t>
+                <t t-if="len(product.product_variant_ids) &gt; 1">
+                  <a class="btn btn-default btn-xs fa fa-shopping-cart" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']>1 else None))"/>
+                </t>
+            </xpath>
         </template>
 
         <template id="products_grid" name="Products Grid">
