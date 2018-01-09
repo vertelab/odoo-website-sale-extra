@@ -20,6 +20,7 @@
 ##############################################################################
 
 from openerp import api, models, fields, _
+from openerp.osv import expression
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -28,11 +29,11 @@ class product_product(models.Model):
 
     @api.v7
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=100):
+        _logger.warn('\nname: %s\nargs: %s\noperator: %s\n' % (name, args, operator))
         values = name.split(',')
-        ids = set(self.pool.get('product.product').search(cr, uid, ['&', ('name','ilike',values[0].strip()), ('sale_ok', '=', True)], context=context))
-        if len(values) > 1:
-            attributes = values[1:]
-            for attr in attributes:
-                ids = ids & set(self.pool.get('product.product').search(cr, uid, [('attribute_value_ids.name','ilike',attr.strip())], context=context))
-
-        return list(set(self.name_get(cr, uid, ids)) | set(super(product_product, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)))
+        if len(values) < 2:
+            return super(product_product, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
+        name = values[0].strip()
+        values = values[1:]
+        ids = self.pool.get('product.product').search(cr, uid, [('name', operator, name), ('sale_ok', '=', True)] + [('attribute_value_ids.name', operator, v.strip()) for v in values], limit=limit, context=context)
+        return self.name_get(cr, uid, ids)
