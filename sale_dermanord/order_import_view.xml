@@ -27,6 +27,7 @@
                         <span> </span><span>Nordic Web Trading AB (Excel)</span>
                         <span> </span><span>Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)</span>
                         <span> </span><span>Tailwide AB (Naturligt snygg) (Url)</span>
+                        <span> </span><span>Bangerhead AB (Excel)</span>
                         </group>
                     </sheet>
                     <footer attrs="{'invisible': ['|', ('mime', '=', False), ('import_type', '=', False)]}">
