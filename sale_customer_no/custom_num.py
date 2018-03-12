@@ -44,10 +44,17 @@ class res_partner(models.Model):
 
     @api.v7
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=10):
-        if context.get('customer_no_search'):
-            return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', '=ilike', '%s%%' % name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
-        else:
-            return super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
+        args = args or []
+        res = super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
+        partner_ids = self.search(cr, uid, [('customer_no', '=', name), ('id', 'not in', [r[0] for r in res])] + args, context=context, limit=limit)
+        if partner_ids:
+            res += self.name_get(cr, uid, partner_ids, context=context)
+        return res
+        # Why this exists?
+        #~ if context.get('customer_no_search'):
+            #~ return self.name_get(cr, uid, self.pool.get('res.partner').search(cr, uid, [('ref', '=ilike', '%s%%' % name)])) + super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
+        #~ else:
+            #~ return super(res_partner, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
 
     @api.one
     def generate_new_customer_no(self):
