@@ -28,6 +28,7 @@ Add Tags for Product Category
 ======================================
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['website_sale', 'child_catagory_tags'],
     'data': ['website_product_category_tags_view.xml'],

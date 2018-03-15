@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Lets you set different weight and volume for variants belonging to the same product template. Also adds precision to the volume field.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['product'],
 'data': ['dp_data.xml'],

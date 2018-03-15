@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Function to escalate a crm.helpdesk to a claim.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['crm_helpdesk', 'crm_claim'],
 'data': [

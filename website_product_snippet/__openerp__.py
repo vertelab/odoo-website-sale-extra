@@ -28,6 +28,7 @@ Snippets for product presentation
 =================================
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['base', 'website_sale'],
     'data': ['website_product_snippet_view.xml', 'res_partner_view.xml'],

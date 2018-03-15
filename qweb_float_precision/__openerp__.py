@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Example: <span t-field="line.product_uom_qty" t-field-options="{&quot;precision&quot;: 0}"/>""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['base'],
 'data': [],

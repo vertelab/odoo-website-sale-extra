@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Function to escalate a project.issue to a claim.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [

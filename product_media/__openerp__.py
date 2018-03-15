@@ -25,6 +25,7 @@
 'category': 'Hidden',
 'description': """Sell media products in the webshop.""",
 'author': 'Vertel AB',
+    'license': 'AGPL-3',
 'website': 'http://www.vertel.se',
 'depends': ['sale'],
 'data': [

@@ -36,6 +36,7 @@ Special order imports for Dermanord AB
 
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['sale',],
     'external_dependencies': {

@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Wizard that can change image on several customers at once.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['base'],
     'data': [

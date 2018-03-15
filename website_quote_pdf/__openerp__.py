@@ -28,6 +28,7 @@ Transform quotation to a PDF file
 ======================================
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['website_sale'],
     'data': ['website_quote_pdf.xml',

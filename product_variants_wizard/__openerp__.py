@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Wizard that can turn several products into variants on one product.template.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['product'],
     'data': [

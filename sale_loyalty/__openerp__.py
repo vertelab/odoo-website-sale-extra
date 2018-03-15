@@ -23,6 +23,7 @@
     'name': 'Sales Loyalty Program',
     'version': '0.1',
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'category': 'sale',
     'summary': 'Loyalty Program for Sale Orders',

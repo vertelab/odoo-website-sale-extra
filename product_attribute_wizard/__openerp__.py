@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Wizard that adds attributes to several products at once.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['product'],
     'data': ['product_attribute_wizard_view.xml',],

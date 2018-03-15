@@ -28,6 +28,7 @@ Module For Penta Project
 ===================================
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['website', 'sale', 'crm', 'website_hr_cv', 'website_crm'],
     'data': ['penta_view.xml',

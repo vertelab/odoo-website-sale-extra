@@ -25,6 +25,7 @@
     'category': 'Hidden',
     'description': """Adds the ability to surch for products by their customer codes.""",
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['product_customer_code'],
     'data': [

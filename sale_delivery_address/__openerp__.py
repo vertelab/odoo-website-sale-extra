@@ -28,6 +28,7 @@ Full address for delivery
 ======================================
 """,
     'author': 'Vertel AB',
+    'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
     'depends': ['partner_show_contact_type', 'sale_customer_no'],
     'data': ['sale_delivery_address.xml',
