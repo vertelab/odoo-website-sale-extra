@@ -35,5 +35,5 @@ class product_product(models.Model):
             return super(product_product, self).name_search(cr, uid, name, args, operator=operator, context=context, limit=limit)
         name = values[0].strip()
         values = values[1:]
-        ids = self.pool.get('product.product').search(cr, uid, (args or []) + [('name', operator, name)] + [('attribute_value_ids.name', operator, v.strip()) for v in for v in values], limit=limit, context=context)
+        ids = self.pool.get('product.product').search(cr, uid, (args or []) + [('name', operator, name)] + [('attribute_value_ids.name', operator, v.strip()) for v in values], limit=limit, context=context)
         return self.name_get(cr, uid, ids)
