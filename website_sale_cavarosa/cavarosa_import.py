@@ -51,8 +51,8 @@ class CavarosaImport(models.TransientModel):
     
     @api.one
     def import_files(self):
-        #~ try:
-        if True:
+        try:
+        # ~ if True:
             districts = {}
             for r in self.env['res.district'].search([]):
                 districts[r.name] = r
@@ -131,7 +131,12 @@ class CavarosaImport(models.TransientModel):
                         })
                 
                 for id in products.keys():
-                    self.set_external_id(self.env['product.template'].create(products[id]), 'commerce_product_%s' % id)
+                    xml_id = 'commerce_product_%s' % id
+                    template = self.env['ir.model.data'].xmlid_to_object('__cavarosa_import__.%s' % xml_id)
+                    if template:
+                        template.write(products[id])
+                    else:
+                        self.set_external_id(self.env['product.template'].create(products[id]), xml_id)
             
             #Import customers
             if self.customers:
@@ -244,15 +249,15 @@ class CavarosaImport(models.TransientModel):
                         users[exid] = self.env['res.users'].with_context({'no_reset_password': True}).create(values)
                         self.set_external_id(users[exid], exid)
                 
-        #~ except Exception as e:
-            #~ try:
-                #~ # Close the ssh session, if it exists
-                #~ self.session.close()
-                #~ self.transport.close()
-            #~ except:
-                #~ pass
-            #~ # Reraise after terminating ssh connection
-            #~ raise e
+        except Exception as e:
+            try:
+                # Close the ssh session, if it exists
+                self.session.close()
+                self.transport.close()
+            except:
+                pass
+            # Reraise after terminating ssh connection
+            raise e
         try:
             # Close the ssh session, if it exists
             self.session.close()

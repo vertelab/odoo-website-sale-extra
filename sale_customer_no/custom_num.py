@@ -36,7 +36,6 @@ class res_partner(models.Model):
     @api.one
     @api.depends('ref','parent_id','parent_id.customer_no')
     def _get_customer_no(self):
-        _logger.warn('_get_customer_no %s, %s' % (self.id, self.name))
         if self.parent_id:
             self.customer_no = self.parent_id.customer_no
         else:
