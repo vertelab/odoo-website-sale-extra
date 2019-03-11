@@ -26,7 +26,7 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit ='res.partner'
 
-    customer_no = fields.Char('Customer Number', select=True, compute='_get_customer_no', store=True)
+    customer_no = fields.Char('Customer Number', select=True)
 
     #Use this field definition, and remove depends on _get_customer_no
     #to avoid calculating customer_no for all customers on installation.
@@ -34,13 +34,12 @@ class res_partner(models.Model):
     #customer_no = fields.Char('Customer Number', select=True)
 
     @api.one
-    @api.depends('ref','parent_id','parent_id.customer_no')
     def _get_customer_no(self):
-        _logger.warn('_get_customer_no %s, %s' % (self.id, self.name))
         if self.parent_id:
             self.customer_no = self.parent_id.customer_no
         else:
             self.customer_no = self.ref
+        self.child_ids._get_customer_no()
 
     @api.v7
     def name_search(self, cr, uid, name, args=None, operator='ilike', context=None, limit=10):
@@ -71,9 +70,18 @@ class res_partner(models.Model):
     @api.model
     @api.returns('self', lambda value: value.id)
     def create(self, vals):
-        if not (vals.get('parent_id') and vals.get('ref')) and (not int(self.env['ir.config_parameter'].get_param('sale_customer_no.company_only', '1')) or vals.get('is_company')):
+        if not (vals.get('parent_id') or vals.get('ref')) and (not int(self.env['ir.config_parameter'].get_param('sale_customer_no.company_only', '1')) or vals.get('is_company')):
             vals['ref'] = self._generate_new_customer_no(vals.get('customer'), vals.get('supplier'))
-        return super(res_partner, self).create(vals)
+        res = super(res_partner, self).create(vals)
+        res._get_customer_no()
+        return res
+
+    @api.multi
+    def write(self, vals):
+        res = super(res_partner, self).write(vals)
+        if 'ref' in vals:
+            self._get_customer_no()
+        return res
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
