@@ -148,6 +148,13 @@ class DermanordImport(models.TransientModel):
 
     @api.multi
     def import_files(self):
+        def create_order(values):
+            order = self.env['sale.order'].create(values)
+            res = order.onchange(order.read()[0], 'partner_id', order._onchange_spec())
+            if res.get('value'):
+                order.write(res['value'])
+            return order
+        
         order = None
         missing_products = []
         ordernummer = ''
@@ -195,7 +202,7 @@ class DermanordImport(models.TransientModel):
                         line += 1
                         orderdatum = lines[line]
                     line += 1
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': ordernummer,
                     'date_order': orderdatum,
@@ -247,7 +254,7 @@ class DermanordImport(models.TransientModel):
                     if lines[line] == 'Orderdatum':
                         orderdatum = lines[line+5]
                     line += 1
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': ordernummer,
                     'date_order': orderdatum,
@@ -285,7 +292,7 @@ class DermanordImport(models.TransientModel):
 #
             if self[0].import_type == 'lyko':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': wb.cell_value(1,0),
                 })
@@ -309,7 +316,7 @@ class DermanordImport(models.TransientModel):
             if self[0].import_type == 'isaksen':
                 #~ customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type)),('is_company','=',True)])
                 customer = self.env['res.partner'].search([('customer_no','=','515'),('is_company','=',True),('customer','=',True)])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': int(float('%s%s' % (wb.cell_value(1,8),wb.cell_value(1,9)))),
                 })
@@ -331,7 +338,7 @@ class DermanordImport(models.TransientModel):
 #
             if self[0].import_type == 'nordicfeel':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': str(int(wb.cell_value(2,0))),
                 })
@@ -358,7 +365,7 @@ class DermanordImport(models.TransientModel):
 #
             if self[0].import_type == 'skincity_xl':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': self.file_name.replace('.xlsx',''),
                 })
@@ -381,7 +388,7 @@ class DermanordImport(models.TransientModel):
 #
             if self[0].import_type == 'bangerhead':
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': self.file_name.replace('.xlsx',''),
                 })
@@ -412,7 +419,7 @@ class DermanordImport(models.TransientModel):
                 _logger.warn('bnr %s' % bnr.findall(self.order_file.decode('base64')))
 
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': bnr.findall(self.order_file.decode('base64'))[0] if len(bnr.findall(self.order_file.decode('base64'))) > 0 else '',
                 })
@@ -440,7 +447,7 @@ class DermanordImport(models.TransientModel):
             if self.import_type == 'tailwide':
 
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                order = self.env['sale.order'].create({
+                order = create_order({
                     'partner_id': customer.id,
                     'client_order_ref': specter_head[3] if len(specter_head) > 3 else '',
                 })
