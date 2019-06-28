@@ -1,2 +1,2 @@
-import res_config
-import partner_eniro
+from . import res_config_settings
+from . import partner_eniro

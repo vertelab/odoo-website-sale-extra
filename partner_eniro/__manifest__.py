@@ -31,8 +31,8 @@ and update company information using company registration number.
 """,
     'author': 'Vertel AB',
     'website': 'http://www.vertel.se',
-    'depends': ['l10n_se',],
-    'data': ['partner_eniro_view.xml','res_config_view.xml'],
+    'depends': ['base_setup',],
+    'data': ['partner_eniro_view.xml','res_config_settings_view.xml'],
     'installable': True,
 }
 # vim:expandtab:smartindent:tabstop=4s:softtabstop=4:shiftwidth=4:

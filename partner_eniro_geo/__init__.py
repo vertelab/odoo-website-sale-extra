@@ -1,1 +1,1 @@
-import partner_eniro
+from . import partner_eniro

@@ -19,8 +19,9 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
-import urllib2
+from odoo import models, fields, api, _
+from urllib.request import urlopen
+from urllib.error import URLError, HTTPError
 import logging
 import re
 _logger = logging.getLogger(__name__)
@@ -29,27 +30,44 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit = "res.partner"
 
+    # start: res_partner.py from l10n_se
+    company_registry = fields.Char(compute="_company_registry",inverse='_set_company_registry',string='Company Registry', size=11,readonly=False)
+    
+    @api.depends('vat')
+    def _company_registry(self):
+        for partner in self:
+            if partner.vat and re.match('SE[0-9]{10}01', partner.vat):
+                partner.company_registry = "%s-%s" % (partner.vat[2:8],partner.vat[8:-2])
+    
+    @api.depends('company_registry')
+    def _set_company_registry(self):
+        for partner in self:
+            if not partner.company_registry: continue
+            if not partner.company_registry[6] == '-': continue
+            partner.vat = 'SE' + partner.company_registry[:6] + partner.company_registry[7:] + '01'
+    # end
+
     @api.model
     def get_company_info(self):
 
         if self.is_company and self.vat and (len(self.vat) > 0):
 
-            api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api_profile')
-            api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api_key')
+            api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api.profile')
+            api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api.key')
             if not (api_key or api_profile):
                 raise Warning('Please configurate Eniro api account')
 
             try:
                 #For future reference: use urllib2.quote() to translate the search term to url format.
-                res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
+                res = urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
                 (true,false,null) = (True,False,None)
-            except urllib2.HTTPError as e:
+            except HTTPError as e:
                 _logger.error('api.eniro error: %s %s' % (e.code, e.reason))
                 if e.code == 401:
                     _logger.error('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
                     raise Warning('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
                 return False
-            except urllib2.URLError as e:
+            except URLError as e:
                 _logger.error('api.eniro url error: %s %s' % (e.code, e.reason))
                 return False
 
@@ -65,8 +83,10 @@ class res_partner(models.Model):
             address = adverts['address']
             phoneNumbers = adverts['phoneNumbers']
             location = adverts['location']
+            
             if not adverts['homepage'] == None:
-                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urllib2.urlopen(adverts['homepage']).read())[1]
+                _logger.warn('\n\n%s\n' % adverts['homepage'])
+                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(adverts['homepage']).read().decode('utf-8'))[1]
             else:
                 homepage = None
 
@@ -77,8 +97,8 @@ class res_partner(models.Model):
                 'zip': address['postCode'],
                 'city': address['postArea'],
                 'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0] if len(phoneNumbers)>0 else '',
-                'partner_latitude': location['coordinates'][0]['latitude'],
-                'partner_longitude': location['coordinates'][0]['longitude'],
+                'partner_latitude': location['coordinates'][0]['latitude'] if len(location['coordinates']) else '',
+                'partner_longitude': location['coordinates'][0]['longitude'] if len(location['coordinates']) else '',
                 'website': homepage,
                 'country_id': self.env['res.country'].search([('code','=','SE')])[0].id,
             })
