@@ -12,7 +12,7 @@
                         string="Get Company Info"
                         name="get_company_info"
                         colspan="2"
-                        icon="gtk-copy"
+                        icon="fa-copy"
                         type="object"
                         attrs="{'invisible': [('is_company','=', False)]}"
                         />
