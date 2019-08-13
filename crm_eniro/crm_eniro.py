@@ -40,15 +40,17 @@ class res_partner(models.Model):
                 raise Warning('Please configurate Eniro api account')
 
             try:
-                res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
+                res = urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
+    # ~ res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
                 (true,false,null) = (True,False,None) 
-            except urllib2.HTTPError as e:
+            # ~ except urllib2.HTTPError as e:
+            except HTTPError as e:
                 _logger.error('api.eniro error: %s %s' % (e.code, e.reason))
                 if e.code == 401:
                     _logger.error('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
                     raise Warning('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
                 return False
-            except urllib2.URLError as e:
+            except URLError as e:
                 _logger.error('api.eniro url error: %s %s' % (e.code, e.reason))
                 return False
             
@@ -65,7 +67,7 @@ class res_partner(models.Model):
             phoneNumbers = adverts['phoneNumbers']
             location = adverts['location']
             if not adverts['homepage'] == None:
-                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urllib2.urlopen(adverts['homepage']).read())[1]
+                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(adverts['homepage']).read())[1]
             else:
                 homepage = None
 

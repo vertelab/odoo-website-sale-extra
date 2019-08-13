@@ -9,7 +9,7 @@
             <field name="arch" type="xml">
                 <field name="title" position="before">
                     <button
-                        string="Get Company Info"
+                        help="Get Company Info"
                         name="get_company_info"
                         colspan="2"
                         icon="fa-copy"
