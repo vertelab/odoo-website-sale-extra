@@ -1,1 +1,2 @@
-import crm_eniro
+# ~ import crm_eniro
+from . import crm_eniro
