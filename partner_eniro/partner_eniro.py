@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ##############################################################################
 #
-#    OpenERP, Open Source Management Solution, third party addon
+#    Odoo, Open Source Management Solution, third party addon
 #    Copyright (C) 2004-2015 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
@@ -47,7 +47,7 @@ class res_partner(models.Model):
             partner.vat = 'SE' + partner.company_registry[:6] + partner.company_registry[7:] + '01'
     # end
 
-    @api.model
+    @api.one
     def get_company_info(self):
 
         if self.is_company and self.vat and (len(self.vat) > 0):
@@ -72,21 +72,25 @@ class res_partner(models.Model):
                 return False
 
             json = eval(res)
-            _logger.info('<<<<<< API Eniro Result: %s >>>>>' % json)
+            _logger.info('<<<<<< API Eniro **** info Result: %s >>>>>' % json)
 
             if not json or len(json['adverts']) == 0 or json['totalHits'] == 0:
                 return False
 
-            adverts = json['adverts'][json['totalHits']-1]
-            _logger.debug('<<<<<< Adverts: %s >>>>>' % adverts)
+            adverts = json['adverts'][0]
+            _logger.warn('Eniro <<<<<< Adverts: %s >>>>>' % adverts)
             companyInfo = adverts['companyInfo']
             address = adverts['address']
             phoneNumbers = adverts['phoneNumbers']
+
+            _logger.info('<<<<<< API Eniro **** info Result: %s >>>>>' % json)
+
             location = adverts['location']
-            
+            _logger.warn('Eniro Default value: homepage... test!!' )
+
             if not adverts['homepage'] == None:
-                _logger.warn('\n\n%s\n' % adverts['homepage'])
-                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(adverts['homepage']).read().decode('utf-8'))[1]
+                homepage = adverts['homepage']
+                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(homepage).read().decode('utf-8'))[1]
             else:
                 homepage = None
 
@@ -97,8 +101,8 @@ class res_partner(models.Model):
                 'zip': address['postCode'],
                 'city': address['postArea'],
                 'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0] if len(phoneNumbers)>0 else '',
-                'partner_latitude': location['coordinates'][0]['latitude'] if len(location['coordinates']) else '',
-                'partner_longitude': location['coordinates'][0]['longitude'] if len(location['coordinates']) else '',
+                # ~ 'partner_latitude': location['coordinates'][0]['latitude'] if len(location['coordinates']) else '',
+                # ~ 'partner_longitude': location['coordinates'][0]['longitude'] if len(location['coordinates']) else '',
                 'website': homepage,
                 'country_id': self.env['res.country'].search([('code','=','SE')])[0].id,
             })

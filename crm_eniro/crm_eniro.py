@@ -19,31 +19,35 @@
 #
 ##############################################################################
 
-from openerp import models, fields, api, _
-import urllib2
+from odoo import models, fields, api, _
+from urllib.request import urlopen
+from urllib.error import URLError, HTTPError
+from odoo.exceptions import Warning
+import urllib.parse
 import logging
 import re
+import requests
 _logger = logging.getLogger(__name__)
 
+class crm_lead(models.Model):
+    _inherit = "crm.lead"
+    # start: res_partner.py from l10n_se
+    company_registry = fields.Char(string='Company Registry', size=11)
 
-class res_partner(models.Model):
-    _inherit = "res.partner"
+    @api.one
+    def get_company_info_registry(self):
 
-    @api.model
-    def get_company_info(self):
+        if self.company_registry and (len(self.company_registry) > 0):
 
-        if self.is_company and self.vat and (len(self.vat) > 0):
-
-            api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api_profile')
-            api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api_key')
+            api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api.profile')
+            api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api.key')
             if not (api_key or api_profile):
-                raise Warning('Please configurate Eniro api account')
+                raise Warning('Please configurate Eniro api account, %s , %s' % (api_profile, api_key) )
 
             try:
-                res = urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
-    # ~ res = urllib2.urlopen('http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry)).read()
-                (true,false,null) = (True,False,None) 
-            # ~ except urllib2.HTTPError as e:
+                res = requests.get(u'http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.company_registry ))
+                (true,false,null) = (True,False,None)
+ 
             except HTTPError as e:
                 _logger.error('api.eniro error: %s %s' % (e.code, e.reason))
                 if e.code == 401:
@@ -53,35 +57,116 @@ class res_partner(models.Model):
             except URLError as e:
                 _logger.error('api.eniro url error: %s %s' % (e.code, e.reason))
                 return False
+            _logger.info('<<<<<< API Eniro Result: %s >>>>>' % res)
             
-            json = eval(res)
+           # (true,false,null) = (True,False,None) ## eval needs this!
+            json = res.json()
             _logger.info('<<<<<< API Eniro Result: %s >>>>>' % json)
 
             if not json or len(json['adverts']) == 0 or json['totalHits'] == 0:
                 return False
 
-            adverts = json['adverts'][json['totalHits']-1]
+            adverts = json['adverts'][0]
             _logger.debug('<<<<<< Adverts: %s >>>>>' % adverts)
             companyInfo = adverts['companyInfo']
             address = adverts['address']
             phoneNumbers = adverts['phoneNumbers']
             location = adverts['location']
+
             if not adverts['homepage'] == None:
-                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(adverts['homepage']).read())[1]
+                homepage = adverts['homepage']
+                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(homepage).read().decode('utf-8'))[1]
             else:
                 homepage = None
 
             self.write({
                 'name': companyInfo['companyName'],
+                'partner_name': companyInfo['companyName'],
                 'street': address['streetName'],
                 'street2': address['postBox'] or '',
                 'zip': address['postCode'],
                 'city': address['postArea'],
                 'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0] if len(phoneNumbers)>0 else '',
-                'partner_latitude': location['coordinates'][0]['latitude'],
-                'partner_longitude': location['coordinates'][0]['longitude'],
+                # ~ 'partner_latitude': location['coordinates'][0]['latitude'],
+                # ~ 'partner_longitude': location['coordinates'][0]['longitude'],
                 'website': homepage,
                 'country_id': self.env['res.country'].search([('code','=','SE')])[0].id,
             })
 
         return json
+
+    @api.one
+    def get_company_info(self):
+
+        if self.name and (len(self.name) > 0):
+
+            api_profile = self.env['ir.config_parameter'].sudo().get_param('eniro_api.profile')
+            api_key = self.env['ir.config_parameter'].sudo().get_param('eniro_api.key')
+            if not (api_key or api_profile):
+                raise Warning('Please configurate Eniro api account, %s , %s' % (api_profile, api_key) )
+
+            try:
+                res = requests.get(u'http://api.eniro.com/partnerapi/cs/search/basic?profile=%s&key=%s&country=se&version=1.1.3&search_word=%s' % (api_profile, api_key, self.name ))
+                # ~ raise Warning(res.json().keys() )
+                (true,false,null) = (True,False,None)
+            except HTTPError as e:
+                _logger.error('api.eniro error: %s %s' % (e.code, e.reason))
+                if e.code == 401:
+                    _logger.error('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
+                    raise Warning('Eniro API %s %s (wrong profile/key)' % (e.code, e.reason))
+                return False
+            except URLError as e:
+                _logger.error('api.eniro url error: %s %s' % (e.code, e.reason))
+                return False
+            _logger.info('<<<<<< API Eniro Result: %s >>>>>' % res)
+            
+           # (true,false,null) = (True,False,None) ## eval needs this!
+            json = res.json()
+            _logger.info('<<<<<< API Eniro Result: %s >>>>>' % json)
+
+            if not json or len(json['adverts']) == 0 or json['totalHits'] == 0:
+                return False
+
+            adverts = json['adverts'][0]
+            _logger.debug('<<<<<< Adverts: %s >>>>>' % adverts)
+            companyInfo = adverts['companyInfo']
+            address = adverts['address']
+            phoneNumbers = adverts['phoneNumbers']
+            location = adverts['location']
+
+            if not adverts['homepage'] == None:
+                homepage = adverts['homepage']
+                homepage = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', urlopen(homepage).read().decode('utf-8'))[1]
+            else:
+                homepage = None
+
+            self.write({
+                'name': companyInfo['companyName'],
+                'partner_name': companyInfo['companyName'],
+                'street': address['streetName'],
+                'street2': address['postBox'] or '',
+                'zip': address['postCode'],
+                'city': address['postArea'],
+                'phone': [pn['phoneNumber'] for pn in phoneNumbers if pn['type'] == 'std'][0] if len(phoneNumbers)>0 else '',
+                # ~ 'partner_latitude': location['coordinates'][0]['latitude'],
+                # ~ 'partner_longitude': location['coordinates'][0]['longitude'],
+                'company_registry': '%s-%s' % (companyInfo['orgNumber'][0:6], companyInfo['orgNumber'][-4:]),
+                'website': homepage,
+                'country_id': self.env['res.country'].search([('code','=','SE')])[0].id,
+            })
+
+        return json
+
+    @api.multi
+    def _create_lead_partner_data(self, name, is_company, parent_id=False):
+        """ extract data from lead to create a partner
+            :param name : furtur name of the partner
+            :param is_company : True if the partner is a company
+            :param parent_id : id of the parent partner (False if no parent)
+            :returns res.partner record
+        """
+        res = super(crm_lead, self)._create_lead_partner_data(name, is_company, parent_id)
+        res.update({ 'company_registry': self.company_registry })
+        return res
+        
+        
