@@ -24,6 +24,8 @@ from urllib.request import urlopen
 from urllib.error import URLError, HTTPError
 import logging
 import re
+from odoo.exceptions import Warning
+
 _logger = logging.getLogger(__name__)
 
 

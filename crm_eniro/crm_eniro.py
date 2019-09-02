@@ -23,6 +23,8 @@ from openerp import models, fields, api, _
 import urllib2
 import logging
 import re
+from odoo.exceptions import Warning
+
 _logger = logging.getLogger(__name__)
 
 
