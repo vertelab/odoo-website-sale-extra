@@ -23,6 +23,7 @@ from openerp.exceptions import except_orm, Warning, RedirectWarning
 import base64
 from cStringIO import StringIO
 
+
 from subprocess import Popen, PIPE
 import os
 import tempfile
@@ -53,7 +54,7 @@ class DermanordImport(models.TransientModel):
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_type = fields.Selection([('bangerhead','Bangerhead AB'),('tailwide','Tailwide AB'),('birka',u'BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
+    import_type = fields.Selection([('bangerhead','Bangerhead AB'),('tailwide','Tailwide AB'),('harmoniq','HARMONIQ AB'),('birka','BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     file_name = fields.Char(string='File Name')
@@ -142,6 +143,11 @@ class DermanordImport(models.TransientModel):
 
             if specter_head and specter_head[6] == 'Naturligt Snygg':
                 self.import_type = 'tailwide'
+                
+            if specter_head and specter_head[6] == 'HARMONIQ AB':
+                self.import_type = 'harmoniq'
+                
+            
 
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
@@ -170,6 +176,9 @@ class DermanordImport(models.TransientModel):
                 _logger.debug("Trace of the failed file indexing attempt.", exc_info=True)
                 raise Warning(e)
             lines = content.splitlines()
+            
+            
+
 #
 #   Fina mig i Hedemora AB
 #
@@ -466,6 +475,30 @@ class DermanordImport(models.TransientModel):
                         missing_products.append(prod)
                     i += 4
 
+#
+# Harmoniq AB
+#
+            if self.import_type == 'harmoniq':
+
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                order = create_order({
+                    'partner_id': customer.id,
+                    'client_order_ref': specter_head[3] if len(specter_head) > 3 else '',
+                })
+                i = 0
+                while i < len(specter_lines):
+                    prod = specter_lines[i][:-1]
+                    qty  = specter_qty.findall(specter_lines[i+1])[0] if len(specter_qty.findall(specter_lines[i+1])) > 0 else 0
+                    product = self.env['product.product'].search([('default_code','=',prod)])
+                    if product:
+                        self.env['sale.order.line'].create({
+                                    'order_id': order.id,
+                                    'product_id': product.id,
+                                    'product_uom_qty': int(qty),
+                                })
+                    else:
+                        missing_products.append(prod)
+                    i += 4
 
 #
 # END
