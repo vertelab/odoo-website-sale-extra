@@ -24,6 +24,7 @@ import base64
 from cStringIO import StringIO
 
 
+
 from subprocess import Popen, PIPE
 import os
 import tempfile
@@ -54,7 +55,7 @@ class DermanordImport(models.TransientModel):
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
     mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_type = fields.Selection([('bangerhead','Bangerhead AB'),('tailwide','Tailwide AB'),('harmoniq','HARMONIQ AB'),('birka','BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
+    import_type = fields.Selection([('bangerhead','Bangerhead AB'),('ahlens','Åhléns AB'),('tailwide','Tailwide AB'),('harmoniq','HARMONIQ AB'),('birka','BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     file_name = fields.Char(string='File Name')
@@ -139,14 +140,26 @@ class DermanordImport(models.TransientModel):
                 raise Warning(e)
             tree = html.fromstring(page.content)
             specter_head = tree.xpath('//tr/td/font/text()')
+            ahlens_head = tree.xpath('//div[@class="ramdata"]/text()') # /div[@"ramdata"]
+            # ~ raise Warning(ahlens_head)
             specter_lines = tree.xpath('//tr/td/nobr/text()')
+            ahlens_lines = tree.xpath('//table/tr')
+            # ~ raise Warning(ahlens_lines)
 
             if specter_head and specter_head[6] == 'Naturligt Snygg':
                 self.import_type = 'tailwide'
                 
             if specter_head and specter_head[6] == 'HARMONIQ AB':
                 self.import_type = 'harmoniq'
+            
+            # ~ ahlens_heads = []
+            # ~ if ahlens_head:
+                # ~ ahlens_heads.append(ahlens_head)
+                # ~ for ahlens_head in ahlens_heads:
+            if u'Åhléns AB' in ''.join(ahlens_head):
+                self.import_type = 'ahlens'
                 
+            
             
 
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
@@ -162,6 +175,7 @@ class DermanordImport(models.TransientModel):
             return order
         
         order = None
+        orders = []
         missing_products = []
         ordernummer = ''
         orderdatum = ''
@@ -499,34 +513,107 @@ class DermanordImport(models.TransientModel):
                     else:
                         missing_products.append(prod)
                     i += 4
+#
+# Åhléns AB
+#
+            if self.import_type == 'ahlens':
+                
+                ahlens_lines = tree.xpath('//table/tr')
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                # ~ raise Warning('%s ' %customer)
+                plock = {}
+                for line in ahlens_lines:
+                    
+                    if len(line) == 2:
+                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
+                            plock_idx = line[0].findtext('div')
+                            order_ref_ids = line[1].findtext('div')
+                            plock[plock_idx] = []
+                                
+                            # ~ raise Warning( '%s ' % order_ref_id)
+                    if len(line) > 7:
+                        product_ids = line[3].text
+                        qtys = line[7].text
+                        plock[plock_idx].append((product_ids, qtys))
+                
+                            # ~ prod = ahlens_lines[i][:-1]
+                for pl in plock.keys():
+                    order = create_order({
+                                    'partner_id': customer.id,
+                                    'client_order_ref': pl,
+                                    'origin' : order_ref_ids,
+                                    })
+                    orders.append(order.id)
+                    missing_products = []
+                    for element in plock[pl]:
+                        if not element[0] == 'Lev artnr':
+                            
+                            product = self.env['product.product'].search([('default_code','=',element[0])])
+                        
+                            if product:
+                                self.env['sale.order.line'].create({
+                                            'order_id': order.id,
+                                            'product_id': product.id,
+                                            'product_uom_qty': int(element[1]),
+                                        })
+                            else:
+                                missing_products.append(element[0])
+                                # ~ i += 4
+                    if len(missing_products) > 0:
+                        order.note = 'Saknade produkter: ' + ','.join(missing_products)
+                    order.note = '%s%s\n%s / %s' %('Saknade produkter:' if len(missing_products) >0 else '',','.join(missing_products) if len(missing_products) >0 else '', order_ref_ids,pl.replace('Plocklista ', ''))
+                    if order:
+                        attachment = self.env['ir.attachment'].create({
+                        'name': order.client_order_ref or 'Order'  + '.' + self.mime,
+                        'res_name': order.name,
+                        'res_model': 'sale.order',
+                        'res_id': order.id,
+                        'datas': self.order_file,
+                        'datas_fname': order.client_order_ref,
+                    })
+                
 
+            
 #
 # END
 #
-
-        if missing_products and order:
-            order.note = 'Saknade produkter: ' + ','.join(missing_products)
-        if order:
-            attachment = self.env['ir.attachment'].create({
-                    'name': order.client_order_ref or 'Order'  + '.' + self.mime,
-                    'res_name': order.name,
+        if not self.import_type == 'ahlens':
+            if missing_products and order:
+                order.note = 'Saknade produkter: ' + ','.join(missing_products)
+            if order:
+                attachment = self.env['ir.attachment'].create({
+                        'name': order.client_order_ref or 'Order'  + '.' + self.mime,
+                        'res_name': order.name,
+                        'res_model': 'sale.order',
+                        'res_id': order.id,
+                        'datas': self.order_file,
+                        'datas_fname': order.client_order_ref,
+                    })
+                #~ if attachment.mimetype == 'application/pdf':
+                    #~ attachment.pdf2image(800,1200)
+        
+        if len(orders) > 1:
+            return {'type': 'ir.actions.act_window',
                     'res_model': 'sale.order',
-                    'res_id': order.id,
-                    'datas': self.order_file,
-                    'datas_fname': order.client_order_ref,
-                })
-            #~ if attachment.mimetype == 'application/pdf':
-                #~ attachment.pdf2image(800,1200)
-
-        return {'type': 'ir.actions.act_window',
-                'res_model': 'sale.order',
-                'view_type': 'form',
-                'view_mode': 'form',
-                 'view_id': self.env.ref('sale.view_order_form').id,
-                 'res_id': order.id if order else None,
-                 'target': 'current',
-                 'context': {},
-                 }
+                    'view_type': 'form',
+                    'view_mode': 'tree,form',
+                    'view_ids': [(0,0,{'view_mode':'tree', 'view_id':self.env.ref('sale.view_quotation_tree').id}), 
+                                (0,0,{'view_mode':'form','view_id':self.env.ref('sale.view_order_form').id})],
+                    'res_id': order.id if order else None,
+                    'target': 'current',
+                    'context': {},
+                    'domain' : [('id', 'in', orders)],
+                     }
+        else:
+            return {'type': 'ir.actions.act_window',
+                    'res_model': 'sale.order',
+                    'view_type': 'form',
+                    'view_mode': 'form',
+                     'view_id': self.env.ref('sale.view_order_form').id,
+                     'res_id': order.id if order else None,
+                     'target': 'current',
+                     'context': {},
+                     }
 
 
 
