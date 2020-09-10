@@ -1,2 +1,2 @@
-import res_partner
-import website_product_snippet
+from . import res_partner
+from . import website_product_snippet

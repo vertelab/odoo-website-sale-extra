@@ -28,7 +28,7 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     district_id = fields.Many2one(comodel_name='res.district', string='District')
-    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.tracking.campaign')
+    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.lead')
 
 
 class Main(http.Controller):

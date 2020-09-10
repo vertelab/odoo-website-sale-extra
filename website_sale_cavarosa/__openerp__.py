@@ -30,7 +30,7 @@ Special sale configuration for Cavarosa AB
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['crm_campaign_supplier', 'website_crm_campaign', 'website_product_snippet', 'website_masonry', 'cavarosa_delivery', 'delivery_pickup', 'sale_order_line_view', 'report_glabels', 'website_partner', 'website_imagemagick', 'sale_purchase'],
+    'depends': ['crm_campaign_supplier', 'website_crm_campaign', 'website_product_snippet', 'website_masonry', 'cavarosa_delivery', 'delivery_pickup', 'website_partner', 'website_imagemagick', 'sale_purchase'],
     'data': [
         'crm_view.xml',
         'res_district_view.xml',

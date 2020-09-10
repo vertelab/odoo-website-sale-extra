@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data noupdate="0">
         
         <record id="uom_3_pack" model="product.uom">
@@ -24,4 +24,4 @@
         </record>
         
     </data>
-</openerp>
+</odoo>

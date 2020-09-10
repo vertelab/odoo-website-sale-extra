@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
 
         <template id="shop_menu" name="Shop Menu">
@@ -50,13 +50,13 @@
             <xpath expr="//b[@class='oe_price']" position="attributes">
                 <attribute name="t-field">product.unit_price</attribute>
             </xpath>
-            <xpath expr="//h4[@class='css_editable_mode_display']/span[1]" position="attributes">
+            <xpath expr="//h4" position="attributes">
                 <attribute name="t-field">product.unit_price</attribute>
             </xpath>
         </template>
 
         <template id="product" inherit_id="website_sale.product">
-            <xpath expr="//t[@t-call='website_sale.search']" position="replce"/>
+            <xpath expr="//t[@t-call='website_sale.search']" position="replace"/>
             <xpath expr="//h1[@t-field='product.name']" position="after">
                 <p t-field="product.default_code" class="text-muted"/>
                 <t t-if="product.type == 'product'">
@@ -67,14 +67,14 @@
                     <b><p/></b>
                 </t>
             </xpath>
-            <xpath expr="//form[@class='js_add_cart_variants']" position="inside">
+            <xpath expr="//form" position="inside">
                 <input name="campaign_id" t-att-value="int(request.params.get('campaign_id', 0))" type="hidden"/>
             </xpath>
-            <xpath expr="//form[@class='js_add_cart_variants']" position="attributes">
+            <xpath expr="//form" position="attributes">
                 <attribute name="t-if">product.campaign_product</attribute>
             </xpath>
-            <xpath expr="//hr[@t-if='product.description_sale']" position="replace"/>
-            <xpath expr="//hr[not(@t-if='product.description_sale')]" position="replace"/>
+            <xpath expr="//hr" position="replace"/>
+            <xpath expr="//hr" position="replace"/>
             <xpath expr="//p[@t-field='product.description_sale']/.." position="attributes">
                 <attribute name="class">hidden</attribute>
             </xpath>
@@ -91,14 +91,17 @@
             </xpath>
         </template>
 
-        <template id="cart" inherit_id="website_sale.cart">
-            <xpath expr="//th[@class='decimal_precision']" position="before">
+        <template id="cart" inherit_id="website_sale.product_price">
+            <xpath expr="//h4" position="before">
                 <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>
                 <t t-if="has_bigger">
                     <th style="width: 70px;"/>
                 </t>
             </xpath>
-            <xpath expr="//td[@name='price']" position="before">
+        </template>
+        <template id="cart" inherit_id="website_sale.cart_lines">
+
+            <xpath expr="//td[@class='td-price']" position="before">
                 <t t-if="line.product_id.uom_id.uom_type == 'bigger'">
                     <td>
                         <span>
@@ -110,22 +113,24 @@
                     <td/>
                 </t>
             </xpath>
-            <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+        </template>
+<!--         <template id="cart" inherit_id="website_sale.cart_lines">
+            <xpath expr="//div[@t-field='line.product_id.image_small']" position="replace">
                 <span t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded", "style": "width: 64px; height: 64px;"}'/>
             </xpath>
             <xpath expr="//td[@t-if='line.product_id.product_tmpl_id']/div[@class='text-muted']" position="attributes">
                 <attribute name="class">text-muted hidden</attribute>
             </xpath>
         </template>
-
+ -->
         <template id="payment" inherit_id="website_sale.payment">
-            <xpath expr="//th[@width='100']" position="before">
+     <!--        <xpath expr="//th" position="before">
                 <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>
                 <t t-if="has_bigger">
                     <th style="width: 70px;"/>
                 </t>
-            </xpath>
-            <xpath expr="//td[@class='text-center']" position="before">
+            </xpath>  -->
+<!--             <xpath expr="//td[@class='text-center']" position="before">
                 <t t-if="line.product_id.uom_id.uom_type == 'bigger'">
                     <td>
                         <span>
@@ -133,20 +138,20 @@
                         </span>
                     </td>
                 </t>
-            </xpath>
-            <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
+            </xpath> -->
+      <!--       <xpath expr="//span[@t-field='line.product_id.image_small']" position="replace">
                 <span t-field="line.product_id.image_small" t-field-options='{"widget": "image", "class": "img-rounded", "style": "width: 64px; height: 64px;"}'/>
-            </xpath>
+            </xpath> 
         </template>
 
-        <template id="continue_shopping" inherit_id="website_sale.continue_shopping">
+        <template id="continue_shopping" inherit_id="website_sale.cart">
             <xpath expr="//a[@href='/shop']" position="attributes">
                 <attribute name="href">/campaign</attribute>
             </xpath>
         </template>
 
         <template id="product_quantity" inherit_id="website_sale.product_quantity">
-            <xpath expr="//div[@class='css_quantity input-group oe_website_spinner']" position="attributes">
+            <xpath expr="//div" position="attributes">
                 <attribute name="class">css_quantity input-group oe_website_spinner hidden</attribute>
             </xpath>
         </template>
@@ -173,11 +178,12 @@
                             </div>
                         </t>
                     </div>
-<!--
+
                     <t t-call="website_sale_cavarosa.shop_menu"/>
--->
+
                 </div>
             </t>
+        -->
         </template>
 
         <template id="product_grid" name="Product Grid">
@@ -269,4 +275,4 @@
         </template>
 
     </data>
-</openerp>
+</odoo>

@@ -18,33 +18,35 @@
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields, api, _
+from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
 class product_template(models.Model):
     _inherit = 'product.template'
 
-    @api.one
     def _unit_price(self):
-        if self.sudo().uom_id.factor:
-            self.unit_price = self.list_price * self.sudo().uom_id.factor
-        elif self.sudo().uom_id.factor_inv:
-            self.unit_price = self.list_price / self.sudo().uom_id.factor_inv
-        else:
-            self.unit_price = self.list_price
+        for price in self:
+            if price.sudo().uom_id.factor:
+                price.unit_price = price.list_price * price.sudo().uom_id.factor
+            elif price.sudo().uom_id.factor_inv:
+                price.unit_price = price.list_price / price.sudo().uom_id.factor_inv
+            else:
+                price.unit_price = price.list_price
     unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
-    @api.one
+    
     def _seller_id(self):
-        self.seller_id = self.seller_ids[0].name if len(self.seller_ids) > 0 else None
+        for seller in self:
+            seller.seller_id = seller.seller_ids[0].name if len(seller.seller_ids) > 0 else None
     seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
-    @api.one
+
     def _campaign_product(self):
-        campaign = self.env['website'].current_campaign()
-        if campaign and (self in campaign[0].campaign_product_ids.mapped('product_id')):
-            self.campaign_product = True
-        else:
-            self.campaign_product = False
+        for camp_prod in self:
+            campaign = camp_prod.env['website'].current_campaign()
+            if campaign and (camp_prod in campaign[0].campaign_product_ids.mapped('product_id')):
+                camp_prod.campaign_product = True
+            else:
+                camp_prod.campaign_product = False
     campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')
     website_short_description = fields.Text(string='Website Short Description', help='This description only shows in product grid view')
 

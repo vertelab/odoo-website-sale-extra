@@ -1,58 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
     <data>
-        <!-- Customize Snippets -->
-        <template id="website_product_snippets" inherit_id="website.snippets" name="Custom Snippets">
-            <!-- Customize Structure -->
-            <xpath expr="//div[@id='snippet_structure']" position="inside">
-                <!-- products by category snippet -->
-                <div>
-                    <div class="oe_snippet_thumbnail">
-                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
-                        <span class="oe_snippet_thumbnail_title">Products By Category</span>
-                    </div>
-                    <section class="oe_snippet_body products_by_category mb16 mt16">
-                        <div class="container">
-                            <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
-                            <div class="product_div"/>
-                        </div>
-                    </section>
-                </div>
-                <!-- end of products by category snippet -->
-                <!-- products by category partner -->
-                <div>
-                    <div class="oe_snippet_thumbnail">
-                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_features.png" />
-                        <span class="oe_snippet_thumbnail_title">Products By Supplier</span>
-                    </div>
-                    <section class="oe_snippet_body products_by_partner mb16 mt16">
-                        <div class="container">
-                            <h2 class="text-center oe_ps_title mt16 mb16">Supplier</h2>
-                            <div class="product_div"/>
-                        </div>
-                    </section>
-                </div>
-                <!-- end of products by category partner -->
-            </xpath>
-            <!-- Customize Content -->
-            <xpath expr="//div[@id='snippet_content']" position="inside">
-                <!-- individual product -->
-                <div id="individual_product_snippet">
-                    <div class="oe_snippet_thumbnail">
-                        <img class="oe_snippet_thumbnail_img" src="/website/static/src/img/blocks/block_big_picture.png"/>
-                        <span class="oe_snippet_thumbnail_title">Individual Product</span>
-                    </div>
-                    <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right">
-                        <div class="product_div"/>
-                    </div>
-                </div>
-                <!-- end of individual product -->
-            </xpath>
-        </template>
-        <!-- product snippet options -->
+
+
+
+     <template id="category" name="Testimonial snippet">
+     <section class="snippet_testimonial">
+     </section>
+     TEST
+
+    </template>
+
+
+   <!-- 
         <template id="product_snippet_options" inherit_id="website.snippet_options" name="Product Snippet Options">
             <xpath expr="." position="inside">
-                <!-- products by category -->
+   
                 <div data-snippet-option-id="products_by_category" data-selector=".products_by_category">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product by Category</a>
@@ -77,11 +40,11 @@
                         </ul>
                     </li>
                 </div>
-                <!-- products by partner -->
+         
                 <div data-snippet-option-id="products_by_partner" data-selector=".products_by_partner">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product by Supplier</a>
-                        <t t-set="partners" t-value="request.env['res.partner'].search([('supplier', '=', True), ('customer', '=', False), ('is_company', '=', True), ('product_ids', '!=', False)])" />
+                        <t t-set="partners" t-value="request.env['res.partner'].search([])" />
                         <ul class="dropdown-menu">
                             <t t-if="len(partners) &gt; 0">
                                 <t t-foreach="partners" t-as="partner">
@@ -102,7 +65,7 @@
                         </ul>
                     </li>
                 </div>
-                <!-- individual product -->
+ 
                 <div data-snippet-option-id="individual_product" data-selector=".oe_individual_product">
                     <li class="dropdown-submenu">
                         <a tabindex="-1" href="#">Product</a>
@@ -129,10 +92,24 @@
                 </div>
             </xpath>
         </template>
+ -->
+
+ 
+        <template id="place_into_bar" inherit_id="website.snippets" name="Place into bar">
+             <xpath expr="//div[@id='snippet_structure']/div[@class='o_panel_body']" position="inside">
+
+            <t t-snippet="website_product_snippet.category" t-thumbnail="/website_product_snippet/static/description/blog2.png" />
+      
+
+            </xpath>
+        </template>
+
+
+
         <!-- Custom Snippet CSS and javascript -->
         <template id="website_product_snippet_css_and_js" inherit_id="website.layout" name="Website Product Snippet Custom CSS and JS">
             <!-- Customize css -->
-            <xpath expr="//t[@t-call-assets='website.assets_frontend']" position="before">
+            <xpath expr="//t[@t-call-assets='web.assets_frontend']" position="before">
                 <link href="/website_product_snippet/static/src/css/product_snippet.css" rel="stylesheet"/>
             </xpath>
             <!-- Customize javascript -->
@@ -141,8 +118,8 @@
             </xpath>
         </template>
         <!-- Custom Snippet Options CSS -->
-        <template id="website_product_snippet_options_css" inherit_id="website.theme" name="Website Product Snippet Options CSS">
+        <template id="website_product_snippet_options_css" inherit_id="website.assets_frontend" name="Website Product Snippet Options CSS">
             <xpath expr="link[last()]" position="after" />
         </template>
     </data>
-</openerp>
+</odoo>

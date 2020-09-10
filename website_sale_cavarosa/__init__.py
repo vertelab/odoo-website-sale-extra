@@ -1,7 +1,7 @@
-import crm
-import res_district
-import res_partner
-import res_country
-import product
-import sale
-import cavarosa_import
+from . import crm
+from . import res_district
+from . import res_partner
+from . import res_country
+from . import product
+from . import sale
+from . import cavarosa_import

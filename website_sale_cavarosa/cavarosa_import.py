@@ -21,7 +21,7 @@
 from openerp import models, fields, api, _
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 import base64
-from cStringIO import StringIO
+# from cStringIO import StringIO
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -49,222 +49,223 @@ class CavarosaImport(models.TransientModel):
     username = fields.Char(string='Username', required=True, help="Your username on wiggum.vertel.se")
     password = fields.Char(string='Password', required=True, help="Your password on wiggum.vertel.se")
     
-    @api.one
     def import_files(self):
-        try:
-        # ~ if True:
-            districts = {}
-            for r in self.env['res.district'].search([]):
-                districts[r.name] = r
-            suppliers = {}
-            for r in self.env['res.partner'].search([('supplier', '=', True)]):
-                suppliers[r.name] = r
-            products = {}
-            #~ for r in self.env['product.template'].search():
-                #~ products[r.name] = r
-            users = {}
-            customers = {}
-            ignore = ('10', '18', '57')
-            users_ignore = ('1730', '1763', '1547', '457', '1769', '1515', '1721')
-            
-            
-            # Import districts
-            if self.districts:
-                f = csv.reader(StringIO(base64.b64decode(self.districts)))
-                for row in f:
-                    if row[0]:
-                        _logger.warn(row)
-                        image = self.download_image(row[1])
-                        vals = {
-                            'name': row[0],
-                            'country_id': self.find_country(row[2]),
-                            'website_description': (image and '<img src="data:image/png;base64,%s" />' % image) or '',
-                        }
-                        if not vals['name'] in districts:
-                            districts[row[0]] = self.env['res.district'].create(vals)
-                        else:
-                            districts[vals['name']].write(vals)
-            
-            #Import suppliers
-            if self.suppliers:
-                f = csv.reader(StringIO(base64.b64decode(self.suppliers)))
-                for row in f:
-                    if row[0]:
-                        district = districts.get(row[1])
-                        if not district:
-                            district = districts[row[1]] = self.env['res.district'].create({
-                                'name': row[1],
-                            })
-                        vals = {
-                            'customer': False,
-                            'supplier': True,
-                            'name': row[0],
-                            'district_id': district.id,
-                            'image': self.download_image(row[2], '/var/lib/drupal7/files/cavarosawine_se/'),
-                            'country_id': self.find_country(row[3]),
-                            'comment': row[4],
-                        }
-                        if not vals['name'] in suppliers:
-                            suppliers[vals['name']] = self.env['res.partner'].create(vals)
-                        else:
-                            suppliers[vals['name']].write(vals)
-            
-            #Import products
-            if self.commerce_product and self.produktvisningar:
-                f = csv.DictReader(StringIO(base64.b64decode(self.commerce_product)))
-                for row in f:
-                    if row[u'Product ID'] not in ignore:
-                        products[row[u'Product ID']] = {
-                            'list_price': float(row.get(u'Pris', '0').split(' ')[0]) / 100,
-                            'name': row[u'Titel'],
-                            'image': self.download_image(row[u'Bild']),
-                            'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
-                        }
-                f = csv.DictReader(StringIO(base64.b64decode(self.produktvisningar)))
-                for row in f:
-                    if row[u'Produkt (vara)'] and (row[u'Produkt (vara)'] not in ignore):
-                        uom = self.find_uom(row[u'Typ'].split(' ')[1])
-                        products[row[u'Produkt (vara)']].update({
-                            'description_sale': row[u'Beskrivning'],
-                            'uom_id': uom.id,
-                            'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
-                        })
+        for importf in self:
+
+            try:
+            # ~ if True:
+                districts = {}
+                for r in importf.env['res.district'].search([]):
+                    districts[r.name] = r
+                suppliers = {}
+                for r in importf.env['res.partner'].search([('supplier', '=', True)]):
+                    suppliers[r.name] = r
+                products = {}
+                #~ for r in self.env['product.template'].search():
+                    #~ products[r.name] = r
+                users = {}
+                customers = {}
+                ignore = ('10', '18', '57')
+                users_ignore = ('1730', '1763', '1547', '457', '1769', '1515', '1721')
                 
-                for id in products.keys():
-                    xml_id = 'commerce_product_%s' % id
-                    template = self.env['ir.model.data'].xmlid_to_object('__cavarosa_import__.%s' % xml_id)
-                    if template:
-                        template.write(products[id])
-                    else:
-                        self.set_external_id(self.env['product.template'].create(products[id]), xml_id)
-            
-            #Import customers
-            if self.customers:
-                f = csv.DictReader(StringIO(base64.b64decode(self.customers)))
-                for row in f:
-                    exid = 'drupal_customer_profile_id_%s' % row[u'Profil-ID']
-                    if row[u'Typ'] == 'Betalningsinformation':
-                        country = self.find_country(row[u'Address - Land'])
-                        customers[exid] = self.env['res.partner'].create({
-                            'customer': True,
-                            'name': row[u'Address - Fullständigt namn'],
-                            'street': row[u'Address - Huvudgata (till exempel gatuadress)'],
-                            'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
-                            'zip': row[u'Address - Postnummer'],
-                            'city': row[u'Address - Ort (till exempel stad)'],
-                            'state_id': self.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
-                            'country_id': country,
-                            'phone': row[u'Telefon'],
-                            'comment': row[u'Övriga upplysningar /Meddelanden'],
-                        })
-                        self.set_external_id(customers[exid], exid)
-                    elif row[u'Typ'] == 'Shipping information':
-                        country = self.find_country(row[u'Address - Land'])
-                        customers[exid] = self.env['res.partner'].create({
-                            'type': 'delivery',
-                            'name': row[u'Address - Fullständigt namn'],
-                            'street': row[u'Address - Huvudgata (till exempel gatuadress)'],
-                            'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
-                            'zip': row[u'Address - Postnummer'],
-                            'city': row[u'Address - Ort (till exempel stad)'],
-                            'state_id': self.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
-                            'country_id': country,
-                            'phone': row[u'Telefon'],
-                            'comment': row[u'Övriga upplysningar /Meddelanden'],
-                        })
-                        self.set_external_id(customers[exid], exid)
-                    else:
-                        raise Warning('Unknown type: %s' % row[u'Typ'])
-            
-            #Import users
-            delivery_users = []
-            unknown_users = []
-            if self.users:
-                portal = self.env['ir.model.data'].get_object('base', 'group_portal')
-                f = csv.DictReader(StringIO(base64.b64decode(self.users)))
-                for row in f:
-                    exid = 'drupal_uid_%s' % row[u'Uid']
-                    partner = customers.get('drupal_customer_profile_id_%s' % row[u'Profil-ID'])
-                    if partner and partner.type != 'delivery':
-                        # Ignore problem cases
-                        if row[u'Uid'] not in users_ignore:
-                            if exid in users:
-                                if partner.parent_id:
-                                    _logger.warn('Partner %s tillhörde %s. Flyttad till %s' % (partner.id, partner.parent_id.id, users[exid].partner_id.id))
-                                partner.parent_id = users[exid].partner_id
+                
+                # Import districts
+                if importf.districts:
+                    f = csv.reader(StringIO(base64.b64decode(importf.districts)))
+                    for row in f:
+                        if row[0]:
+                            _logger.warn(row)
+                            image = importf.download_image(row[1])
+                            vals = {
+                                'name': row[0],
+                                'country_id': importf.find_country(row[2]),
+                                'website_description': (image and '<img src="data:image/png;base64,%s" />' % image) or '',
+                            }
+                            if not vals['name'] in districts:
+                                districts[row[0]] = importf.env['res.district'].create(vals)
                             else:
-                                users[exid] = self.env['res.users'].with_context({'no_reset_password': True}).create({
-                                    'partner_id': partner.id,
-                                    'name': partner.name,
-                                    'login': row[u'Namn'],
-                                    'email': row[u'E-post'],
-                                    'create_date': row[u'Skapad datum'] or False,
-                                    'login_date': row[u'Senaste inloggning'] or False,
-                                    'groups_id': [(6, 0, [portal.id])],
-                                })
-                                self.set_external_id(users[exid], exid)
-                    if partner:
-                        # Save delivery adresses for later
-                        delivery_users.append({
-                            'exid': exid,
-                            'partner_id': partner,
-                            'name': partner.name,
-                            'login': row[u'Namn'],
-                            'email': row[u'E-post'],
-                            'create_date': row[u'Skapad datum'] or False,
-                            'login_date': row[u'Senaste inloggning'] or False,
-                            'groups_id': [(6, 0, [portal.id])],
-                        })
-                    else:
-                        # Save users without customers for later.
-                        unknown_users.append({
-                            'exid': exid,
-                            'name': row[u'Namn'],
-                            'login': row[u'Namn'],
-                            'email': row[u'E-post'],
-                            'create_date': row[u'Skapad datum'] or False,
-                            'login_date': row[u'Senaste inloggning'] or False,
-                            'groups_id': [(6, 0, [portal.id])],
-                        })
+                                districts[vals['name']].write(vals)
+                
+                    #Import suppliers
+                    if importf.suppliers:
+                        f = csv.reader(StringIO(base64.b64decode(importf.suppliers)))
+                        for row in f:
+                            if row[0]:
+                                district = districts.get(row[1])
+                                if not district:
+                                    district = districts[row[1]] = importf.env['res.district'].create({
+                                        'name': row[1],
+                                    })
+                                vals = {
+                                    'customer': False,
+                                    'supplier': True,
+                                    'name': row[0],
+                                    'district_id': district.id,
+                                    'image': importf.download_image(row[2], '/var/lib/drupal7/files/cavarosawine_se/'),
+                                    'country_id': importf.find_country(row[3]),
+                                    'comment': row[4],
+                                }
+                                if not vals['name'] in suppliers:
+                                    suppliers[vals['name']] = importf.env['res.partner'].create(vals)
+                                else:
+                                    suppliers[vals['name']].write(vals)
+            
+                #Import products
+                if importf.commerce_product and importf.produktvisningar:
+                    f = csv.DictReader(StringIO(base64.b64decode(importf.commerce_product)))
+                    for row in f:
+                        if row[u'Product ID'] not in ignore:
+                            products[row[u'Product ID']] = {
+                                'list_price': float(row.get(u'Pris', '0').split(' ')[0]) / 100,
+                                'name': row[u'Titel'],
+                                'image': importf.download_image(row[u'Bild']),
+                                'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
+                            }
+                    f = csv.DictReader(StringIO(base64.b64decode(importf.produktvisningar)))
+                    for row in f:
+                        if row[u'Produkt (vara)'] and (row[u'Produkt (vara)'] not in ignore):
+                            uom = importf.find_uom(row[u'Typ'].split(' ')[1])
+                            products[row[u'Produkt (vara)']].update({
+                                'description_sale': row[u'Beskrivning'],
+                                'uom_id': uom.id,
+                                'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
+                            })
                     
-                # Create delivery adress data.
-                for values in delivery_users:
-                    partner = values['partner_id']
-                    if values['exid'] in users:
-                        # User exists. Add the delivery adress to user partner.
-                        partner.drupal_parent_ids |= users[values['exid']].partner_id
-                    else:
-                        # Create a new user with delivery adress as partner.
-                        exid = values['exid']
-                        del values['exid']
-                        values['partner_id'] = partner.id
-                        users[exid] = self.env['res.users'].with_context({'no_reset_password': True}).create(values)
-                        self.set_external_id(users[exid], exid)
+                    for id in products.keys():
+                        xml_id = 'commerce_product_%s' % id
+                        template = importf.env['ir.model.data'].xmlid_to_object('__cavarosa_import__.%s' % xml_id)
+                        if template:
+                            template.write(products[id])
+                        else:
+                            importf.set_external_id(importf.env['product.template'].create(products[id]), xml_id)
                 
-                # Create users without customer data.
-                for values in unknown_users:
-                    if values['exid'] not in users:
-                        exid = values['exid']
-                        del values['exid']
-                        users[exid] = self.env['res.users'].with_context({'no_reset_password': True}).create(values)
-                        self.set_external_id(users[exid], exid)
+                #Import customers
+                if importf.customers:
+                    f = csv.DictReader(StringIO(base64.b64decode(importf.customers)))
+                    for row in f:
+                        exid = 'drupal_customer_profile_id_%s' % row[u'Profil-ID']
+                        if row[u'Typ'] == 'Betalningsinformation':
+                            country = importf.find_country(row[u'Address - Land'])
+                            customers[exid] = importf.env['res.partner'].create({
+                                'customer': True,
+                                'name': row[u'Address - Fullständigt namn'],
+                                'street': row[u'Address - Huvudgata (till exempel gatuadress)'],
+                                'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
+                                'zip': row[u'Address - Postnummer'],
+                                'city': row[u'Address - Ort (till exempel stad)'],
+                                'state_id': importf.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
+                                'country_id': country,
+                                'phone': row[u'Telefon'],
+                                'comment': row[u'Övriga upplysningar /Meddelanden'],
+                            })
+                            importf.set_external_id(customers[exid], exid)
+                        elif row[u'Typ'] == 'Shipping information':
+                            country = importf.find_country(row[u'Address - Land'])
+                            customers[exid] = importf.env['res.partner'].create({
+                                'type': 'delivery',
+                                'name': row[u'Address - Fullständigt namn'],
+                                'street': row[u'Address - Huvudgata (till exempel gatuadress)'],
+                                'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
+                                'zip': row[u'Address - Postnummer'],
+                                'city': row[u'Address - Ort (till exempel stad)'],
+                                'state_id': importf.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
+                                'country_id': country,
+                                'phone': row[u'Telefon'],
+                                'comment': row[u'Övriga upplysningar /Meddelanden'],
+                            })
+                            importf.set_external_id(customers[exid], exid)
+                        else:
+                            raise Warning('Unknown type: %s' % row[u'Typ'])
                 
-        except Exception as e:
+                #Import users
+                delivery_users = []
+                unknown_users = []
+                if importf.users:
+                    portal = importf.env['ir.model.data'].get_object('base', 'group_portal')
+                    f = csv.DictReader(StringIO(base64.b64decode(importf.users)))
+                    for row in f:
+                        exid = 'drupal_uid_%s' % row[u'Uid']
+                        partner = customers.get('drupal_customer_profile_id_%s' % row[u'Profil-ID'])
+                        if partner and partner.type != 'delivery':
+                            # Ignore problem cases
+                            if row[u'Uid'] not in users_ignore:
+                                if exid in users:
+                                    if partner.parent_id:
+                                        _logger.warn('Partner %s tillhörde %s. Flyttad till %s' % (partner.id, partner.parent_id.id, users[exid].partner_id.id))
+                                    partner.parent_id = users[exid].partner_id
+                                else:
+                                    users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create({
+                                        'partner_id': partner.id,
+                                        'name': partner.name,
+                                        'login': row[u'Namn'],
+                                        'email': row[u'E-post'],
+                                        'create_date': row[u'Skapad datum'] or False,
+                                        'login_date': row[u'Senaste inloggning'] or False,
+                                        'groups_id': [(6, 0, [portal.id])],
+                                    })
+                                    importf.set_external_id(users[exid], exid)
+                        if partner:
+                            # Save delivery adresses for later
+                            delivery_users.append({
+                                'exid': exid,
+                                'partner_id': partner,
+                                'name': partner.name,
+                                'login': row[u'Namn'],
+                                'email': row[u'E-post'],
+                                'create_date': row[u'Skapad datum'] or False,
+                                'login_date': row[u'Senaste inloggning'] or False,
+                                'groups_id': [(6, 0, [portal.id])],
+                            })
+                        else:
+                            # Save users without customers for later.
+                            unknown_users.append({
+                                'exid': exid,
+                                'name': row[u'Namn'],
+                                'login': row[u'Namn'],
+                                'email': row[u'E-post'],
+                                'create_date': row[u'Skapad datum'] or False,
+                                'login_date': row[u'Senaste inloggning'] or False,
+                                'groups_id': [(6, 0, [portal.id])],
+                            })
+                        
+                    # Create delivery adress data.
+                    for values in delivery_users:
+                        partner = values['partner_id']
+                        if values['exid'] in users:
+                            # User exists. Add the delivery adress to user partner.
+                            partner.drupal_parent_ids |= users[values['exid']].partner_id
+                        else:
+                            # Create a new user with delivery adress as partner.
+                            exid = values['exid']
+                            del values['exid']
+                            values['partner_id'] = partner.id
+                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(values)
+                            importf.set_external_id(users[exid], exid)
+                    
+                    # Create users without customer data.
+                    for values in unknown_users:
+                        if values['exid'] not in users:
+                            exid = values['exid']
+                            del values['exid']
+                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(values)
+                            importf.set_external_id(users[exid], exid)
+                    
+            except Exception as e:
+                try:
+                    # Close the ssh session, if it exists
+                    importf.session.close()
+                    importf.transport.close()
+                except:
+                    pass
+                # Reraise after terminating ssh connection
+                raise e
             try:
                 # Close the ssh session, if it exists
-                self.session.close()
-                self.transport.close()
+                importf.session.close()
+                importf.transport.close()
             except:
                 pass
-            # Reraise after terminating ssh connection
-            raise e
-        try:
-            # Close the ssh session, if it exists
-            self.session.close()
-            self.transport.close()
-        except:
-            pass
-        self.password = ''
+            importf.password = ''
 
     @api.model
     def find_uom(self, name):

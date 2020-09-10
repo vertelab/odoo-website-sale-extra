@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<openerp>
+<odoo>
         <data noupdate="1">
 
         <record id="sale_order_line_tags" model="ir.actions.server">
@@ -13,16 +13,15 @@ for o in object.browse(context.get('active_ids', [])):
 action = env['report'].get_action(colis, 'website_sale_cavarosa.sol_glabels_tags_report')
             </field>
         </record>
-
+<!-- 
         <record id="ir_values_so_line_tags" model="ir.values">
             <field name="name">Run SO line labels</field>
             <field name="model">sale.order.line</field>
             <field name="key2">client_action_multi</field>
             <field name="value" eval="'ir.actions.server,%s' %ref('website_sale_cavarosa.sale_order_line_tags')"/>
-        </record>
-
+        </record> -->
     </data>
-    
+
     <data>
 
         <report string="Print Sale Order Line Tags" id="action_sol_glabels_tags_report" model="sale.order.line" report_type="glabels" name="website_sale_cavarosa.sol_glabels_tags_report" />
@@ -32,4 +31,4 @@ action = env['report'].get_action(colis, 'website_sale_cavarosa.sol_glabels_tags
         </record>
 
     </data>
-</openerp>
+</odoo>

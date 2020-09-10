@@ -21,7 +21,6 @@
 from openerp import models, fields, api, _
 from openerp import http
 from openerp.http import request
-from openerp.addons.website_sale.controllers.main import website_sale
 import logging
 _logger = logging.getLogger(__name__)
 
@@ -41,24 +40,25 @@ class sale_order_line(models.Model):
     carrier_info = fields.Char(compute='_carrier_info')
     order_name = fields.Char(related='order_id.name')
     mobile = fields.Char(related='order_id.partner_id.mobile')
-    campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='crm.tracking.campaign', store=True)
+    campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='utm.campaign', store=True)
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
-    @api.one
     @api.depends('product_id')
     def _supplier_id(self):
-        self.supplier_id = self.product_id.seller_ids.mapped('name')[0] if len(self.product_id.seller_ids.mapped('name')) > 0 else None
-        self.campaign_id = self.order_id.campaign_id
+        for supplier in self:
+            supplier.supplier_id = supplier.product_id.seller_ids.mapped('name')[0] if len(supplier.product_id.seller_ids.mapped('name')) > 0 else None
+            supplier.campaign_id = supplier.order_id.campaign_id
 
-    @api.one
     def _unit_qty(self):
-        self.unit_qty = int(self.product_id.uom_id.factor_inv) if self.product_id.uom_id.uom_type == 'bigger' else 1
+        for unit in self: 
+            unit.unit_qty = int(unit.product_id.uom_id.factor_inv) if unit.product_id.uom_id.uom_type == 'bigger' else 1
 
-    @api.one
+
     def _carrier_info(self):
-        if self.order_id.carrier_id == self.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
-            self.carrier_info = self.order_id.carrier_id.name if self.order_id.carrier_id else '' + ': ' + self.order_id.cavarosa_box or ''
-        elif self.order_id.carrier_id.pickup_location: #utlämningsställe
-            self.carrier_info = self.order_id.carrier_id.name + ': ' + self.order_id.partner_shipping_id.name
-        else:   #hemleverans
-            self.carrier_info = self.order_id.carrier_id.name
+        for carrier in self:
+            if carrier.order_id.carrier_id == carrier.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
+                carrier.carrier_info = carrier.order_id.carrier_id.name if carrier.order_id.carrier_id else '' + ': ' + carrier.order_id.cavarosa_box or ''
+            elif carrier.order_id.carrier_id.pickup_location: #utlämningsställe
+                carrier.carrier_info = carrier.order_id.carrier_id.name + ': ' + carrier.order_id.partner_shipping_id.name
+            else:   #hemleverans
+                carrier.carrier_info = carrier.order_id.carrier_id.name
