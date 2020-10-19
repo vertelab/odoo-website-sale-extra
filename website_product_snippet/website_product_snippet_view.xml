@@ -1,110 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
+           <!-- Customize Snippets -->
+        <template id="website_product_category" name="Products By Category">
+                <!-- Customize Structure -->
+                        <!-- products by category snippet -->
+       
+                <div class="container">
+                      <section class="oe_snippet_body products_by_category mb16 mt16">
+                            <div class="container">
+                                <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
+                                <div class="product_div"/>
+                            </div>
+                        </section>
+                    </div>
+      
+        </template>
 
+        <template id="website_product_supplier" name="Products By Supplier">
+            <section>
+                <!-- end of products by category snippet -->
+                <!-- products by category partner -->
+                <div>
+                    <section class="oe_snippet_body products_by_partner mb16 mt16">
+                        <div class="container">
+                            <h2 class="text-center oe_ps_title mt16 mb16">Supplier</h2>
+                            <div class="product_div"/>
+                        </div>
+                    </section>
+                </div>
+                <!-- end of products by category partner -->
+            </section>
+        </template>
 
+            <!-- Customize Content -->
+        <template id="invidual_product_snippet" name="Invidual Snippets">
+            <section>
+                <div class="container" id="individual_product_snippet">
+                    <div class="row">
+                           <h2 class="text-center oe_ps_title mt16 mb16">Product</h2>
+                    <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right">
+                            <div class="product_div"/>
+                        </div>
+                        </div>
+                    </div>
+           </section>
+        </template>
 
-     <template id="category" name="Testimonial snippet">
-     <section class="snippet_testimonial">
-     </section>
-     TEST
-
-    </template>
-
-
-   <!-- 
+            <!-- product snippet options -->
         <template id="product_snippet_options" inherit_id="website.snippet_options" name="Product Snippet Options">
-            <xpath expr="." position="inside">
-   
+            <xpath expr="//div[@data-js='background']" position="after">
+                <!-- products by category -->
                 <div data-snippet-option-id="products_by_category" data-selector=".products_by_category">
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Product by Category</a>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product by Category</we-toggler>
+                         <we-collapse>
                         <t t-set="categories" t-value="request.env['product.template'].search([('categ_id', '!=', False)]).mapped('categ_id')" />
-                        <ul class="dropdown-menu">
                             <t t-if="len(categories) &gt; 0">
                                 <t t-foreach="categories" t-as="category">
-                                    <li>
-                                        <a t-att-data-value="category.id" class="oe_products_by_category"><t t-esc="category.name"/></a>
-                                    </li>
+           
+                                    <we-button t-att-data-value="category.id" t-attf-data-select-class="{{category.name}}">
+                           
+                                        <a t-field="category.name" t-att-data-value="category.id" data-select-class="oe_products_by_category"/>
+                               
+                                    </we-button>
+                            
                                 </t>
                             </t>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Columns</a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="3" class="oe_ps_col_change">Col-3</a></li>
-                            <li><a data-value="4" class="oe_ps_col_change">Col-4</a></li>
-                            <li><a data-value="6" class="oe_ps_col_change">Col-6</a></li>
-                            <li><a data-value="12" class="oe_ps_col_change">Col-12</a></li>
-                        </ul>
-                    </li>
+                      </we-collapse>
+                   </we-collapse-area>
+                        <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                          <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
                 </div>
-         
+
+                <!-- products by partner -->
                 <div data-snippet-option-id="products_by_partner" data-selector=".products_by_partner">
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Product by Supplier</a>
-                        <t t-set="partners" t-value="request.env['res.partner'].search([])" />
-                        <ul class="dropdown-menu">
+                    <we-collapse-area>
+                         <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product by Supplier</we-toggler>
+                             <we-collapse>
+                        <t t-set="partners" t-value="request.env['res.partner'].search([('is_company', '=', True)])" />
                             <t t-if="len(partners) &gt; 0">
                                 <t t-foreach="partners" t-as="partner">
-                                    <li>
-                                        <a t-att-data-value="partner.id" class="oe_products_by_partner"><t t-esc="partner.name"/></a>
-                                    </li>
+                                    <we-button t-att-data-value="partner.id" data-select-class="oe_products_by_partner" class="oe_products_by_partner">
+                                        <t t-esc="partner.name"/>
+                                    </we-button>
                                 </t>
                             </t>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Columns</a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="3" class="oe_ps_col_change">Col-3</a></li>
-                            <li><a data-value="4" class="oe_ps_col_change">Col-4</a></li>
-                            <li><a data-value="6" class="oe_ps_col_change">Col-6</a></li>
-                            <li><a data-value="12" class="oe_ps_col_change">Col-12</a></li>
-                        </ul>
-                    </li>
-                </div>
- 
+                    </we-collapse>
+                </we-collapse-area>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                          <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
+                </div> 
+                <!-- individual product -->
                 <div data-snippet-option-id="individual_product" data-selector=".oe_individual_product">
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Product</a>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product </we-toggler>
+                         <we-collapse>
                         <t t-set="products" t-value="request.env['product.template'].search([('active', '=', True)])" />
-                        <ul class="dropdown-menu">
                             <t t-if="len(products) &gt; 0">
                                 <t t-foreach="products" t-as="product">
-                                    <li>
-                                        <a t-att-data-value="product.id" class="oe_individual_product"><t t-esc="product.name"/></a>
-                                    </li>
+                                    <we-button t-att-data-value="product.id" t-attf-data-select-class="{{product.name}}"><t t-esc="product.name"/>
+                                </we-button>
                                 </t>
                             </t>
-                        </ul>
-                    </li>
-                    <li class="dropdown-submenu">
-                        <a tabindex="-1" href="#">Columns</a>
-                        <ul class="dropdown-menu">
-                            <li><a data-value="3" class="oe_ind_col_change">Col-3</a></li>
-                            <li><a data-value="4" class="oe_ind_col_change">Col-4</a></li>
-                            <li><a data-value="6" class="oe_ind_col_change">Col-6</a></li>
-                            <li><a data-value="12" class="oe_ind_col_change">Col-12</a></li>
-                        </ul>
-                    </li>
+                        </we-collapse>
+                    </we-collapse-area>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                          <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
+                </div>
+      
+            </xpath>
+        </template>
+
+        <template id="adding_new_snippet_to_website_snippetsr" inherit_id="website.snippets" name="Place into building blocks bar">
+            <xpath expr="//div[@id='snippet_structure']" position="inside">
+                <div class="o_panel_body">
+                        <t t-snippet="website_product_snippet.website_product_supplier" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
+                    <t t-snippet="website_product_snippet.invidual_product_snippet" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
+                    <t t-snippet="website_product_snippet.website_product_category" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
                 </div>
             </xpath>
         </template>
- -->
-
- 
-        <template id="place_into_bar" inherit_id="website.snippets" name="Place into bar">
-             <xpath expr="//div[@id='snippet_structure']/div[@class='o_panel_body']" position="inside">
-
-            <t t-snippet="website_product_snippet.category" t-thumbnail="/website_product_snippet/static/description/blog2.png" />
-      
-
-            </xpath>
-        </template>
-
-
 
         <!-- Custom Snippet CSS and javascript -->
         <template id="website_product_snippet_css_and_js" inherit_id="website.layout" name="Website Product Snippet Custom CSS and JS">

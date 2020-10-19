@@ -21,6 +21,7 @@
 from openerp.exceptions import except_orm, Warning, RedirectWarning
 from openerp import http
 from openerp.http import request
+import odoo
 import werkzeug
 import logging
 _logger = logging.getLogger(__name__)
@@ -48,6 +49,7 @@ class product_snippet(http.Controller):
         products_list = {'category': category.name, 'products': {}}
         for p in products:
             products_list['products'][p.id] = {'name': p.name, 'image': p.image_medium, 'description': p.description_sale if p.description_sale else ''}
+            _logger.warning('sandra %s' % product_list)
         return products_list
 
     @http.route(['/product_snippet/get_products_by_partner'], type='json', auth="user", website=True)

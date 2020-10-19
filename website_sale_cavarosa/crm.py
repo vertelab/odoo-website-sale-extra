@@ -36,7 +36,7 @@ class website(models.Model):
     _inherit = 'website'
 
     def current_campaign(self):
-        return self.env['utm.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today()), ('website_published', '=', True)])
+        return self.env['utm.campaign'].search([('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())])
 
 
 class website_sale(http.Controller):
@@ -59,7 +59,7 @@ class current_campaign(http.Controller):
         if not campaigns:
             campaigns = request.website.sudo().current_campaign()
         if len(campaigns) > 0:
-            return request.website.render('website_sale_cavarosa.current_campaign', {'campaign': campaigns[0]})
+            return request.render('website_sale_cavarosa.current_campaign', {'campaign': campaigns[0]})
         else:
             campaigns = request.env['utm.campaign'].sudo().search([('date_start', '>=', fields.Date.today())])
             if len(campaigns) > 0:
@@ -67,9 +67,9 @@ class current_campaign(http.Controller):
                 for c in campaigns:
                     if c.date_start < next_campaign_date:
                         next_campaign_date = c.date_start
-                return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': next_campaign_date})
+                return request.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': next_campaign_date})
             else:
-                return request.website.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': None})
+                return request.render('website_sale_cavarosa.no_campaign', {'next_campaign_date': None})
 
     @http.route(['/snippet/get_campaign'], type='json', auth="user", website=True)
     def get_campaign(self, campaign_id=None, **kw):

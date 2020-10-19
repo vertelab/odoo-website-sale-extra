@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
     <data>
-        <record id="view_sales_order_line_filter" model="ir.ui.view">
-            <field name="name">sale.order.line.search.inherited.website_sale_cavarosa</field>
+<!--        <record id="view_sales_order_line_filter" model="ir.ui.view">
+            <field name="name">sale.order.line.select</field>
             <field name="model">sale.order.line</field>
             <field name="inherit_id" ref="sale.view_sales_order_line_filter" />
             <field name="arch" type="xml">
@@ -10,11 +10,11 @@
                     <field name="campaign_id"/>
                     <field name="supplier_id"/>
                 </field>
-                <filter string="Status" position="after">
+                <filter position="after">
                     <filter string="Campaign" domain="[]" context="{'group_by':'campaign_id'}"/>
                     <filter string="Supplier" domain="[]" context="{'group_by':'supplier_id'}"/>
                 </filter>
             </field>
-        </record>
+        </record>  -->
     </data>
 </odoo>
