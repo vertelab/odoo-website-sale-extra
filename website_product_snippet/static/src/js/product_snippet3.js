@@ -1,5 +1,7 @@
-odoo.define('website.editor.snippets.options', function (require) {
+odoo.define('website_product_snippet.product', function (require) {
 'use strict';
+
+website.add_template_file('/website_product_snippet/static/src/xml/product_snippet.xml');
 
 var core = require('web.core');
 var Dialog = require('web.Dialog');
@@ -7,10 +9,13 @@ var weWidgets = require('wysiwyg.widgets');
 var options = require('web_editor.snippets.options');
 var website = this.website;
 var qweb = core.qweb;
+var sAnimation = require('website.content.snippets.animation');
 
-options.registry.products_by_category = options.Class.extend({
-    selector : '.oe_products_by_category',
-    
+console.log('sandra');
+
+    sAnimation.registry.product_by_category = sAnimation.Class.extend({
+    selector : '.product_by_category',
+
     start: function () {
         var self = this;
         var div_height = 0;
@@ -47,9 +52,10 @@ options.registry.products_by_category = options.Class.extend({
 
                     var content = qweb.render('website_product_snippets.website_product_category', {
                         'product_name': data['products'][key]['name'],
-                        // 'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
+                        'product_image': data['products'][key]['image'] != null ? ("data:image/png;base64," + data['products'][key]['image']) : '',
                         'product_description': data['products'][key]['description'],
                         'product_url': '/shop/product/' + key,
+
                     });
                     product_content += content;
                 });
@@ -146,3 +152,14 @@ options.registry.products_by_category = options.Class.extend({
 //         });
 //     }
 // });
+
+
+odoo.define(function (require) {
+
+    options.registry.website_product_category = options.Class.extend({
+        onFocus: function () {
+            alert("On focus!")
+        },
+    });
+});
+

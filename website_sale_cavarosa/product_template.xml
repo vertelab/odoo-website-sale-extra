@@ -179,8 +179,7 @@
                             </div>
                         </t>
                     </div>
-               
-
+            
                     <t t-call="website_sale_cavarosa.shop_menu"/>
 
                 </div>

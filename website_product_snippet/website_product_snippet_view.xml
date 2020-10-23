@@ -11,6 +11,23 @@
                             <div class="container">
                                 <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
                                 <div class="product_div"/>
+                                <h1>hej</h1>
+                    
+
+                                <t t-foreach="request.env['product.category'].search([])" t-as="product">
+                                   <t t-esc="product.name"/>
+
+                               </t>
+
+
+                                <t t-if="category">
+                                    <div class="card-body">
+                                      <h3 class="card-title" t-field="product.name" />
+                                    </div>
+                                  </t>
+
+                    
+
                             </div>
                         </section>
                     </div>
@@ -57,15 +74,13 @@
                          <we-collapse>
                         <t t-set="categories" t-value="request.env['product.template'].search([('categ_id', '!=', False)]).mapped('categ_id')" />
                             <t t-if="len(categories) &gt; 0">
-                                <t t-foreach="categories" t-as="category">
-           
-                                    <we-button t-att-data-value="category.id" t-attf-data-select-class="{{category.name}}">
+
+                                    <we-button data-js="products_by_category" t-attf-data-select-class="all">
+
                            
-                                        <a t-field="category.name" t-att-data-value="category.id" data-select-class="oe_products_by_category"/>
+                                        <a data-select-class="oe_products_by_category">all</a>
                                
                                     </we-button>
-                            
-                                </t>
                             </t>
                       </we-collapse>
                    </we-collapse-area>
@@ -144,19 +159,28 @@
         </template>
 
         <!-- Custom Snippet CSS and javascript -->
-        <template id="website_product_snippet_css_and_js" inherit_id="website.layout" name="Website Product Snippet Custom CSS and JS">
-            <!-- Customize css -->
-            <xpath expr="//t[@t-call-assets='web.assets_frontend']" position="before">
-                <link href="/website_product_snippet/static/src/css/product_snippet.css" rel="stylesheet"/>
-            </xpath>
-            <!-- Customize javascript -->
+
+
+<!-- <template id="assets_editor" inherit_id="website.assets_editor" name="Products By Category">
+    <xpath expr="." position="inside">
+      <script src="/website_product_snippet/static/src/js/product_snippet.js" type="text/javascript"/>
+    </xpath>
+</template>
+ -->
+        <template id="snippet_js" inherit_id="website.layout">
             <xpath expr="//body" position="inside">
-                <script src="/website_product_snippet/static/src/js/product_snippet.js" type="text/javascript"/>
+              <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>
             </xpath>
         </template>
-        <!-- Custom Snippet Options CSS -->
-        <template id="website_product_snippet_options_css" inherit_id="website.assets_frontend" name="Website Product Snippet Options CSS">
-            <xpath expr="link[last()]" position="after" />
+
+        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Assets Frontend Cavarosa">
+            <xpath expr="." position="inside">
+              <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>
+            </xpath>
         </template>
+
+
+
+
     </data>
 </odoo>
