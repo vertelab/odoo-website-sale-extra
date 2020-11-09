@@ -5,15 +5,23 @@
         <record id="product_template_form_view" model="ir.ui.view">
             <field name="name">product.template.common.form.inherit.website_sale_cavarosa</field>
             <field name="model">product.template</field>
-            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="inherit_id" ref="product.product_template_only_form_view"/>
             <field name="arch" type="xml">
                 <field name="list_price" position="after">
+                    <label for="unit_price"/>
                     <field name="unit_price"/>
                 </field>
                 <field name="description_sale" position="before">
+                     <field name="unit_price"/>
                     <label for="website_short_description"/>
                     <field name="website_short_description"/>
                 </field>
+                  <page position="after">
+                    <page string="Webbeskrivning">
+                        <label for="website_description"/>
+                        <field name="website_description"/>
+                    </page>
+                </page>
             </field>
         </record>
 

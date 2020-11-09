@@ -24,6 +24,7 @@ _logger = logging.getLogger(__name__)
 
 class product_template(models.Model):
     _inherit = 'product.template'
+    website_description = fields.Html(string="Website Description")
 
     def _unit_price(self):
         for price in self:
@@ -33,7 +34,7 @@ class product_template(models.Model):
                 price.unit_price = price.list_price / price.sudo().uom_id.factor_inv
             else:
                 price.unit_price = price.list_price
-    unit_price = fields.Float(string='Unit Price', digits=(16, 0), compute='_unit_price')
+    unit_price = fields.Monetary(string='Unit Price', digits=(16, 0), compute='_unit_price')
     
     def _seller_id(self):
         for seller in self:

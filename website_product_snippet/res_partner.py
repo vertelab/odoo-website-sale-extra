@@ -28,9 +28,18 @@ _logger = logging.getLogger(__name__)
 class res_partner(models.Model):
     _inherit = 'res.partner'
 
-    product_ids = fields.Many2many(string='Products', comodel_name='product.supplierinfo', inverse_name='name')
     seller_ids = fields.One2many(string='Suppliers', comodel_name='product.supplierinfo', inverse_name='name')
 
-    # def _product_ids(self):
-    # 	for product in self:
-    #     	product.product_ids = [(6, 0, [s.product_tmpl_id.id for s in product_ids.seller_ids])]
+    def _product_ids(self):
+    	for product in self:
+        	product.product_ids = [(6, 0, [s.product_tmpl_id.id for s in product.seller_ids])]
+    product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')
+
+# class res_partner(models.Model):
+#     _inherit = 'res.partner'
+
+#     seller_ids = fields.One2many(string='Suppliers', comodel_name='product.supplierinfo', inverse_name='name')
+#     @api.one
+#     def _product_ids(self):
+#         self.product_ids = [(6, 0, [s.product_tmpl_id.id for s in self.seller_ids])]
+#     product_ids = fields.Many2many(string='Products', comodel_name='product.template', compute='_product_ids')

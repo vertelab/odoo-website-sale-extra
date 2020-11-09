@@ -28,8 +28,25 @@ class res_partner(models.Model):
     _inherit = 'res.partner'
 
     district_id = fields.Many2one(comodel_name='res.district', string='District')
-    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='crm.lead')
+    campaign_ids = fields.Many2many(string='Campaigns', comodel_name='utm.campaign')
+    # supplier = # fields.Boolean(string='Supplier')
+    # customer = # fields.Boolean(string='Customer')
 
+    supplier = fields.Boolean(compute='_get_supplier')
+    customer = fields.Boolean(compute='_get_customer')
+
+    old_parent_id = fields.Char(string="Old parent_id for porting")
+    old_id = fields.Char(string="Old id for porting data")
+
+    def _get_supplier(self):
+        for partner in self: 
+            partner.supplier = bool(partner.supplier_rank)
+            _logger.warning(" sup %s " % partner.supplier_rank)
+
+    def _get_customer(self):
+        for partner in self:    
+            partner.customer = bool(partner.customer_rank)
+            _logger.warning(" cust %s " % partner.customer_rank)
 
 class Main(http.Controller):
 
@@ -50,18 +67,18 @@ class Main(http.Controller):
     @http.route(['/producers'], type='http', auth="public", website=True)
     def producers(self, **post):
         countries = request.env['res.district'].sudo().search([]).mapped('country_id')
-        return request.website.render('website_sale_cavarosa.producers', {'countries': countries})
+        return request.render('website_sale_cavarosa.producers', {'countries': countries})
 
     @http.route(['/producer/<int:partner_id>'], type='http', auth="public", website=True)
     def producer_products(self, partner_id=None, **post):
         partner = request.env['res.partner'].sudo().browse(partner_id)
         products = partner.product_ids
-        return request.website.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
+        return request.render('website_sale_cavarosa.producer_products', {'supplier': partner, 'products': products})
 
     @http.route(['/country/<model("res.country"):country>'], type='http', auth="public", website=True)
     def res_country(self, country=None, **post):
-        return request.website.render('website_sale_cavarosa.country', {'country': country})
+        return request.render('website_sale_cavarosa.country', {'country': country})
 
     @http.route(['/district/<model("res.district"):district>'], type='http', auth="public", website=True)
     def res_district(self, district=None, **post):
-        return request.website.render('website_sale_cavarosa.district', {'district': district})
+        return request.render('website_sale_cavarosa.district', {'district': district})

@@ -30,6 +30,13 @@
     background: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1) 50%);
 }
 
+
+#product_full_description{
+width:50%;
+margin: auto;
+}
+
+
 .product_short_description {
     height: 4.8em;
     overflow: hidden;
@@ -61,7 +68,7 @@
 
 #shopmenus {
     position: fixed;
-    top: 20%;
+    top: 16.5%;
     left: 2%;
     background-color: rgba(0,0,0,0.6);
     border: rgba(0,0,0,0.4);
@@ -71,13 +78,13 @@
 
 #shopmenus_dropdown {
     position: fixed;
-    top: calc(20% + 2.2em);
+    top: -570px !important;
     left: 2%;
     background-color: rgba(0,0,0,0.6);
     border: rgba(0,0,0,0.4);
     z-index: 100;
+    padding: 10px;
 }
-
 #shopmenus_dropdown a {
     color: #fff;
 }
@@ -97,9 +104,6 @@
         top: 10%;
     }
 
-    #shopmenus_dropdown {
-        top: calc(10% + 2.2em);
-    }
 }
 
 @media (max-width: 767px) {
@@ -107,4 +111,9 @@
         padding-left: 0px !important;
         padding-right: 0px !important;
     }
+
+        #product_full_description{
+        width:95%;
+}
+
 }

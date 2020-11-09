@@ -8,9 +8,23 @@
             <field name="model">res.partner</field>
             <field name="inherit_id" ref="base.view_partner_form"/>
             <field name="arch" type="xml">
-                <field name="website" position="after">
-                    <field name="campaign_ids" widget="many2many_tags"/>
+                 <field name="website" position="after">
+        			<field name="campaign_ids" widget="many2many_tags"/>
+        			<field name="old_parent_id"/>
+        			<field name="old_id"/>
                 </field>
+
+                <field name="ref" position="after">
+                    <field name="supplier"/>
+                    <field name="customer"/>
+
+                </field>
+<!-- 
+                 <fields name="ref" position="after">
+                    <field name="supplier"/>
+                    <field name="customer"/>
+                </fields>
+ -->
             </field>
         </record>
 
@@ -172,6 +186,14 @@
                 <script src="/website_sale_cavarosa/static/src/js/snippet.js" type="text/javascript"></script>
             </xpath>
         </template>
+
+        <template id="snippet_js" inherit_id="website.layout">
+            <xpath expr="//body" position="inside">
+              <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"></script>
+            </xpath>
+        </template>
+
+
 
     </data>
 </odoo>

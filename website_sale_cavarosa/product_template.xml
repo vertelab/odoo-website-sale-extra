@@ -48,10 +48,10 @@
 
         <template id="product_price" inherit_id="website_sale.product_price">
             <xpath expr="//b[@class='oe_price']" position="attributes">
-                <attribute name="t-field">product.unit_price</attribute>
+                <attribute name="t-field">product.list_price</attribute>
             </xpath>
             <xpath expr="//h4" position="attributes">
-                <attribute name="t-field">product.unit_price</attribute>
+                <attribute name="t-field">product.list_price</attribute>
             </xpath>
         </template>
 
@@ -171,7 +171,7 @@
                                         <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
                                     </a>
                                     <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="object.object_id.name"/></b></h3>
-                                    <div class="text-muted" t-field="object.object_id.website_short_description"/>
+                                    <div class="text-muted col-md-12" t-field="object.object_id.website_short_description"/>
                                     <t t-call="website_sale_cavarosa.products_grid">
                                         <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                     </t>
@@ -186,14 +186,14 @@
             </t>
         </template>
 
-        <template id="product_grid" name="Product Grid">
+         <template id="product_grid" name="Product Grid">
             <form action="/shop/cart/update" method="post">
                 <a t-att-href="'/shop/product/%s' %product.id">
                     <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
                         <div class="oe_cr_inner">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
                             <div class="oe_product_image">
-                                <img class="img img-responsive" style="margin: auto;" t-att-src="'/website/image/product.template/%s/image/300x300' %product.id"/>
+                                <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:100%;" t-att-src="'/web/image/product.product/%s/image_1024/' %product.id"/>
                             </div>
                             <p class="product_short_description text-muted" t-field="product.website_short_description"/>
                             <t t-if="product.campaign_product">
@@ -206,7 +206,7 @@
                                             }'>
                                             </span>
                                             <span itemprop="price" style="display:none;" t-esc="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).unit_price"/>
-                                            <span itemprop="priceCurrency" style="display:none;" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                                            <span itemprop="priceCurrency" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                                         </b>
                                         <t t-if="product.type == 'product'">
                                             <b><p t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
@@ -228,14 +228,14 @@
                     </div>
                 </a>
             </form>
-        </template>
+        </template> 
 
-        <template id="products_add_to_cart" inherit_id="website_sale_cavarosa.product_grid" active="False" customize_show="True" name="Add to Cart">
+         <template id="products_add_to_cart" inherit_id="website_sale_cavarosa.product_grid" active="True" customize_show="True" name="Add to Cart">
             <xpath expr="//span[@itemprop='priceCurrency']" position="after">
                 <input name="product_id" t-att-value="product.product_variant_ids[0].id" type="hidden"/>
-                <t t-if="len(product.product_variant_ids) == 1">
+             <!--    <t t-if="len(product.product_variant_ids) == 1"> -->
                   <a class="btn btn-default btn-xs fa fa-shopping-cart a-submit"/>
-                </t>
+           <!--      </t> -->
                 <t t-if="len(product.product_variant_ids) &gt; 1">
                   <a class="btn btn-default btn-xs fa fa-shopping-cart" t-att-href="keep('/shop/product/%s' % slug(product), page=(pager['page']['num'] if pager['page']['num']>1 else None))"/>
                 </t>
