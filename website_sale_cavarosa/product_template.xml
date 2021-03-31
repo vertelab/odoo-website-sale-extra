@@ -48,10 +48,10 @@
 
         <template id="product_price" inherit_id="website_sale.product_price">
             <xpath expr="//b[@class='oe_price']" position="attributes">
-                <attribute name="t-field">product.list_price</attribute>
+                <attribute name="t-field">product.unit_price</attribute>
             </xpath>
             <xpath expr="//h4" position="attributes">
-                <attribute name="t-field">product.list_price</attribute>
+                <attribute name="t-field">product.unit_price</attribute>
             </xpath>
         </template>
 
@@ -164,13 +164,36 @@
                         <h1 t-field="campaign.name" class="text-center"/>
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
                         <div t-field="campaign.website_description"/>
+
+                       <section class="s_three_columns pt32 pb32">
+                            <div class="container">
+                                <div class="row d-flex align-items-stretch">
+                                     <t t-foreach="campaign.object_ids" t-as="object">
+                                    <div class="col-lg-3 s_col_no_bgcolor pt16 pb16">
+                                        <div class="card bg-white">
+                                           <t t-if="object.object_id._name == 'res.partner'">
+                                            <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">             
+                                          <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:auto;" t-att-src="'/web/image/res.partner/%s/image_1024/' %object.object_id.id"/>
+                                          </a>
+                                          </t>
+                                            <div class="card-body">
+                                                <h3 class="card-title o_default_snippet_text"><t t-esc="object.object_id.name"/></h3>
+                                                <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </t>
+                                </div>
+                            </div>
+                        </section>
+
                         <t t-foreach="campaign.object_ids" t-as="object">
                             <div class="container oe_website_sale">
                                 <t t-if="object.object_id._name == 'res.partner'">
                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
                                         <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
                                     </a>
-                                    <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="object.object_id.name"/></b></h3>
+                                  <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="object.object_id.name"/></b></h3>
                                     <div class="text-muted col-md-12" t-field="object.object_id.website_short_description"/>
                                     <t t-call="website_sale_cavarosa.products_grid">
                                         <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
@@ -193,7 +216,7 @@
                         <div class="oe_cr_inner">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
                             <div class="oe_product_image">
-                                <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:100%;" t-att-src="'/web/image/product.product/%s/image_1024/' %product.id"/>
+                                <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:100%;" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
                             </div>
                             <p class="product_short_description text-muted" t-field="product.website_short_description"/>
                             <t t-if="product.campaign_product">
@@ -216,7 +239,7 @@
                                             <b><p/></b>
                                         </t>
                                         <t t-if="product.uom_id.uom_type == 'bigger'">
-                                            <p style="height: 40px;">You buy this product <t t-esc="int(product.uom_id.factor_inv)"/> in a package</p>
+                                            <p style="height: 40px;">Säljs endast i <t t-esc="int(product.uom_id.factor_inv)"/>-pack </p>
                                         </t>
                                         <t t-if="product.uom_id.uom_type != 'bigger'">
                                             <p style="height: 40px;"/>

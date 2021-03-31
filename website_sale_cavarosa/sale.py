@@ -43,6 +43,7 @@ class sale_order_line(models.Model):
     campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='utm.campaign', store=True)
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
+
     @api.depends('product_id')
     def _supplier_id(self):
         for supplier in self:
@@ -62,3 +63,21 @@ class sale_order_line(models.Model):
                 carrier.carrier_info = carrier.order_id.carrier_id.name + ': ' + carrier.order_id.partner_shipping_id.name
             else:   #hemleverans
                 carrier.carrier_info = carrier.order_id.carrier_id.name
+
+
+class sale_order(models.Model):
+    _inherit = 'sale.order'
+    old_id = fields.Char(string="Old id for porting data")
+
+
+
+# class Home(models.Model):
+#     _inherit = 'home'
+
+#     def _redirect_to_campaign_page(self)
+#         if 
+#             return request.redirect("/campaign")
+
+
+
+

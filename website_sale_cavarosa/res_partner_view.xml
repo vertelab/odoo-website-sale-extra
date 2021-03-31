@@ -19,12 +19,13 @@
                     <field name="customer"/>
 
                 </field>
-<!-- 
-                 <fields name="ref" position="after">
-                    <field name="supplier"/>
-                    <field name="customer"/>
-                </fields>
- -->
+
+                <notebook position="inside">
+                    <page string="Website short description">
+                        <field name="website_short_description"/>
+                    </page>
+                </notebook>
+                
             </field>
         </record>
 
@@ -79,11 +80,11 @@
                         <div class="col-md-12">
                             <h2 t-field="supplier.name" class="text-center"/>
                             <h3 class="css_non_editable_mode_hidden">Description for <b><t t-esc="supplier.name"/></b></h3>
-                            <div t-field="supplier.website_description"/>
+                            <div t-field="supplier.comment"/>
                             <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
-                            <div class="text-muted css_non_editable_mode_hidden mb32" t-field="supplier.website_short_description"/>
+                            <div class="css_non_editable_mode_hidden" t-field="supplier.website_short_description"/>
                             <h3 class="css_non_editable_mode_hidden">Image for <b><t t-esc="supplier.name"/></b></h3>
-                            <span itemprop="image" contenteditable="true" t-field="supplier.image" t-field-options="{&quot;widget&quot;: &quot;image&quot;, &quot;class&quot;: &quot;css_non_editable_mode_hidden&quot;, &quot;alt-field&quot;: &quot;name&quot;}"/>
+                            <div t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product' }"/>
                             <t t-if="products">
                                 <t t-call="website_sale_cavarosa.products_grid"/>
                             </t>
@@ -155,13 +156,13 @@
                                             <div class="col-md-12" style="padding: 0px;">
                                                 <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
                                                 <div class="text-muted col-md-12 mb8" style="padding: 0px;" t-field="supplier.website_short_description"/>
-                                                <t t-if="supplier.image">
+                                                <t t-if="supplier.image_1920">
                                                     <div class="col-md-12" style="padding: 0px;">
                                                         <div class="o_container">
-                                                            <span itemprop="image" t-field="supplier.image" t-field-options='{"widget": "image", "class": "img-rounded", "alt-field": "name"}'/>
+                                                            <div t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product' }"/>
                                                         </div>
                                                     </div>
-                                                </t>
+                                                </t> 
                                             </div>
                                         </div>
                                     </t>
@@ -192,6 +193,18 @@
               <script src="/website_sale_cavarosa/static/src/js/main.js" type="text/javascript"></script>
             </xpath>
         </template>
+
+
+<!--     <template id="assets_frontend" inherit_id="website.assets_frontend" name="snippet">
+      <xpath expr="." position="inside">
+         <script type="text/javascript">
+            odoo.define(function (require){
+              var ajax = require('web.ajax');
+              ajax.loadJS("/website_sale_cavarosa/static/src/js/snippet.js");
+            });
+        </script>
+      </xpath>
+    </template> -->
 
 
 

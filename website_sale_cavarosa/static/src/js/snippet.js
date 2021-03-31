@@ -1,5 +1,9 @@
+
+odoo.define( function (require) {
+
+
 var website = odoo.website;
-website.add_template_file('/website_sale_cavarosa/static/src/xml/snippets.xml');
+// website.add_template_file('/website_sale_cavarosa/static/src/xml/snippets.xml');
 
 var core = require('web.core');
 var Dialog = require('web.Dialog');
@@ -19,20 +23,31 @@ website.snippet.options.current_campaign_navigator_option = website.snippet.Opti
     get_campaign: function(campaign_id){
         if (campaign_id != '') {
             var self = this;
-            self._rpc("/snippet/get_campaign", "call", {
-                'campaign_id': campaign_id,
-            }).then(function(data){
-                var supplier_content = '';
-                $.each(data, function(key, info) {
-                    var content = qweb.render('supplier_content', {
-                        'supplier_url': data[key]['supplier_url'],
-                        'supplier_name': data[key]['supplier_name'],
+     
+                rpc.query({
+                        route: "/shop/delivery/carrier_data",
+                        params: {
+                            campaign_id: campaign_id,
+                        }
+                      
+                }).then(function(data){
+                    var supplier_content = '';
+                    $.each(data, function(key, info) {
+                        console.log('sandraaa')
+
+                        var content = qweb.render('supplier_content', {
+                            'supplier_url': data[key]['supplier_url'],
+                            'supplier_name': data[key]['supplier_name'],
+                        });
+                        content = content.replace("image_url", data[key]['supplier_image']);
+                        supplier_content += content;
                     });
-                    content = content.replace("image_url", data[key]['supplier_image']);
-                    supplier_content += content;
-                });
                 self.$target.find(".supplier_content").html(supplier_content + "<t t-esc='user_id'/>");
             });
         }
     }
 });
+
+
+});
+

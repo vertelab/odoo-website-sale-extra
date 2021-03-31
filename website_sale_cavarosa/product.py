@@ -49,6 +49,7 @@ class product_template(models.Model):
             else:
                 camp_prod.campaign_product = False
     campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')
+    # website_short_desc = fields.Text(string='Website Short Desc', help='This description only shows in product grid view')
     website_short_description = fields.Text(string='Website Short Description', help='This description only shows in product grid view')
 
     @api.model
