@@ -1,5 +1,0 @@
-id,name,model_id/id,group_id/id,perm_read,perm_write,perm_create,perm_unlink
-access_res_district_salesman,res.district.salesman,model_res_district,base.group_sale_salesman,1,1,1,0
-access_res_district_manager,res.district.manager,model_res_district,base.group_sale_manager,1,1,1,1
-access_res_district_all,res.district.all,model_res_district,,1,0,0,0
-access_product_uom_public,product.uom public,product.model_product_uom,,1,0,0,0

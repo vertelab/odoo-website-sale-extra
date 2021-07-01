@@ -1,2 +1,0 @@
-import res_partner
-import website_product_snippet
