@@ -38,13 +38,14 @@ Special order imports for Dermanord AB
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': ['sale',],
+    'depends': ['sale', 'sale_management'],
     'external_dependencies': {
-        'python': ['xlrd','pdfminer','unicodecsv'],
+        'python': ['xlrd', 'pdfminer', 'unicodecsv'],
     },
     'data': [
-        'order_import_view.xml',
-        ],
+        'security/ir.model.access.csv',
+        'views/order_import_view.xml',
+    ],
     'application': False,
     'installable': True,
 }
