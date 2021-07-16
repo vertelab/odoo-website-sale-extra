@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--
+    <template id="product_item_price_template" inherit_id="website_sale.products_item">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="t-if">(product.product_variant_ids and not website.hide_price) or (product.product_variant_ids and website.hide_price and not user_id._is_public())
+            </attribute>
+        </xpath>
+    </template>
+
+    <template id="product_price_template" inherit_id="website_sale.product_price">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="t-if">(not website.hide_price) or (website.hide_price and not user_id._is_public())
+            </attribute>
+        </xpath>
+    </template>
+
+    <template id="product_template" inherit_id="website_sale.product">
+        <xpath expr="//form[@action='/shop/cart/update']" position="attributes">
+            <attribute name="t-if">(not website.hide_price) or (website.hide_price and not user_id._is_public())</attribute>
+        </xpath>
+    </template>
+-->
+    
+    <template id="product_price_template_alan_theme" inherit_id="alan_customize.product_items">
+        <xpath expr="//div[hasclass('product_price')]" position="attributes">
+            <attribute name="t-if">(not website.hide_price) or (website.hide_price and not user_id._is_public())
+            </attribute>
+        </xpath>
+    </template>
+    
+</odoo>
+
