@@ -549,11 +549,12 @@ class DermanordImport(models.TransientModel):
                             product = self.env['product.product'].search([('default_code', '=', element[0])])
                         
                             if product:
-                                self.env['sale.order.line'].create({
-                                            'order_id': order.id,
-                                            'product_id': product.id,
-                                            'product_uom_qty': int(element[1]),
-                                        })
+                                for rec in product:
+                                    self.env['sale.order.line'].create({
+                                                'order_id': order.id,
+                                                'product_id': rec.id,
+                                                'product_uom_qty': int(element[1]),
+                                            })
                             else:
                                 missing_products.append(element[0])
                                 # ~ i += 4
