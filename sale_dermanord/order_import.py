@@ -141,7 +141,7 @@ class DermanordImport(models.TransientModel):
             tree = html.fromstring(page.content)
             specter_head = tree.xpath('//tr/td/font/text()')
             ahlens_head = tree.xpath('//div[@class="ramdata"]/text()') # /div[@"ramdata"]
-            kicks_head = tree.xpath('//div[@class="ramrubrik"][contains(text(),"pare"][1]/following-sibling::div[1]')
+            kicks_head = tree.xpath('//div[@class="ramrubrik"][contains(text(),"pare")][1]/following-sibling::div[1]')
             # ~ raise Warning(ahlens_head)
             specter_lines = tree.xpath('//tr/td/nobr/text()')
             ahlens_lines = tree.xpath('//table/tr')
