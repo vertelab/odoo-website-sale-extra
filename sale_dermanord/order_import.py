@@ -153,6 +153,7 @@ class DermanordImport(models.TransientModel):
             if specter_head and specter_head[6] == 'HARMONIQ AB':
                 self.import_type = 'harmoniq'
             
+            _logger.warning("Kicks header is %s", kicks_head);
             # ~ ahlens_heads = []
             # ~ if ahlens_head:
                 # ~ ahlens_heads.append(ahlens_head)
