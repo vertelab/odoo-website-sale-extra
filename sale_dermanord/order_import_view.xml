@@ -30,6 +30,7 @@
                         <span> </span><span>Bangerhead AB (Excel)</span>
                         <span> </span><span>HARMONIQ AB (Url)</span>
                         <span> </span><span>Åhléns AB(Url)</span>
+                        <span> </span><span>Kicks(Url)</span>
                         </group>
                     </sheet>
                     <footer attrs="{'invisible': ['|', ('mime', '=', False), ('import_type', '=', False)]}">
