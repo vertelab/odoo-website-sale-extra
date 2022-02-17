@@ -33,6 +33,8 @@ Special order imports for Dermanord AB
 * Nordic Web Trading AB (Excel)
 * Eckerö Group - Rederiaktiebolaget Eckerö (Birka) (Text)
 * Tailwide AB (Narutligt snygg) (Url)
+* Åhlens AB (Url)
+* Kicks (Url)
 
 """,
     'author': 'Vertel AB',
