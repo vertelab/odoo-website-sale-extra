@@ -540,14 +540,10 @@ class DermanordImport(models.TransientModel):
             if self.import_type == 'ahlens':
                 
                 ahlens_lines = tree.xpath('//table/tr')
-                for line in ahlens_lines:
-                    _logger.warning('ahlens_lines is: %s', etree.tostring(line, pretty_print=True))
-
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # ~ raise Warning('%s ' %customer)
                 plock = {}
                 for line in ahlens_lines:
-                    
                     if len(line) == 2:
                         if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
                             plock_idx = line[0].findtext('div')
@@ -602,23 +598,55 @@ class DermanordImport(models.TransientModel):
                 kicks_lines = tree.xpath('//table/tr')
                 _logger.warning('kicks_lines length: %s', len(kicks_lines))
 
-                # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                # # ~ raise Warning('%s ' %customer)
-                # plock = {}
-                # for line in kicks_lines:
-                #     if len(line) == 2:
-                #         if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
-                #             plock_idx = line[0].findtext('div')
-                #             order_ref_ids = line[1].findtext('div')
-                #             plock[plock_idx] = []
+                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                # ~ raise Warning('%s ' %customer)
+                plock = {}
+                for line in kicks_lines:
+                    if len(line) == 2:
+                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
+                            plock_idx = line[0].findtext('div')
+                            order_ref_ids = line[1].findtext('div')
+                            plock[plock_idx] = []
                                 
-                #             # ~ raise Warning( '%s ' % order_ref_id)
-                #     if len(line) > 7:
-                #         product_ids = line[3].text
-                #         qtys = line[7].text
-                #         plock[plock_idx].append((product_ids, qtys))
-                
-                #             # ~ prod = ahlens_lines[i][:-1]
+                            # ~ raise Warning( '%s ' % order_ref_id)
+                    if len(line) > 7:
+                        product_ids = line[3].text
+                        qtys = line[7].text
+                        plock[plock_idx].append((product_ids, qtys))
+                for pl in plock.keys():
+                    order = create_order({
+                                    'partner_id': customer.id,
+                                    'client_order_ref': pl,
+                                    'origin' : order_ref_ids,
+                                    })
+                    orders.append(order.id)
+                    missing_products = []
+                    for element in plock[pl]:
+                        if not element[0] == 'Lev artnr':
+                            
+                            product = self.env['product.product'].search([('default_code','=',element[0])])
+                        
+                            if product:
+                                self.env['sale.order.line'].create({
+                                            'order_id': order.id,
+                                            'product_id': product.id,
+                                            'product_uom_qty': int(element[1]),
+                                        })
+                            else:
+                                missing_products.append(element[0])
+                                # ~ i += 4
+                    if len(missing_products) > 0:
+                        order.note = 'Saknade produkter: ' + ','.join(missing_products)
+                    order.note = '%s%s\n%s / %s' %('Saknade produkter:' if len(missing_products) >0 else '',','.join(missing_products) if len(missing_products) >0 else '', order_ref_ids,pl.replace('Plocklista ', ''))
+                    if order:
+                        attachment = self.env['ir.attachment'].create({
+                        'name': order.client_order_ref or 'Order'  + '.' + self.mime,
+                        'res_name': order.name,
+                        'res_model': 'sale.order',
+                        'res_id': order.id,
+                        'datas': self.order_file,
+                        'datas_fname': order.client_order_ref,
+                    })
 #
 # END
 #
