@@ -35,7 +35,7 @@ try:
 except:
     _logger.info('xlrd not installed. sudo pip install xlrd')
 
-from lxml import html
+from lxml import html, etree
 import requests
 
 import re
@@ -596,7 +596,7 @@ class DermanordImport(models.TransientModel):
 # KICKS
 #
             if self.import_type == 'kicks':
-                _logger.warning('tree is: %s', tree)
+                _logger.warning('tree is: %s', etree.tostring(tree, pretty_print=True))
                 kicks_lines = tree.xpath('//table/tr')
                 # ahlens_lines = tree.xpath('//table/tr')
                 # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
