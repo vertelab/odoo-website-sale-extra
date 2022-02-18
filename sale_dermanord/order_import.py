@@ -540,6 +540,9 @@ class DermanordImport(models.TransientModel):
             if self.import_type == 'ahlens':
                 
                 ahlens_lines = tree.xpath('//table/tr')
+                for line in kicks_lines:
+                    _logger.warning('ahlens_lines is: %s', etree.tostring(line, pretty_print=True))
+
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # ~ raise Warning('%s ' %customer)
                 plock = {}
@@ -597,12 +600,25 @@ class DermanordImport(models.TransientModel):
 #
             if self.import_type == 'kicks':
                 kicks_lines = tree.xpath('//table/tr')
-                for line in kicks_lines:
-                    _logger.warning('kicks_line is: %s', etree.tostring(line, pretty_print=True))
                 _logger.warning('kicks_lines length: %s', len(kicks_lines))
-                # ahlens_lines = tree.xpath('//table/tr')
+
                 # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
-                # raise Warning('%s ' %customer)
+                # # ~ raise Warning('%s ' %customer)
+                # plock = {}
+                # for line in kicks_lines:
+                #     if len(line) == 2:
+                #         if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
+                #             plock_idx = line[0].findtext('div')
+                #             order_ref_ids = line[1].findtext('div')
+                #             plock[plock_idx] = []
+                                
+                #             # ~ raise Warning( '%s ' % order_ref_id)
+                #     if len(line) > 7:
+                #         product_ids = line[3].text
+                #         qtys = line[7].text
+                #         plock[plock_idx].append((product_ids, qtys))
+                
+                #             # ~ prod = ahlens_lines[i][:-1]
 #
 # END
 #
