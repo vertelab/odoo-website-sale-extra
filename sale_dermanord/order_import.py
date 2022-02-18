@@ -540,7 +540,7 @@ class DermanordImport(models.TransientModel):
             if self.import_type == 'ahlens':
                 
                 ahlens_lines = tree.xpath('//table/tr')
-                for line in kicks_lines:
+                for line in ahlens_lines:
                     _logger.warning('ahlens_lines is: %s', etree.tostring(line, pretty_print=True))
 
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
