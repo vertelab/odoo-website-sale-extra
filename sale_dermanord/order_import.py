@@ -596,8 +596,8 @@ class DermanordImport(models.TransientModel):
 # KICKS
 #
             if self.import_type == 'kicks':
-                foo = "do"
-                _logger.warning('Foo in KICKS is %s', foo)
+                _logger.warning('tree is: %s', tree)
+                kicks_lines = tree.xpath('//table/tr')
                 # ahlens_lines = tree.xpath('//table/tr')
                 # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # raise Warning('%s ' %customer)
