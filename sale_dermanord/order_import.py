@@ -160,7 +160,7 @@ class DermanordImport(models.TransientModel):
                 # ~ for ahlens_head in ahlens_heads:
             if u'Åhléns AB' in ''.join(ahlens_head):
                 self.import_type = 'ahlens'
-            if u'KICKS' in ''.join(kicks_head[0]):
+            if u'KICKS' in ''.join(kicks_head[0].text):
                 self.import_type = 'kicks'
                 
             
