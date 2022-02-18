@@ -54,8 +54,26 @@ class DermanordImport(models.TransientModel):
 
     order_file = fields.Binary(string='Order file')
     order_url = fields.Char(string='Url')
-    mime = fields.Selection([('url','url'),('text','text/plain'),('pdf','application/pdf'),('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),('xls','application/vnd.ms-excel'),('xlm','application/vnd.ms-office')])
-    import_type = fields.Selection([('bangerhead','Bangerhead AB'),('ahlens','Åhléns AB'),('kicks','KICKS'),('tailwide','Tailwide AB'),('harmoniq','HARMONIQ AB'),('birka','BIRKA CRUISES AB'),('nordicfeel','Nordic Web Trading AB'),('isaksen','Isaksen & CO AS'),('lyko','Lyko Online AB'),('finamig','Fina mig i Hedemora AB'),('skincity','Skincity Sweden'),('skincity_xl','Skincity Sweden')])
+    mime = fields.Selection(
+        [('url','url'),
+         ('text','text/plain'),
+         ('pdf','application/pdf'),
+         ('xlsx','application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'),
+         ('xls','application/vnd.ms-excel'),
+         ('xlm','application/vnd.ms-office')])
+    import_type = fields.Selection(
+        [('bangerhead','Bangerhead AB'),
+         ('ahlens','Åhléns AB'),
+         ('kicks','KICKS'),
+         ('tailwide','Tailwide AB'),
+         ('harmoniq','HARMONIQ AB'),
+         ('birka','BIRKA CRUISES AB'),
+         ('nordicfeel','Nordic Web Trading AB'),
+         ('isaksen','Isaksen & CO AS'),
+         ('lyko','Lyko Online AB'),
+         ('finamig','Fina mig i Hedemora AB'),
+         ('skincity','Skincity Sweden'),
+         ('skincity_xl','Skincity Sweden')])
     info = fields.Text(string='Info')
     tmp_file = fields.Char(string='Tmp File')
     file_name = fields.Char(string='File Name')
@@ -152,8 +170,7 @@ class DermanordImport(models.TransientModel):
                 
             if specter_head and specter_head[6] == 'HARMONIQ AB':
                 self.import_type = 'harmoniq'
-            
-            _logger.warning("Kicks header is %s", kicks_head);
+
             # ~ ahlens_heads = []
             # ~ if ahlens_head:
                 # ~ ahlens_heads.append(ahlens_head)
@@ -578,8 +595,9 @@ class DermanordImport(models.TransientModel):
 #
 # KICKS
 #
-            if self.import_type == 'KICKS':
+            if self.import_type == 'kicks':
                 foo = "do"
+                _logger.warning('Foo in KICKS is %s', foo)
                 # ahlens_lines = tree.xpath('//table/tr')
                 # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # raise Warning('%s ' %customer)
