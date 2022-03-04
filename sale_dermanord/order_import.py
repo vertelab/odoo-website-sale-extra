@@ -64,7 +64,7 @@ class DermanordImport(models.TransientModel):
     import_type = fields.Selection(
         [('bangerhead','Bangerhead AB'),
          ('ahlens','Åhléns AB'),
-         ('kicks','KICKS'),
+         ('kicks','Kicks Kosmetikkedjan AB'),
          ('tailwide','Tailwide AB'),
          ('harmoniq','HARMONIQ AB'),
          ('birka','BIRKA CRUISES AB'),
@@ -596,7 +596,6 @@ class DermanordImport(models.TransientModel):
 #
             if self.import_type == 'kicks':
                 kicks_lines = tree.xpath('//table/tr')
-                _logger.warning('kicks_lines length: %s', len(kicks_lines))
 
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # ~ raise Warning('%s ' %customer)
