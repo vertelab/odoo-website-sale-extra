@@ -167,21 +167,20 @@ class DermanordImport(models.TransientModel):
 
             if specter_head and specter_head[6] == 'Naturligt Snygg':
                 self.import_type = 'tailwide'
-                
-            if specter_head and specter_head[6] == 'HARMONIQ AB':
+
+            elif specter_head and specter_head[6] == 'HARMONIQ AB':
                 self.import_type = 'harmoniq'
 
             # ~ ahlens_heads = []
             # ~ if ahlens_head:
                 # ~ ahlens_heads.append(ahlens_head)
                 # ~ for ahlens_head in ahlens_heads:
-            if u'Åhléns AB' in ''.join(ahlens_head):
+            elif ahlens_head and u'Åhléns AB' in ''.join(ahlens_head):
                 self.import_type = 'ahlens'
-            if u'KICKS' in ''.join(kicks_head[0].text):
+            elif kicks_head and kicks_head[0] and u'kicks' in ''.join(kicks_head[0].text.lower()):
                 self.import_type = 'kicks'
-                
-            
-            
+            else:
+                _logger.warn("Order Import: No import type set.")
 
             self.info = '%s\n%s' % (self.get_selection_value('import_type',self.import_type),self.get_selection_value('mime',self.mime))
 
@@ -194,7 +193,7 @@ class DermanordImport(models.TransientModel):
             if res.get('value'):
                 order.write(res['value'])
             return order
-        
+
         order = None
         orders = []
         missing_products = []
@@ -211,8 +210,8 @@ class DermanordImport(models.TransientModel):
                 _logger.debug("Trace of the failed file indexing attempt.", exc_info=True)
                 raise Warning(e)
             lines = content.splitlines()
-            
-            
+
+
 
 #
 #   Fina mig i Hedemora AB
@@ -402,8 +401,8 @@ class DermanordImport(models.TransientModel):
                                     })
                         else:
                             missing_products.append(wb.cell_value(line,1))
-                            
-                            
+
+
 #
 # Skin City XL
 #
@@ -538,24 +537,24 @@ class DermanordImport(models.TransientModel):
 # Åhléns AB
 #
             if self.import_type == 'ahlens':
-                
+
                 ahlens_lines = tree.xpath('//table/tr')
                 customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
                 # ~ raise Warning('%s ' %customer)
                 plock = {}
                 for line in ahlens_lines:
                     if len(line) == 2:
-                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
+                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):
                             plock_idx = line[0].findtext('div')
                             order_ref_ids = line[1].findtext('div')
                             plock[plock_idx] = []
-                                
+
                             # ~ raise Warning( '%s ' % order_ref_id)
                     if len(line) > 7:
                         product_ids = line[3].text
                         qtys = line[7].text
                         plock[plock_idx].append((product_ids, qtys))
-                
+
                             # ~ prod = ahlens_lines[i][:-1]
                 for pl in plock.keys():
                     order = create_order({
@@ -567,9 +566,9 @@ class DermanordImport(models.TransientModel):
                     missing_products = []
                     for element in plock[pl]:
                         if not element[0] == 'Lev artnr':
-                            
+
                             product = self.env['product.product'].search([('default_code','=',element[0])])
-                        
+
                             if product:
                                 self.env['sale.order.line'].create({
                                             'order_id': order.id,
@@ -590,7 +589,7 @@ class DermanordImport(models.TransientModel):
                         'res_id': order.id,
                         'datas': self.order_file,
                         'datas_fname': order.client_order_ref,
-                    })         
+                    })
 #
 # KICKS
 #
@@ -602,11 +601,11 @@ class DermanordImport(models.TransientModel):
                 plock = {}
                 for line in kicks_lines:
                     if len(line) == 2:
-                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):        
+                        if type(line[0].findtext('div')) == str and 'Plocklista' in line[0].findtext('div'):
                             plock_idx = line[0].findtext('div')
                             order_ref_ids = line[1].findtext('div')
                             plock[plock_idx] = []
-                                
+
                             # ~ raise Warning( '%s ' % order_ref_id)
                     if len(line) > 7:
                         product_ids = line[3].text
@@ -622,9 +621,9 @@ class DermanordImport(models.TransientModel):
                     missing_products = []
                     for element in plock[pl]:
                         if not element[0] == 'Lev artnr':
-                            
+
                             product = self.env['product.product'].search([('default_code','=',element[0])])
-                        
+
                             if product:
                                 self.env['sale.order.line'].create({
                                             'order_id': order.id,
@@ -663,13 +662,13 @@ class DermanordImport(models.TransientModel):
                     })
                 #~ if attachment.mimetype == 'application/pdf':
                     #~ attachment.pdf2image(800,1200)
-        
+
         if len(orders) > 1:
             return {'type': 'ir.actions.act_window',
                     'res_model': 'sale.order',
                     'view_type': 'form',
                     'view_mode': 'tree,form',
-                    'view_ids': [(0,0,{'view_mode':'tree', 'view_id':self.env.ref('sale.view_quotation_tree').id}), 
+                    'view_ids': [(0,0,{'view_mode':'tree', 'view_id':self.env.ref('sale.view_quotation_tree').id}),
                                 (0,0,{'view_mode':'form','view_id':self.env.ref('sale.view_order_form').id})],
                     'res_id': order.id if order else None,
                     'target': 'current',
