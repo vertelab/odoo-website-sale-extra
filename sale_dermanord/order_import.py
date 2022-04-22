@@ -596,7 +596,18 @@ class DermanordImport(models.TransientModel):
             if self.import_type == 'kicks':
                 kicks_lines = tree.xpath('//table/tr')
 
-                customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+
+                header_title = tree.xpath('//tr/td[1]/div[@class="sidrubrik"]')[0].text
+                store_id = re.findall("[1-9][0-9]*", header_title)
+                if store_id:
+                    store_id = int(store_id[0])
+                    _logger.info("KicksImport: Preparing to import store %s" % store_id)
+                else:
+                    _logger.error("Invalid order header: Store ID not found.")
+                    raise KicksParseError("Invalid order header: Store ID not found.")
+
+                # customer = self.env['res.partner'].search([('name','=',self.get_selection_value('import_type',self.import_type))])
+                customer = self.kick_store_mapper(store_id)
                 # ~ raise Warning('%s ' %customer)
                 plock = {}
                 for line in kicks_lines:
@@ -687,6 +698,21 @@ class DermanordImport(models.TransientModel):
                      }
 
 
+    def kick_store_mapper(self,store_id):
+        '''
+        Map a Kicks store number to the relevant res.partner.
+        '''
+        imd = self.env["ir.model.data"].search([("module","=","sale_dermanord"),
+                                                       ("model","=","res.partner"),
+                                                       ("name","=","kicks_store_%s" % store_id)])
+        if not imd:
+            _logger.error("Kicks: Store ID %s not properly mapped to an external ID." % store_id )
+            raise KicksParseError("KicksImport: Store ID %s not properly mapped to an external ID." % store_id )
+        # else
+        ret = self.env["res.partner"].browse(imd.res_id)
+        _logger.info("KicksImport: Found partner %s - %s" % (ret.id, ret.name))
+        return self.env["res.partner"].browse(imd.res_id)
+
 
     def get_selection_text(self,field,value):
         for type,text in self.fields_get([field])[field]['selection']:
@@ -699,3 +725,6 @@ class DermanordImport(models.TransientModel):
             if type == value:
                 return text
         return None
+
+class KicksParseError(ValueError):
+    pass
