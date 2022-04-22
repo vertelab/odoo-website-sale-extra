@@ -702,7 +702,7 @@ class DermanordImport(models.TransientModel):
         '''
         Map a Kicks store number to the relevant res.partner.
         '''
-        imd = self.env["ir.model.data"].search([("module","=","sale_dermanord"),
+        imd = self.env["ir.model.data"].search([("module","=","__kicks_store__"),
                                                        ("model","=","res.partner"),
                                                        ("name","=","kicks_store_%s" % store_id)])
         if not imd:
