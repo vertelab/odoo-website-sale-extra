@@ -179,7 +179,7 @@
                                           </t>
                                             <div class="card-body">
                                                 <h3 class="card-title o_default_snippet_text"><t t-esc="object.object_id.name"/></h3>
-                                                <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"></p>
+                                                <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"/>
                                             </div>
                                         </div>
                                     </div>
