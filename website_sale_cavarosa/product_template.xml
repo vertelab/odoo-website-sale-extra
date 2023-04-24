@@ -164,7 +164,7 @@
                         <h1 t-field="campaign.name" class="text-center"/>
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
 			<div t-field="campaign.website_description"/>
-			<t t-set="campaign_size" t-set="round(12/campaign.object_ids)"/> <!-- TODO: Does this "t-set" work??-->
+			<!-- t t-set="campaign_size" t-set="round(12/campaign.object_ids)"/> --> <!-- TODO: Does this "t-set" work??-->
 
                        <section class="s_three_columns pt32 pb32">
                             <div class="container">
