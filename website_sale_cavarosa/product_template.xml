@@ -163,13 +163,14 @@
                     <div class="mt64 mb64">
                         <h1 t-field="campaign.name" class="text-center"/>
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
-                        <div t-field="campaign.website_description"/>
+			<div t-field="campaign.website_description"/>
+			<t t-set="campaign_size" t-set="round(12/campaign.object_ids)"/> <!-- TODO: Does this "t-set" work??-->
 
                        <section class="s_three_columns pt32 pb32">
                             <div class="container">
                                 <div class="row d-flex align-items-stretch">
                                      <t t-foreach="campaign.object_ids" t-as="object">
-                                    <div class="col-lg-3 s_col_no_bgcolor pt16 pb16">
+					<div t-attf-class="col-lg-{{campaign_size}} s_col_no_bgcolor pt16 pb16"> <!-- class="col-lg-3 s_col_no_bgcolor pt16 pb16" --> 
                                         <div class="card bg-white">
                                            <t t-if="object.object_id._name == 'res.partner'">
                                             <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">             
