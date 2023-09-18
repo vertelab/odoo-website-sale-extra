@@ -1,0 +1,14 @@
+<odoo>
+    <data>
+        <record id="utm_campaign_view_form" model="ir.ui.view">
+            <field name="name">utm.campaign.form</field>
+            <field name="model">utm.campaign</field>
+            <field name="inherit_id" ref="utm.utm_campaign_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button name="action_clear_cart" type="object"  class="oe_highlight" string="Clear Cart"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

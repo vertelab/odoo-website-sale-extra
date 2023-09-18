@@ -22,6 +22,7 @@ from odoo import models, fields, api, _
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class product_template(models.Model):
     _inherit = 'product.template'
     website_description = fields.Html(string="Website Description")
@@ -50,7 +51,8 @@ class product_template(models.Model):
                 camp_prod.campaign_product = False
     campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')
     # website_short_desc = fields.Text(string='Website Short Desc', help='This description only shows in product grid view')
-    website_short_description = fields.Text(string='Website Short Description', help='This description only shows in product grid view')
+    website_short_description = fields.Text(string='Website Short Description',
+                                            help='This description only shows in product grid view')
 
     @api.model
     def products_list(self, domain, order, row):

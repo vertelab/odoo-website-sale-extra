@@ -22,7 +22,9 @@ from openerp import models, fields, api, _
 from openerp import http
 from openerp.http import request
 import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class res_partner(models.Model):
     _inherit = 'res.partner'
@@ -39,14 +41,15 @@ class res_partner(models.Model):
     old_id = fields.Char(string="Old id for porting data")
 
     def _get_supplier(self):
-        for partner in self: 
+        for partner in self:
             partner.supplier = bool(partner.supplier_rank)
             _logger.warning(" sup %s " % partner.supplier_rank)
 
     def _get_customer(self):
-        for partner in self:    
+        for partner in self:
             partner.customer = bool(partner.customer_rank)
             _logger.warning(" cust %s " % partner.customer_rank)
+
 
 class Main(http.Controller):
 
@@ -58,9 +61,9 @@ class Main(http.Controller):
         if len(products) > 0:
             for p in products:
                 products_list['products'][p.id] = {
-                'name': p.name,
-                'image': p.image_medium,
-                'description': p.description_sale if p.description_sale else ''
+                    'name': p.name,
+                    'image': p.image_medium,
+                    'description': p.description_sale if p.description_sale else ''
                 }
         return products_list
 

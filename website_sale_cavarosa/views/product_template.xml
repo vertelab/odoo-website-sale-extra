@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <data>
 
+    <data>
         <template id="shop_menu" name="Shop Menu">
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="shopmenus" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">Shop Menu <span class="caret"></span>
@@ -163,7 +163,7 @@
                     <div class="mt64 mb64">
                         <h1 t-field="campaign.name" class="text-center"/>
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
-			<div t-field="campaign.website_description"/>
+			            <div t-field="campaign.website_description"/>
 			<!-- t t-set="campaign_size" t-set="round(12/campaign.object_ids)"/> --> <!-- TODO: Does this "t-set" work??-->
 
                        <section class="s_three_columns pt32 pb32">
@@ -257,6 +257,7 @@
          <template id="products_add_to_cart" inherit_id="website_sale_cavarosa.product_grid" active="True" customize_show="True" name="Add to Cart">
             <xpath expr="//span[@itemprop='priceCurrency']" position="after">
                 <input name="product_id" t-att-value="product.product_variant_ids[0].id" type="hidden"/>
+                <input name="campaign_id" t-att-value="campaign.id" type="hidden"/>
              <!--    <t t-if="len(product.product_variant_ids) == 1"> -->
                   <a class="btn btn-default btn-xs fa fa-shopping-cart a-submit"/>
            <!--      </t> -->

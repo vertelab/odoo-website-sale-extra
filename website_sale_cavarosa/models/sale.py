@@ -24,6 +24,7 @@ from openerp.http import request
 import logging
 _logger = logging.getLogger(__name__)
 
+
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
@@ -43,7 +44,6 @@ class sale_order_line(models.Model):
     campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='utm.campaign', store=True)
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
-
     @api.depends('product_id')
     def _supplier_id(self):
         for supplier in self:
@@ -53,7 +53,6 @@ class sale_order_line(models.Model):
     def _unit_qty(self):
         for unit in self: 
             unit.unit_qty = int(unit.product_id.uom_id.factor_inv) if unit.product_id.uom_id.uom_type == 'bigger' else 1
-
 
     def _carrier_info(self):
         for carrier in self:
@@ -67,6 +66,7 @@ class sale_order_line(models.Model):
 
 class sale_order(models.Model):
     _inherit = 'sale.order'
+
     old_id = fields.Char(string="Old id for porting data")
 
 
