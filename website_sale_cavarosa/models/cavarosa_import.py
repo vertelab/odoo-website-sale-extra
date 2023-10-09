@@ -24,6 +24,7 @@ import base64
 # from cStringIO import StringIO
 
 import logging
+
 _logger = logging.getLogger(__name__)
 
 try:
@@ -31,10 +32,13 @@ try:
 except:
     _logger.info('Missing unicodecsv. sudo pip install unicodecsv')
 
+
 class ResPartner(models.Model):
     _inherit = 'res.partner'
-    
-    drupal_parent_ids = fields.Many2many(string='Drupal Parents', comodel_name='res.partner', relation='drupal_partner_rel_partner', column1='child_id', column2='parent_id')
+
+    drupal_parent_ids = fields.Many2many(string='Drupal Parents', comodel_name='res.partner',
+                                         relation='drupal_partner_rel_partner', column1='child_id', column2='parent_id')
+
 
 class CavarosaImport(models.TransientModel):
     _name = 'sale.cavarosa.import.wizard'
@@ -48,12 +52,12 @@ class CavarosaImport(models.TransientModel):
     customers = fields.Binary('Customers')
     username = fields.Char(string='Username', required=True, help="Your username on wiggum.vertel.se")
     password = fields.Char(string='Password', required=True, help="Your password on wiggum.vertel.se")
-    
+
     def import_files(self):
         for importf in self:
 
             try:
-            # ~ if True:
+                # ~ if True:
                 districts = {}
                 for r in importf.env['res.district'].search([]):
                     districts[r.name] = r
@@ -61,14 +65,13 @@ class CavarosaImport(models.TransientModel):
                 for r in importf.env['res.partner'].search([('supplier', '=', True)]):
                     suppliers[r.name] = r
                 products = {}
-                #~ for r in self.env['product.template'].search():
-                    #~ products[r.name] = r
+                # ~ for r in self.env['product.template'].search():
+                # ~ products[r.name] = r
                 users = {}
                 customers = {}
                 ignore = ('10', '18', '57')
                 users_ignore = ('1730', '1763', '1547', '457', '1769', '1515', '1721')
-                
-                
+
                 # Import districts
                 if importf.districts:
                     f = csv.reader(StringIO(base64.b64decode(importf.districts)))
@@ -79,14 +82,15 @@ class CavarosaImport(models.TransientModel):
                             vals = {
                                 'name': row[0],
                                 'country_id': importf.find_country(row[2]),
-                                'website_description': (image and '<img src="data:image/png;base64,%s" />' % image) or '',
+                                'website_description': (
+                                                                   image and '<img src="data:image/png;base64,%s" />' % image) or '',
                             }
                             if not vals['name'] in districts:
                                 districts[row[0]] = importf.env['res.district'].create(vals)
                             else:
                                 districts[vals['name']].write(vals)
-                
-                    #Import suppliers
+
+                    # Import suppliers
                     if importf.suppliers:
                         f = csv.reader(StringIO(base64.b64decode(importf.suppliers)))
                         for row in f:
@@ -109,8 +113,8 @@ class CavarosaImport(models.TransientModel):
                                     suppliers[vals['name']] = importf.env['res.partner'].create(vals)
                                 else:
                                     suppliers[vals['name']].write(vals)
-            
-                #Import products
+
+                # Import products
                 if importf.commerce_product and importf.produktvisningar:
                     f = csv.DictReader(StringIO(base64.b64decode(importf.commerce_product)))
                     for row in f:
@@ -119,7 +123,8 @@ class CavarosaImport(models.TransientModel):
                                 'list_price': float(row.get(u'Pris', '0').split(' ')[0]) / 100,
                                 'name': row[u'Titel'],
                                 'image': importf.download_image(row[u'Bild']),
-                                'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[u'Leverantör'] else False,
+                                'seller_ids': [(0, 0, {'name': suppliers[row[u'Leverantör']].id})] if row[
+                                    u'Leverantör'] else False,
                             }
                     f = csv.DictReader(StringIO(base64.b64decode(importf.produktvisningar)))
                     for row in f:
@@ -130,7 +135,7 @@ class CavarosaImport(models.TransientModel):
                                 'uom_id': uom.id,
                                 'list_price': uom.factor_inv * products[row[u'Produkt (vara)']]['list_price'],
                             })
-                    
+
                     for id in products.keys():
                         xml_id = 'commerce_product_%s' % id
                         template = importf.env['ir.model.data'].xmlid_to_object('__cavarosa_import__.%s' % xml_id)
@@ -138,8 +143,8 @@ class CavarosaImport(models.TransientModel):
                             template.write(products[id])
                         else:
                             importf.set_external_id(importf.env['product.template'].create(products[id]), xml_id)
-                
-                #Import customers
+
+                # Import customers
                 if importf.customers:
                     f = csv.DictReader(StringIO(base64.b64decode(importf.customers)))
                     for row in f:
@@ -153,7 +158,8 @@ class CavarosaImport(models.TransientModel):
                                 'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
                                 'zip': row[u'Address - Postnummer'],
                                 'city': row[u'Address - Ort (till exempel stad)'],
-                                'state_id': importf.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
+                                'state_id': importf.find_state(
+                                    row[u'Address - Administrativt område (till exempel stat/provins)'], country),
                                 'country_id': country,
                                 'phone': row[u'Telefon'],
                                 'comment': row[u'Övriga upplysningar /Meddelanden'],
@@ -168,7 +174,8 @@ class CavarosaImport(models.TransientModel):
                                 'street2': row[u'Address - Fastighet (till exempel lägenhets/svitnummer)'],
                                 'zip': row[u'Address - Postnummer'],
                                 'city': row[u'Address - Ort (till exempel stad)'],
-                                'state_id': importf.find_state(row[u'Address - Administrativt område (till exempel stat/provins)'], country),
+                                'state_id': importf.find_state(
+                                    row[u'Address - Administrativt område (till exempel stat/provins)'], country),
                                 'country_id': country,
                                 'phone': row[u'Telefon'],
                                 'comment': row[u'Övriga upplysningar /Meddelanden'],
@@ -176,8 +183,8 @@ class CavarosaImport(models.TransientModel):
                             importf.set_external_id(customers[exid], exid)
                         else:
                             raise Warning('Unknown type: %s' % row[u'Typ'])
-                
-                #Import users
+
+                # Import users
                 delivery_users = []
                 unknown_users = []
                 if importf.users:
@@ -191,10 +198,12 @@ class CavarosaImport(models.TransientModel):
                             if row[u'Uid'] not in users_ignore:
                                 if exid in users:
                                     if partner.parent_id:
-                                        _logger.warn('Partner %s tillhörde %s. Flyttad till %s' % (partner.id, partner.parent_id.id, users[exid].partner_id.id))
+                                        _logger.warn('Partner %s tillhörde %s. Flyttad till %s' % (
+                                        partner.id, partner.parent_id.id, users[exid].partner_id.id))
                                     partner.parent_id = users[exid].partner_id
                                 else:
-                                    users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create({
+                                    users[exid] = importf.env['res.users'].with_context(
+                                        {'no_reset_password': True}).create({
                                         'partner_id': partner.id,
                                         'name': partner.name,
                                         'login': row[u'Namn'],
@@ -227,7 +236,7 @@ class CavarosaImport(models.TransientModel):
                                 'login_date': row[u'Senaste inloggning'] or False,
                                 'groups_id': [(6, 0, [portal.id])],
                             })
-                        
+
                     # Create delivery adress data.
                     for values in delivery_users:
                         partner = values['partner_id']
@@ -239,17 +248,19 @@ class CavarosaImport(models.TransientModel):
                             exid = values['exid']
                             del values['exid']
                             values['partner_id'] = partner.id
-                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(values)
+                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(
+                                values)
                             importf.set_external_id(users[exid], exid)
-                    
+
                     # Create users without customer data.
                     for values in unknown_users:
                         if values['exid'] not in users:
                             exid = values['exid']
                             del values['exid']
-                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(values)
+                            users[exid] = importf.env['res.users'].with_context({'no_reset_password': True}).create(
+                                values)
                             importf.set_external_id(users[exid], exid)
-                    
+
             except Exception as e:
                 try:
                     # Close the ssh session, if it exists
@@ -305,7 +316,7 @@ class CavarosaImport(models.TransientModel):
 
     @api.model
     def download_image(self, image_name, dir='/var/lib/drupal7/files/cavarosawine_se/'):
-        #TODO: Use Paramiko SFTP instead
+        # TODO: Use Paramiko SFTP instead
         if not (hasattr(self, 'session') and self.session):
             import paramiko
             self.transport = paramiko.Transport(('wiggum.vertel.se', 22))

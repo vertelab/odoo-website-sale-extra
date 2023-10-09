@@ -20,7 +20,9 @@
 ##############################################################################
 from openerp import models, fields, api, _
 import logging
+
 _logger = logging.getLogger(__name__)
+
 
 class Country(models.Model):
     _inherit = 'res.country'

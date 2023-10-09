@@ -51,7 +51,7 @@ Special sale configuration for Cavarosa AB
         'views/sale_order_line_data.xml',
         'data/cavarosa_data.xml',
         'views/utm_campaign_view.xml',
-        'data/ir_cron.xml',
+        # 'data/ir_cron.xml',
     ],
     'qweb': ['static/src/xml/snippets.xml'],
     'application': False,

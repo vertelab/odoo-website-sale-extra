@@ -23,12 +23,12 @@ class UTMCampaign(models.Model):
         ])
         return sale_order_ids
 
-    def _clean_expired_cart_campaign(self):
-        utm_campaign_ids = self.env['utm.campaign'].search([
-            ('date_stop', '<', fields.Date.today()),
-        ])
-        for utm_campaign in utm_campaign_ids:
-            sale_order_ids = self._get_sale_order(utm_campaign.id)
-            if sale_order_ids:
-                sale_order_ids.write({'state': 'cancel'})
+    # def _clean_expired_cart_campaign(self):
+    #     utm_campaign_ids = self.env['utm.campaign'].search([
+    #         ('date_stop', '<', fields.Date.today()),
+    #     ])
+    #     for utm_campaign in utm_campaign_ids:
+    #         sale_order_ids = self._get_sale_order(utm_campaign.id)
+    #         if sale_order_ids:
+    #             sale_order_ids.write({'state': 'cancel'})
 

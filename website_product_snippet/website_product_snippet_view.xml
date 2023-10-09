@@ -161,26 +161,17 @@
         <!-- Custom Snippet CSS and javascript -->
 
 
-<!-- <template id="assets_editor" inherit_id="website.assets_editor" name="Products By Category">
-    <xpath expr="." position="inside">
-      <script src="/website_product_snippet/static/src/js/product_snippet.js" type="text/javascript"/>
-    </xpath>
-</template>
- -->
-        <template id="snippet_js" inherit_id="website.layout">
-            <xpath expr="//body" position="inside">
-              <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>
-            </xpath>
-        </template>
+<!--        <template id="snippet_js" inherit_id="website.layout">-->
+<!--            <xpath expr="//body" position="inside">-->
+<!--              <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>-->
+<!--            </xpath>-->
+<!--        </template>-->
 
         <template id="assets_frontend" inherit_id="website.assets_frontend" name="Assets Frontend Cavarosa">
-            <xpath expr="." position="inside">
-              <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>
+            <xpath expr="script[last()]" position="after">
+                <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>
             </xpath>
         </template>
-
-
-
 
     </data>
 </odoo>
