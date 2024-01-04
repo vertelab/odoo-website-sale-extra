@@ -91,14 +91,14 @@
             </xpath>
         </template>
 
-        <template id="product_price" inherit_id="website_sale.product_price">
-            <xpath expr="//h4" position="before">
-                <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>
-                <t t-if="has_bigger">
-                    <th style="width: 70px;"/>
-                </t>
-            </xpath>
-        </template>
+<!--        <template id="product_price" inherit_id="website_sale.product_price">-->
+<!--            <xpath expr="//h4" position="before">-->
+<!--                <t t-set="has_bigger" t-value="website_sale_order.website_order_line.filtered(lambda l: l.product_id.uom_id.uom_type == 'bigger')"/>-->
+<!--                <t t-if="has_bigger">-->
+<!--                    <th style="width: 70px;"/>-->
+<!--                </t>-->
+<!--            </xpath>-->
+<!--        </template>-->
 
 
         <template id="cart_lines" inherit_id="website_sale.cart_lines">
@@ -192,8 +192,8 @@
                                             <span itemprop="priceCurrency" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                                         </b>
                                         <t t-if="product.type == 'product'">
-                                            <b><p t-if="product.sudo().qty_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
-                                            <b><p t-if="product.sudo().qty_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</p></b>
+                                            <b><p t-if="product.sudo().virtual_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
+                                            <b><p t-if="product.sudo().virtual_available &lt;= 0.0" class="" style="color: #f00;">Not in stock</p></b>
                                         </t>
                                         <t t-if="product.type != 'product'">
                                             <b><p/></b>
