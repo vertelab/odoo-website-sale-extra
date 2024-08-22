@@ -1,5 +1,5 @@
 odoo.define('website_product_snippet.products', function (require){
-	
+'use strict';
 var ajax = require('web.ajax');
 var core = require('web.core');
 var Dialog = require('web.Dialog');

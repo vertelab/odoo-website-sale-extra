@@ -21,11 +21,13 @@ website.snippet.options.current_campaign_navigator_option = website.snippet.Opti
         });
     },
     get_campaign: function(campaign_id){
+        console.log("get campaign")
         if (campaign_id != '') {
             var self = this;
      
                 rpc.query({
-                        route: "/shop/delivery/carrier_data",
+//                        route: "/shop/delivery/carrier_data",
+                        route: "/snippet/get_campaign",
                         params: {
                             campaign_id: campaign_id,
                         }
