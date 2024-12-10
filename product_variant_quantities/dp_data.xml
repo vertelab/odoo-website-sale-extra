@@ -1,8 +1,0 @@
-<openerp>
-<data>
-    <record model="decimal.precision" id="dp_volume">
-        <field name="name">Stock Volume</field>
-        <field name="digits">3</field>
-    </record>
-</data>
-</openerp>
