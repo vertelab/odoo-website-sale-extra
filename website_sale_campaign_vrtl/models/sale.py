@@ -62,9 +62,9 @@ class sale_order_line(models.Model):
 
     def _carrier_info(self):
         for carrier in self:
-            if carrier.order_id.carrier_id == carrier.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
-                carrier.carrier_info = carrier.order_id.carrier_id.name if carrier.order_id.carrier_id else '' + ': ' + carrier.order_id.cavarosa_box or ''
-            elif carrier.order_id.carrier_id.pickup_location: #utlämningsställe
+            #if carrier.order_id.carrier_id == carrier.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
+            #    carrier.carrier_info = carrier.order_id.carrier_id.name if carrier.order_id.carrier_id else '' + ': ' + carrier.order_id.cavarosa_box or ''
+            if carrier.order_id.carrier_id.pickup_location: #utlämningsställe
                 carrier.carrier_info = carrier.order_id.carrier_id.name + ': ' + carrier.order_id.partner_shipping_id.name
             else:   #hemleverans
                 carrier.carrier_info = carrier.order_id.carrier_id.name

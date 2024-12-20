@@ -35,7 +35,7 @@ Special sale configuration for Cavarosa AB
         'crm_website_campaign',
         # 'website_product_snippet',
         # 'website_masonry',
-        'cavarosa_delivery',
+        #'cavarosa_delivery',
         'delivery_pickup',
         'website_partner',
         'website_imagemagick',
