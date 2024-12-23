@@ -19,11 +19,11 @@ class WebsiteSaleExtended(WebsiteSale):
 
 class CurrentCampaign(http.Controller):
     @http.route(['/campaign', '/campaign/<model(""):campaigns>'], type='http', auth="public", website=True)
-    def campaign(self, campaigns=None, **post):
-        if not campaigns:
-            campaigns = request.website.sudo().current_campaign()
-        if len(campaigns) > 0:
-            return request.render('website_sale_campaign_vrtl.current_campaign', {'campaign': campaigns[0]})
+    def campaign(self, campaign=None, **post):
+        if not campaign:
+            campaign = request.website.sudo().current_campaign()
+        if campaign:
+            return request.render('website_sale_campaign_vrtl.current_campaign', {'campaign': campaign})
         else:
             campaigns = request.env['utm.campaign'].sudo().search([('date_start', '>=', date.today())])
             if len(campaigns) > 0:

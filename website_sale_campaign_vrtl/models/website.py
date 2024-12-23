@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from odoo import models, fields, api, _
+from odoo.http import request
 
 import logging
 _logger = logging.getLogger(__name__)
@@ -28,13 +29,13 @@ class Website(models.Model):
     _inherit = 'website'
 
     def current_campaign(self):
-        return self.env['utm.campaign'].sudo().search([
+        res = self.env['utm.campaign'].sudo().search([
             ('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())
         ],limit=1)
-
+        return res
 
     def _prepare_sale_order_values(self, partner_sudo):
         self.ensure_one()
         values = super(Website, self)._prepare_sale_order_values(partner_sudo)
-        values['campaign_id'] = equest.website.current_campaign()
+        values['campaign_id'] = request.website.current_campaign().id if request.website.current_campaign() else None
         return values

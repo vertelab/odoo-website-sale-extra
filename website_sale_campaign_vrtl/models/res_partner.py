@@ -75,9 +75,9 @@ class Main(http.Controller):
     @http.route(['/producer/<int:partner_id>'], type='http', auth="public", website=True)
     def producer_products(self, partner_id=None, **post):
 
-        campaigns = request.website.sudo().current_campaign()
-        campaign = campaigns[0] if campaigns else False
-
+        campaign = request.website.sudo().current_campaign()
+        #campaign = campaigns[0] if campaigns else False
+        
         partner = request.env['res.partner'].sudo().browse(partner_id)
         products = partner.product_ids
         return request.render(
