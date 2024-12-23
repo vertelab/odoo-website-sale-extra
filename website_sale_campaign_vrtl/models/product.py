@@ -40,7 +40,7 @@ class ProductTemplate(models.Model):
 
     def _seller_id(self):
         for seller in self:
-            seller.seller_id = seller.seller_ids[0].name if len(seller.seller_ids) > 0 else None
+            seller.seller_id = seller.seller_ids[0].partner_id if len(seller.seller_ids) > 0 else None
 
     seller_id = fields.Many2one(comodel_name='res.partner', compute='_seller_id')
 
