@@ -160,12 +160,12 @@
             <form action="/shop/cart/update" method="post">
                 <a t-att-href="'/shop/product/%s' %product.id">
                     <div class="oe_cr_outer">
-                        <div class="oe_cr_inner">
+                        <div class="oe_cr_inner d-flex flex-column">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
                             <div class="oe_product_image">
-                                <img class="img img-responsive o_object_fit_cover" height="250" style="margin: auto; max-width: 100%; max-height:100%; margin-bottom:15px" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
+                                <img class="img img-responsive o_object_fit_cover" height="250" style="margin: auto; max-width: 100%; margin-bottom:15px" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
                             </div>
-                            <p class="product_short_description text-muted" t-field="product.website_short_description"/>
+                            <p class="product_short_description text-muted flex-grow-1" t-field="product.website_short_description"/>
                             <t t-if="product.campaign_product">
                                 <div class="product_price_div">
                                     <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids and product.campaign_product">
@@ -186,10 +186,10 @@
                                             <b><p/></b>
                                         </t>
                                         <t t-if="product.uom_id.uom_type == 'bigger'">
-                                            <p style="height: 40px;">Säljs endast i <t t-esc="int(product.uom_id.factor_inv)"/>-pack </p>
+                                            <p>Säljs endast i <t t-esc="int(product.uom_id.factor_inv)"/>-pack </p>
                                         </t>
                                         <t t-if="product.uom_id.uom_type != 'bigger'">
-                                            <p style="height: 40px;"/>
+                                            <p/>
                                         </t>
                                     </div>
                                 </div>
@@ -218,9 +218,11 @@
             <div class="row">
                 <t t-if="products">
                     <t t-foreach="products" t-as="product">
-                        <t t-if="product.sudo().website_published">
-                            <t t-call="website_sale_campaign_vrtl.product_grid"/>
-                        </t>
+                        <div t-attf-class="col-lg-3">
+                            <t t-if="product.sudo().website_published">
+                                <t t-call="website_sale_campaign_vrtl.product_grid"/>
+                            </t>
+                        </div>
                     </t>
                 </t>
                 <t t-if="campaign_products">

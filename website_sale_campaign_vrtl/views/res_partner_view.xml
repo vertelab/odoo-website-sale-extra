@@ -39,29 +39,32 @@
                     <div class="mt64 mb64 container">
                         <h2 class="text-center">Our Producers</h2>
                         <t t-if="countries">
-                            <div class="grid">
-                                <t t-foreach="countries" t-as="country">
-                                    <div class="grid-item">
-                                        <a t-att-href="'/country/%s' %country.id" style="color: #000;">
-                                            <h3 t-field="country.name" class="text-center"/>
-                                            <div style="height: 100px;">
-                                                <img class="img img-responsive mb16" style="margin: auto;" t-attf-src="{{country.image_url}}"/>
-
-                                                <!--
-                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="country.image_url + '?size=150x150'" width="150" height="150"/>
-                                                -->
-                                            </div>
-                                        </a>
-                                        <div t-foreach="country.district_ids" t-as="district">
-                                            <a t-att-href="'/district/%s' %district.id" style="color: #000;">
-                                                <h4 t-field="district.name" class="text-center"/>
-                                            </a>
-                                            <div t-foreach="district.partner_ids" t-as="supplier">
-                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                            <div class="container">
+                                <div class="row">
+                                    <t t-foreach="countries" t-as="country">
+                                        <div class="col-lg-4 col-md-4 col-sm-6 mb-4">
+                                            <div class="grid-item h-100">
+                                                <a t-att-href="'/country/%s' %country.id" style="color: #000;">
+                                                    <h3 t-field="country.name" class="text-center"/>
+                                                    <div class="country-image text-center">
+                                                        <img class="img img-responsive mb16" style="margin: auto; max-width: 100%; display: inline-block;" t-attf-src="{{country.image_url}}" width="170" height="100"/>
+<!--                                                         <img class="img img-responsive mb16" style="margin: auto;" t-att-src="country.image_url + '?size=150x150'" width="150" height="150"/>-->
+                                                    </div>
+                                                </a>
+                                                <div t-foreach="country.district_ids" t-as="district">
+                                                    <a t-att-href="'/district/%s' %district.id" style="color: #000;">
+                                                        <h4 t-field="district.name" class="text-center"/>
+                                                    </a>
+                                                    <div t-foreach="district.partner_ids" t-as="supplier">
+                                                        <a t-att-href="'/producer/%s' %supplier.id" class="text-muted">
+                                                            <h5 t-field="supplier.name" class="text-center"/>
+                                                        </a>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                </t>
+                                    </t>
+                                </div>
                             </div>
                         </t>
                     </div>
@@ -74,10 +77,13 @@
                 <div id="wrap">
                     <div class="mt64 mb64 container">
                         <div class="col-md-12">
-                            <ol class="breadcrumb">
+                            <ol class="breadcrumb" style="gap: 8px;">
                                 <li><a href="/producers">Producers</a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li><a t-att-href="'/country/%s' %supplier.district_id.country_id.id"><span t-field="supplier.district_id.country_id.name"/></a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li><a t-att-href="'/district/%s' %supplier.district_id.id"><span t-field="supplier.district_id.name"/></a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li class="active"><span t-field="supplier.name"/></li>
                             </ol>
                         </div>
@@ -103,29 +109,34 @@
                 <div id="wrap">
                     <div class="mt64 mb64 container">
                         <div class="col-md-12">
-                            <ol class="breadcrumb">
+                            <ol class="breadcrumb" style="gap: 8px;">
                                 <li><a href="/producers">Producers</a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li class="active"><span t-field="country.name"/></li>
                             </ol>
                         </div>
                         <div class="col-md-12">
-                            <div class="o_image_floating o_margin_l pull-left" style="width: 25% !important;">
-                                <div class="o_container">
-                                    <img class="img img-responsive mb16" t-att-src="'/website/image/res.country/%s/image' %country.id"/>
+                            <div class="clearfix">
+                                <div class="o_image_floating o_margin_l pull-left" style="width: 25% !important;">
+                                    <div class="o_container">
+                                        <img class="img img-responsive mb16" style="margin: auto; max-width: 100%; display: inline-block;" t-attf-src="{{country.image_url}}" width="170" height="100"/>
+                                    </div>
                                 </div>
+                                <div t-field="country.website_description"/>
                             </div>
-                            <div t-field="country.website_description"/>
                         </div>
-                        <div class="col-md-12">
+                        <div class="col-md-12" style="padding-left: 0;">
                             <t t-if="len(country.district_ids) &gt; 0">
-                                <div class="grid">
+                                <div class="row" style="margin-left: 0;">
                                     <t t-foreach="country.district_ids" t-as="district">
-                                        <div class="grid-item">
+                                        <div class="col-md-4 mb-4">
                                             <a t-att-href="'/district/%s' %district.id" style="color: #000;">
                                                 <h4 t-field="district.name" class="text-center"/>
                                             </a>
                                             <div t-foreach="district.partner_ids" t-as="supplier">
-                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted"><h5 t-field="supplier.name" class="text-center"/></a>
+                                                <a t-att-href="'/producer/%s' %supplier.id" class="text-muted">
+                                                    <h5 t-field="supplier.name" class="text-center"/>
+                                                </a>
                                             </div>
                                         </div>
                                     </t>
@@ -142,37 +153,43 @@
                 <div id="wrap">
                     <div class="mt64 mb64 container">
                         <div class="col-md-12">
-                            <ol class="breadcrumb">
+                            <ol class="breadcrumb" style="gap: 8px;">
                                 <li><a href="/producers">Producers</a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li><a t-att-href="'/country/%s' %district.country_id.id"><span t-field="district.country_id.name"/></a></li>
+                                <li class="mx-1" style="color: #6c757d;">&gt;</li>
                                 <li class="active"><span t-field="district.name"/></li>
                             </ol>
                         </div>
                         <div class="col-md-12 district_description" t-field="district.website_description"/>
+
                         <div class="col-md-12">
                             <t t-if="len(district.sudo().partner_ids) &gt; 0">
-                                <div class="grid">
+                                <div class="row">
                                     <t t-foreach="district.sudo().partner_ids" t-as="supplier">
-                                        <div class="grid-item grid-item--width2">
-                                            <a t-att-href="'/producer/%s' %supplier.id" style="color: #000;">
-                                                <h3 t-field="supplier.name"/>
-                                            </a>
-                                            <div class="col-md-12" style="padding: 0px;">
-                                                <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
-                                                <div class="text-muted col-md-12 mb8" style="padding: 0px;" t-field="supplier.website_short_description"/>
-                                                <t t-if="supplier.image_1920">
-                                                    <div class="col-md-12" style="padding: 0px;">
-                                                        <div class="o_container">
-                                                            <div t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product' }"/>
+                                        <div class="col-md-6 mb-4">
+                                            <div class="h-100">
+                                                <a t-att-href="'/producer/%s' %supplier.id" style="color: #000;">
+                                                    <h3 t-field="supplier.name"/>
+                                                </a>
+                                                <div style="padding: 0px;">
+                                                    <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="supplier.name"/></b></h3>
+                                                    <div class="text-muted mb-3" style="padding: 0px;" t-field="supplier.website_short_description"/>
+                                                    <t t-if="supplier.image_1920">
+                                                        <div style="padding: 0px;">
+                                                            <div class="o_container">
+                                                                <div t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product' }"/>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </t> 
+                                                    </t>
+                                                </div>
                                             </div>
                                         </div>
                                     </t>
                                 </div>
                             </t>
                         </div>
+
                     </div>
                 </div>
             </t>

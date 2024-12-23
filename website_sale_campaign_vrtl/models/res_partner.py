@@ -80,7 +80,10 @@ class Main(http.Controller):
 
         partner = request.env['res.partner'].sudo().browse(partner_id)
         products = partner.product_ids
-        return request.render('website_sale_campaign_vrtl.producer_products', {'supplier': partner, 'products': products,'campaign': campaign})
+        return request.render(
+            'website_sale_campaign_vrtl.producer_products',
+            {'supplier': partner, 'products': products, 'campaign': campaign}
+        )
 
     @http.route(['/country/<model("res.country"):country>'], type='http', auth="public", website=True)
     def res_country(self, country=None, **post):
