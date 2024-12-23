@@ -170,13 +170,13 @@
                                 <div class="product_price_div">
                                     <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids and product.campaign_product">
                                         <b>
-                                            <span t-field="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).unit_price" style="white-space: nowrap; color: #000;"  t-field-options='{
+                                            <span t-field="product.with_context({'pricelist': user_id.partner_id.sudo().property_product_pricelist.id}).unit_price" style="white-space: nowrap; color: #000;"  t-field-options='{
                                                 "widget": "monetary",
-                                                "display_currency": "user_id.partner_id.property_product_pricelist.currency_id"
+                                                "display_currency": "user_id.partner_id.sudo().property_product_pricelist.currency_id"
                                             }'>
                                             </span>
-                                            <span itemprop="price" style="display:none;" t-esc="product.with_context({'pricelist': user_id.partner_id.property_product_pricelist.id}).unit_price"/>
-                                            <span itemprop="priceCurrency" t-esc="user_id.partner_id.property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
+                                            <span itemprop="price" style="display:none;" t-esc="product.with_context({'pricelist': user_id.partner_id.sudo().property_product_pricelist.id}).unit_price"/>
+                                            <span itemprop="priceCurrency" t-esc="user_id.partner_id.sudo().property_product_pricelist.currency_id.name" class='decimal_precision' t-att-data-precision="website.pricelist_id.currency_id.rounding"/>
                                         </b>
                                         <t t-if="product.type == 'product'">
                                             <b><p t-if="product.sudo().virtual_available &gt; 0.0" class="" style="color: #1CB807;">In stock</p></b>
