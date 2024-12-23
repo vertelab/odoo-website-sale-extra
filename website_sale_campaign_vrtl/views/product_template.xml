@@ -163,7 +163,7 @@
                         <div class="oe_cr_inner">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
                             <div class="oe_product_image">
-                                <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:100%;" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
+                                <img class="img img-responsive o_object_fit_cover" height="250" style="margin: auto; max-width: 100%; max-height:100%; margin-bottom:15px" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
                             </div>
                             <p class="product_short_description text-muted" t-field="product.website_short_description"/>
                             <t t-if="product.campaign_product">
@@ -199,6 +199,7 @@
                 </a>
             </form>
         </template>
+
 
         <template id="products_add_to_cart" inherit_id="website_sale_campaign_vrtl.product_grid" active="True" customize_show="True" name="Add to Cart">
             <xpath expr="//span[@itemprop='priceCurrency']" position="after">
