@@ -178,7 +178,7 @@
                                                     <t t-if="supplier.image_1920">
                                                         <div style="padding: 0px;">
                                                             <div class="o_container">
-                                                                <div t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product' }"/>
+                                                                <div  t-field="supplier.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'rounded shadow o_alternative_product', 'width': '100%'}"/>
                                                             </div>
                                                         </div>
                                                     </t>

@@ -120,7 +120,8 @@
                                             <div class="card bg-white w-100">
                                                 <t t-if="object.object_id._name == 'res.partner'">
                                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
-                                                        <img class="img img-responsive o_object_fit_cover" style="margin: auto; max-width: 100%; max-height:auto;" t-att-src="'/web/image/res.partner/%s/image_1024/' %object.object_id.id" height="180" width="100%"/>
+                                                        <div  t-field="object.object_id.image_1920" t-options="{'widget': 'image', 'qweb_img_responsive': False, 'class': 'img img-responsive o_object_fit_cover', 'width': '100%'}"/>
+<!--                                                        <img class="img img-responsive o_object_fit_cover" style="margin: auto; max-width: 100%; max-height:auto;" t-att-src="'/web/image/res.partner/%s/image_1024/' %object.object_id.id" height="180" width="100%"/>-->
                                                     </a>
                                                 </t>
                                                 <div class="card-body d-flex flex-column">
@@ -158,6 +159,7 @@
 
         <template id="product_grid" name="Product Grid">
             <form action="/shop/cart/update" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
                 <a t-att-href="'/shop/product/%s' %product.id">
                     <div class="oe_cr_outer">
                         <div class="oe_cr_inner d-flex flex-column">
