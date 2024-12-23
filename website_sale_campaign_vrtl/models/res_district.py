@@ -26,6 +26,7 @@ _logger = logging.getLogger(__name__)
 
 class District(models.Model):
     _name = 'res.district'
+    _description = "District"
 
     name = fields.Char(string='Name', required=True)
     website_description = fields.Html(string="Website Description")

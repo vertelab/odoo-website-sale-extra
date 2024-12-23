@@ -28,7 +28,7 @@ class Website(models.Model):
     _inherit = 'website'
 
     def current_campaign(self):
-        return self.env['utm.campaign'].search([
+        return self.env['utm.campaign'].sudo().search([
             ('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())
         ],limit=1)
 

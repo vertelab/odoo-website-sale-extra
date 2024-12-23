@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+website_sale_campaign_vrtl.access_sale_cavarosa_import_wizard,access_sale_cavarosa_import_wizard,website_sale_campaign_vrtl.model_sale_cavarosa_import_wizard,base.group_user,1,1,1,1
+website_sale_campaign_vrtl.access_res_district,access_res_district,website_sale_campaign_vrtl.model_res_district,,1,1,1,1
