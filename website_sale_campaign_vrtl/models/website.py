@@ -30,6 +30,11 @@ class Website(models.Model):
     def current_campaign(self):
         return self.env['utm.campaign'].search([
             ('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())
-        ])
+        ],limit=1)
 
 
+    def _prepare_sale_order_values(self, partner_sudo):
+        self.ensure_one()
+        values = super(Website, self)._prepare_sale_order_values(partner_sudo)
+        values['campaign_id'] = equest.website.current_campaign()
+        return values
