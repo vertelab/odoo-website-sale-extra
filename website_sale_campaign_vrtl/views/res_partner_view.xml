@@ -45,7 +45,11 @@
                                         <a t-att-href="'/country/%s' %country.id" style="color: #000;">
                                             <h3 t-field="country.name" class="text-center"/>
                                             <div style="height: 100px;">
-                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="'/website/image/res.country/%s/image/150x150' %country.id"/>
+                                                <img class="img img-responsive mb16" style="margin: auto;" t-attf-src="{{country.image_url}}"/>
+
+                                                <!--
+                                                <img class="img img-responsive mb16" style="margin: auto;" t-att-src="country.image_url + '?size=150x150'" width="150" height="150"/>
+                                                -->
                                             </div>
                                         </a>
                                         <div t-foreach="country.district_ids" t-as="district">

@@ -116,7 +116,7 @@
                             <div class="container">
                                 <div class="row d-flex align-items-stretch">
                                     <t t-foreach="campaign.object_ids" t-as="object">
-                                        <div t-attf-class="col-lg-{{campaign_size}} s_col_no_bgcolor pt16 pb16"> <!-- class="col-lg-3 s_col_no_bgcolor pt16 pb16" -->
+                                        <div t-attf-class="col-lg-3 s_col_no_bgcolor pt16 pb16"> <!-- class="col-lg-3 col-lg-{{campaign_size}} s_col_no_bgcolor pt16 pb16" -->
                                             <div class="card bg-white">
                                                 <t t-if="object.object_id._name == 'res.partner'">
                                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
@@ -125,7 +125,7 @@
                                                 </t>
                                                 <div class="card-body">
                                                     <h3 class="card-title o_default_snippet_text"><t t-esc="object.object_id.name"/></h3>
-<!--                                                    <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"/>-->
+                                                    <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"/>
                                                 </div>
                                             </div>
                                         </div>
@@ -141,7 +141,7 @@
                                         <h2 t-att-id="'supplier_%s' %object.object_id.id" class="text-left"><span t-field="object.name"/></h2>
                                     </a>
                                     <h3 class="css_non_editable_mode_hidden">Short Description for <b><t t-esc="object.object_id.name"/></b></h3>
-<!--                                    <div class="text-muted col-md-12" t-field="object.object_id.website_short_description"/>-->
+                                    <div class="text-muted col-md-12" t-field="object.object_id.website_short_description"/>
                                     <t t-call="website_sale_campaign_vrtl.products_grid">
                                         <t t-set="campaign_products" t-value="request.env['crm.campaign.product'].sudo().search([('campaign_id', '=', campaign.id), ('product_id.website_published', '=', True), ('product_id', 'in', object.object_id.product_ids.mapped('id'))], order='sequence')"/>
                                     </t>
@@ -150,7 +150,7 @@
                         </t>
                     </div>
 
-                    <t t-call="website_sale_campaign_vrtl.shop_menu"/>
+<!--                    <t t-call="website_sale_campaign_vrtl.shop_menu"/>-->
 
                 </div>
             </t>
@@ -159,13 +159,13 @@
         <template id="product_grid" name="Product Grid">
             <form action="/shop/cart/update" method="post">
                 <a t-att-href="'/shop/product/%s' %product.id">
-                    <div class="oe_cr_outer col-md-3 col-sm-4 col-ms-6 col-xs-12">
+                    <div class="oe_cr_outer">
                         <div class="oe_cr_inner">
                             <h3 t-field="product.name" class="text-center" style="color: #000;"/>
                             <div class="oe_product_image">
                                 <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:100%;" t-att-src="'/web/image/product.template/%s/image_1024/' %product.id"/>
                             </div>
-<!--                            <p class="product_short_description text-muted" t-field="product.website_short_description"/>-->
+                            <p class="product_short_description text-muted" t-field="product.website_short_description"/>
                             <t t-if="product.campaign_product">
                                 <div class="product_price_div">
                                     <div itemprop="offers" itemscope="itemscope" itemtype="http://schema.org/Offer" class="product_price" t-if="product.product_variant_ids and product.campaign_product">
@@ -214,22 +214,26 @@
         </template>
 
         <template id="products_grid" name="Products Grid">
-            <t t-if="products">
-                <t t-foreach="products" t-as="product">
-                    <t t-if="product.sudo().website_published">
-                        <t t-call="website_sale_campaign_vrtl.product_grid"/>
-                    </t>
-                </t>
-            </t>
-            <t t-if="campaign_products">
-                <t t-foreach="campaign_products" t-as="campaign_product">
-                    <t t-if="campaign_product.product_id.sudo().website_published">
-                        <t t-call="website_sale_campaign_vrtl.product_grid">
-                            <t t-set="product" t-value="campaign_product.product_id"/>
+            <div class="row">
+                <t t-if="products">
+                    <t t-foreach="products" t-as="product">
+                        <t t-if="product.sudo().website_published">
+                            <t t-call="website_sale_campaign_vrtl.product_grid"/>
                         </t>
                     </t>
                 </t>
-            </t>
+                <t t-if="campaign_products">
+                    <t t-foreach="campaign_products" t-as="campaign_product">
+                        <div t-attf-class="col-lg-3">
+                            <t t-if="campaign_product.product_id.sudo().website_published">
+                                <t t-call="website_sale_campaign_vrtl.product_grid">
+                                    <t t-set="product" t-value="campaign_product.product_id"/>
+                                </t>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </div>
         </template>
 
         <template id="no_campaign" name="No Campaign">

@@ -1,7 +1,7 @@
 
 odoo.define( function (require) {
 
-
+console.log("=====")
 var website = odoo.website;
 // website.add_template_file('/website_sale_campaign_vrtl/static/src/xml/snippets.xml');
 
@@ -35,8 +35,6 @@ website.snippet.options.current_campaign_navigator_option = website.snippet.Opti
                 }).then(function(data){
                     var supplier_content = '';
                     $.each(data, function(key, info) {
-                        console.log('sandraaa')
-
                         var content = qweb.render('supplier_content', {
                             'supplier_url': data[key]['supplier_url'],
                             'supplier_name': data[key]['supplier_name'],

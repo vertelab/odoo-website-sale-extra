@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    OpenERP, Open Source Management Solution, third party addon
-#    Copyright (C) 2017- Vertel AB (<http://vertel.se>).
+#    Copyright (C) 2004-2017 Vertel AB (<http://vertel.se>).
 #
 #    This program is free software: you can redistribute it and/or modify
 #    it under the terms of the GNU Affero General Public License as
@@ -20,47 +20,27 @@
 ##############################################################################
 
 {
-    'name': 'Website Sale Cavarosa',
-    'version': '1.0',
-    'category': '',
+    'name': 'Website Product Snippet',
+    'version': '0.1',
+    'category': 'Sales',
     'description': """
-Special sale configuration for Cavarosa AB
-==========================================
+Snippets for product presentation
+=================================
 """,
     'author': 'Vertel AB',
     'license': 'AGPL-3',
     'website': 'http://www.vertel.se',
-    'depends': [
-        'crm_campaign_supplier',
-        'crm_website_campaign',
-        # 'website_product_snippet',
-        # 'website_masonry',
-        #'cavarosa_delivery',
-        'delivery_pickup',
-        'website_partner',
-        'website_imagemagick',
-        'sale_purchase'
-    ],
+    'depends': ['base', 'website_sale'],
     'data': [
-        'views/crm_view.xml',
-        'views/res_district_view.xml',
-        'views/res_country_view.xml',
-        'views/res_partner_view.xml',
-        'views/product_view.xml',
-        'views/product_template.xml',
-        'views/sale_order_line_data.xml',
-        'data/cavarosa_data.xml',
-        'views/utm_campaign_view.xml',
-        # 'data/ir_cron.xml',
+        'views/website_product_snippet_view.xml',
+        'views/res_partner_view.xml'
     ],
     'assets': {
         'web.assets_frontend': [
-            'website_sale_campaign_vrtl/static/src/css/main.css',
-            # 'website_sale_campaign_vrtl/static/src/js/main.js',
-            # 'website_sale_campaign_vrtl/static/src/js/snippet.js',
+            'website_product_snippet/static/src/js/product_snippet2.js',
+            'website_product_snippet/static/src/xml/product_snippet.xml',
         ],
     },
-    'qweb': ['static/src/xml/snippets.xml'],
     'application': False,
     'installable': True,
 }

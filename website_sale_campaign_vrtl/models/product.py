@@ -55,7 +55,7 @@ class ProductTemplate(models.Model):
     campaign_product = fields.Boolean(string='Is Campaign Product', compute='_campaign_product')
     website_description = fields.Html(string="Website Description")
     website_short_description = fields.Text(string='Website Short Description',
-                                             help='This description only shows in product grid view')
+                                            help='This description only shows in product grid view')
 
     @api.model
     def products_list(self, domain, order, row):

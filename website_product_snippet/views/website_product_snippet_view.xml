@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="website_product_category" name="Products By Category">
+            <div class="container">
+                <section class="oe_snippet_body products_by_category mb16 mt16">
+                    <div class="container">
+                        <h2 class="text-center oe_ps_title mt16 mb16">Category</h2>
+                        <div class="product_div"/>
+
+                        <t t-foreach="request.env['product.category'].search([])" t-as="product">
+                            <t t-esc="product.name"/>
+                        </t>
+
+                        <t t-if="category">
+                            <div class="card-body">
+                                <h3 class="card-title" t-field="product.name" />
+                            </div>
+                        </t>
+                    </div>
+                </section>
+            </div>
+        </template>
+
+        <template id="website_product_supplier" name="Products By Supplier">
+            <section>
+                <div>
+                    <section class="oe_snippet_body products_by_partner mb16 mt16">
+                        <div class="container">
+                            <h2 class="text-center oe_ps_title mt16 mb16">Supplier</h2>
+                            <div class="product_div"/>
+                        </div>
+                    </section>
+                </div>
+            </section>
+        </template>
+
+        <template id="individual_product_snippet" name="Invidual Snippets">
+            <section>
+                <div class="container" id="individual_product_snippet">
+                    <div class="row">
+                        <h2 class="text-center oe_ps_title mt16 mb16">Product</h2>
+                        <div class="oe_snippet_body o_image_floating o_margin_l oe_individual_product pull-right">
+                            <div class="product_div"/>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </template>
+
+        <template id="product_snippet_options" inherit_id="website.snippet_options" name="Product Snippet Options">
+            <xpath expr="//div[@data-js='GridColumns']" position="before">
+                <div data-snippet-option-id="products_by_category" data-selector=".products_by_category">
+                    <we-select>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product by Category</we-toggler>
+                        <we-collapse>
+                            <t t-set="categories" t-value="request.env['product.template'].search([('categ_id', '!=', False)]).mapped('categ_id')" />
+                            <t t-if="len(categories) &gt; 0">
+                                <we-button data-js="products_by_category" t-attf-data-select-class="all">
+                                    <a data-select-class="oe_products_by_category">all</a>
+                                </we-button>
+                            </t>
+                        </we-collapse>
+                    </we-select>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                        <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
+                </div>
+
+                <!-- products by partner -->
+                <div data-snippet-option-id="products_by_partner" data-selector=".products_by_partner">
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product by Supplier</we-toggler>
+                        <we-collapse>
+                            <t t-set="partners" t-value="request.env['res.partner'].search([('is_company', '=', True)])" />
+                            <t t-if="len(partners) &gt; 0">
+                                <t t-foreach="partners" t-as="partner">
+                                    <we-button t-att-data-value="partner.id" data-select-class="oe_products_by_partner" class="oe_products_by_partner">
+                                        <t t-esc="partner.name"/>
+                                    </we-button>
+                                </t>
+                            </t>
+                        </we-collapse>
+                    </we-collapse-area>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                        <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
+                </div>
+
+                <!-- individual product -->
+                <div data-snippet-option-id="individual_product" data-selector=".oe_individual_product">
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Product </we-toggler>
+                        <we-collapse>
+                            <t t-set="products" t-value="request.env['product.template'].search([('active', '=', True)])" />
+                            <t t-if="len(products) &gt; 0">
+                                <t t-foreach="products" t-as="product">
+                                    <we-button t-att-data-value="product.id" t-attf-data-select-class="{{product.name}}"><t t-esc="product.name"/>
+                                    </we-button>
+                                </t>
+                            </t>
+                        </we-collapse>
+                    </we-collapse-area>
+                    <we-collapse-area>
+                        <we-toggler><i class="fa fa-fw fa-arrows-h"/> Columns</we-toggler>
+                        <we-collapse>
+                            <we-button data-select-class="oe_ps_col_change col-3">Col-3</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-4">Col-4</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-6">Col-6</we-button>
+                            <we-button data-select-class="oe_ps_col_change col-12">Col-12</we-button>
+                        </we-collapse>
+                    </we-collapse-area>
+                </div>
+            </xpath>
+        </template>
+
+        <template id="adding_new_snippet_to_website_snippet" inherit_id="website.snippets" name="Place into building blocks bar">
+            <xpath expr="//div[@id='snippet_structure']" position="inside">
+                <div class="o_panel_body">
+                    <t t-snippet="website_product_snippet.website_product_supplier" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
+                    <t t-snippet="website_product_snippet.individual_product_snippet" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
+                    <t t-snippet="website_product_snippet.website_product_category" t-thumbnail="/website/static/src/img/blocks/block_features.png" />
+                </div>
+            </xpath>
+        </template>
+
+<!--        <template id="assets_frontend" inherit_id="website.assets_frontend" name="Assets Frontend Cavarosa">-->
+<!--            <xpath expr="script[last()]" position="after">-->
+<!--                <script src="/website_product_snippet/static/src/js/product_snippet2.js" type="text/javascript"/>-->
+<!--            </xpath>-->
+<!--        </template>-->
+
+    </data>
+</odoo>
