@@ -110,22 +110,22 @@
                     <div class="mt64 mb64">
                         <h1 t-field="campaign.name" class="text-center"/>
                         <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
-                        <div t-field="campaign.website_description"/>
+                        <div t-field="campaign.website_description" class="text-center text-muted"/>
 
                         <section class="s_three_columns pt32 pb32">
                             <div class="container">
-                                <div class="row d-flex align-items-stretch">
+                                <div class="row">
                                     <t t-foreach="campaign.object_ids" t-as="object">
-                                        <div t-attf-class="col-lg-3 s_col_no_bgcolor pt16 pb16"> <!-- class="col-lg-3 col-lg-{{campaign_size}} s_col_no_bgcolor pt16 pb16" -->
-                                            <div class="card bg-white">
+                                        <div t-attf-class="col-lg-3 s_col_no_bgcolor pt16 pb16 d-flex"> <!-- class="col-lg-3 col-lg-{{campaign_size}} s_col_no_bgcolor pt16 pb16" -->
+                                            <div class="card bg-white w-100">
                                                 <t t-if="object.object_id._name == 'res.partner'">
                                                     <a t-att-href="'/producer/%s' %object.object_id.id" style="color: #000;">
-                                                        <img class="img img-responsive" style="margin: auto; max-width: 100%; max-height:auto;" t-att-src="'/web/image/res.partner/%s/image_1024/' %object.object_id.id"/>
+                                                        <img class="img img-responsive o_object_fit_cover" style="margin: auto; max-width: 100%; max-height:auto;" t-att-src="'/web/image/res.partner/%s/image_1024/' %object.object_id.id" height="180" width="100%"/>
                                                     </a>
                                                 </t>
-                                                <div class="card-body">
+                                                <div class="card-body d-flex flex-column">
                                                     <h3 class="card-title o_default_snippet_text"><t t-esc="object.object_id.name"/></h3>
-                                                    <p class="card-text o_default_snippet_text" t-field="object.object_id.website_short_description"/>
+                                                    <p class="card-text o_default_snippet_text flex-grow-1" t-field="object.object_id.website_short_description"/>
                                                 </div>
                                             </div>
                                         </div>
