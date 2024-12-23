@@ -42,6 +42,7 @@ Special sale configuration for Cavarosa AB
         'sale_purchase'
     ],
     'data': [
+        'security/ir.model.access.csv',
         'views/crm_view.xml',
         'views/res_district_view.xml',
         'views/res_country_view.xml',
