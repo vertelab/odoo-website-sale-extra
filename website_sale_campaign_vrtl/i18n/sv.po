@@ -1,19 +1,514 @@
 # Translation of Odoo Server.
 # This file contains the translation of the following modules:
-#   * website_sale_campaign_vrtl
+# 	* website_sale_campaign_vrtl
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: Odoo Server 8.0-20170508\n"
+"Project-Id-Version: Odoo Server 17.0-20241223\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2017-06-09 12:47+0000\n"
-"PO-Revision-Date: 2017-06-09 15:11+0200\n"
-"Last-Translator: <>\n"
+"POT-Creation-Date: 2024-12-30 10:27+0000\n"
+"PO-Revision-Date: 2024-12-30 12:00+0100\n"
+"Last-Translator: \n"
 "Language-Team: \n"
+"Language: sv\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: \n"
-"Language: sv\n"
-"X-Generator: Poedit 2.0.1\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"X-Generator: Poedit 3.4.2\n"
 
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.country
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.district
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producer_products
+msgid "&gt;"
+msgstr "&gt;"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_grid
+msgid "-pack"
+msgstr "-förpackning"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_snippet_options
+msgid "<i class=\"fa fa-fw fa-arrows-h\"/> Get Campaign"
+msgstr "<i class=\"fa fa-fw fa-arrows-h\"/> Hämta kampanj"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Frågor &amp; svar</span>"
+msgstr "<span>Frågor &amp; svar</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Hemleverans övriga Sverige</span>"
+msgstr "<span>Hemleverans övriga Sverige</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Om shopen</span>"
+msgstr "<span>Om shopen</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Personuppgifter</span>"
+msgstr "<span>Personuppgifter</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Prenumerationer</span>"
+msgstr "<span>Prenumerationer</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Uthämtningsställen</span>"
+msgstr "<span>Uthämtningsställen</span>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "<span>Villkor</span>"
+msgstr "<span>Villkor</span>"
+
+#. module: website_sale_campaign_vrtl
+#. odoo-python
+#: code:addons/website_sale_campaign_vrtl/models/utm_campaign.py:0
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__campaign_id
+#, python-format
+msgid "Campaign"
+msgstr "Kampanj"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__campaign_ids
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__campaign_ids
+msgid "Campaigns"
+msgstr "Kampanjer"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__carrier_info
+msgid "Carrier Info"
+msgstr "Information om transportör"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__city
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__shipping_city
+msgid "City"
+msgstr "Stad"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.utm_campaign_view_form
+msgid "Clear Cart"
+msgstr "Tydlig vagn"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_res_partner
+msgid "Contact"
+msgstr "Kontakt"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_res_country
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__country_id
+msgid "Country"
+msgstr "Land"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__create_uid
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__create_uid
+msgid "Created by"
+msgstr "Skapad av"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__create_date
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__create_date
+msgid "Created on"
+msgstr "Skapad på"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.current_campaign_navigator
+msgid "Current Campaign"
+msgstr "Pågående kampanj"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__customer
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__customer
+msgid "Customer"
+msgstr "Kund"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__customers
+msgid "Customers"
+msgstr "Kunder"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.popup_modal
+msgid ""
+"Denna webbsida innehåller information om alkoholdrycker. För inköp och "
+"besök på denna webbplats måste du vara 20 år eller äldre."
+msgstr ""
+"Denna webbsida innehåller information om alkoholdrycker. För inköp och "
+"besök på denna webbplats måste du vara 20 år eller äldre."
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producer_products
+msgid "Description for"
+msgstr "Beskrivning för"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__display_name
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__display_name
+msgid "Display Name"
+msgstr "Visa namn"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.actions.act_window,name:website_sale_campaign_vrtl.action_district_form
+#: model:ir.model,name:website_sale_campaign_vrtl.model_res_district
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__district_id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__district_id
+#: model:ir.ui.menu,name:website_sale_campaign_vrtl.menu_district_form
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.view_district_form
+msgid "District"
+msgstr "Distrikt"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_country__district_ids
+msgid "Districts"
+msgstr "Distrikten"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__districts
+msgid "Distrikt"
+msgstr "Distrikt"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__drupal_parent_ids
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__drupal_parent_ids
+msgid "Drupal Parents"
+msgstr "Drupal överliggande"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_utm_campaign__estimated_delivery
+msgid "Estimated delivery"
+msgstr "Beräknad leverans"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.current_campaign
+msgid "Estimated delivery date"
+msgstr "Beräknad leveransdag"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__id
+msgid "ID"
+msgstr "ID"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producer_products
+msgid "Image for"
+msgstr "Bild för"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_grid
+msgid "In stock"
+msgstr "Finns i lager"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_product__campaign_product
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_template__campaign_product
+msgid "Is Campaign Product"
+msgstr "Är kampanjprodukt"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.popup_modal
+msgid "Jag är 20 år eller äldre"
+msgstr "Jag är 20 år eller äldre"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.popup_modal
+msgid "Jag är under 20 år"
+msgstr "Jag är under 20 år"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__write_uid
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__write_uid
+msgid "Last Updated by"
+msgstr "Senast uppdaterad av"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__write_date
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__write_date
+msgid "Last Updated on"
+msgstr "Senast uppdaterad den"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__suppliers
+msgid "Leverantörer"
+msgstr "Leverantörer"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__mobile
+msgid "Mobile"
+msgstr "Mobil"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__name
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__partner
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__product_name
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__shipping_name
+msgid "Name"
+msgstr "Namn"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.no_campaign
+msgid "Next campaign starts"
+msgstr "Nästa kampanj startar"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_grid
+msgid "Not in stock"
+msgstr "Ej i lager"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__old_id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__old_id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order__old_id
+msgid "Old id for porting data"
+msgstr "Gammal id för portning av data"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__old_parent_id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__old_parent_id
+msgid "Old parent_id for porting"
+msgstr "Gammalt parent_id för portning"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__order_lines
+msgid "Order Lines"
+msgstr "Beställningslinjer"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__order_name
+msgid "Order Reference"
+msgstr "Beställningsreferens"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producers
+msgid "Our Producers"
+msgstr "Våra producenter"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__password
+msgid "Password"
+msgstr "Lösenord"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.country
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.district
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producer_products
+msgid "Producers"
+msgstr "Producenter"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_product_template
+msgid "Product"
+msgstr "Produkt"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__produktvisningar
+msgid "Produktvisningar"
+msgstr "Produktvisningar"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_sale_order
+msgid "Sales Order"
+msgstr "Order"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_sale_order_line
+msgid "Sales Order Line"
+msgstr "Orderrad"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.view_district_filter
+msgid "Search District"
+msgstr "Sök distrikt"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_product__seller_id
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_template__seller_id
+msgid "Seller"
+msgstr "Seller"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.shop_menu
+msgid "Shop Menu <span class=\"caret\"/>"
+msgstr "Butiksmeny <span class=\"caret\"/>"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.current_campaign
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.district
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.producer_products
+msgid "Short Description for"
+msgstr "Kort beskrivning för"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.view_district_tree
+msgid "State"
+msgstr "Stat"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__shipping_street
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__street
+msgid "Street"
+msgstr "Gata"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_partner__supplier
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_users__supplier
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__supplier_id
+msgid "Supplier"
+msgstr "Leverantör"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__partner_ids
+msgid "Suppliers"
+msgstr "Leverantörer"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_grid
+msgid "Säljs endast i"
+msgstr "Säljs endast i"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.no_campaign
+msgid "There is no campaign ongoing!"
+msgstr "Det finns ingen pågående kampanj!"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,help:website_sale_campaign_vrtl.field_product_product__website_short_description
+#: model:ir.model.fields,help:website_sale_campaign_vrtl.field_product_template__website_short_description
+msgid "This description only shows in product grid view"
+msgstr "Denna beskrivning visas endast i produktrutan"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,help:website_sale_campaign_vrtl.field_sale_order_line__campaign_id
+msgid ""
+"This is a name that helps you keep track of your different campaign "
+"efforts, e.g. Fall_Drive, Christmas_Special"
+msgstr ""
+"Detta är ett namn som hjälper dig att hålla reda på dina olika "
+"kampanjinsatser, t.ex. Fall_Drive, Christmas_Special"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_utm_campaign
+msgid "UTM Campaign"
+msgstr "UTM kampanj"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_product__unit_price
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_template__unit_price
+msgid "Unit Price"
+msgstr "Enhetspris"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__unit_qty
+msgid "Unit Qty"
+msgstr "Enhet Antal"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__username
+msgid "Username"
+msgstr "Användarnamn"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__users
+msgid "Users"
+msgstr "Användare"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product_template_form_view
+msgid "Webbeskrivning"
+msgstr "Webbeskrivning"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_website
+msgid "Website"
+msgstr "Webbplats"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_product__website_description
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_template__website_description
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_country__website_description
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_res_district__website_description
+msgid "Website Description"
+msgstr "Beskrivning av webbplatsen"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_product__website_short_description
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_product_template__website_short_description
+msgid "Website Short Description"
+msgstr "Kort beskrivning av webbplatsen"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.view_partner_form
+msgid "Website short description"
+msgstr "Kort beskrivning av webbplatsen"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product
+msgid "You buy this product"
+msgstr "Du köper denna produkt"
+
+#. module: website_sale_campaign_vrtl
+#. odoo-python
+#: code:addons/website_sale_campaign_vrtl/models/sale.py:0
+#, python-format
+msgid "You need to select a delivery option."
+msgstr "Du måste välja ett leveransalternativ."
+
+#. module: website_sale_campaign_vrtl
+#. odoo-python
+#: code:addons/website_sale_campaign_vrtl/models/sale.py:0
+#, python-format
+msgid ""
+"Your order is not associated to a campaign. Select items from the running "
+"campaign."
+msgstr ""
+"Din order är inte kopplad till en kampanj. Välj artiklar från den pågående "
+"kampanjen."
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,help:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__password
+msgid "Your password on wiggum.vertel.se"
+msgstr "Ditt lösenord på wiggum.vertel.se"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,help:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__username
+msgid "Your username on wiggum.vertel.se"
+msgstr "Ditt användarnamn på wiggum.vertel.se"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__shipping_zip
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_order_line__zip
+msgid "Zip"
+msgstr "Dragkedja"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model.fields,field_description:website_sale_campaign_vrtl.field_sale_cavarosa_import_wizard__commerce_product
+msgid "commerce_product.csv"
+msgstr "handel_produkt.csv"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.product
+msgid "in a package"
+msgstr "i ett paket"
+
+#. module: website_sale_campaign_vrtl
+#: model:ir.model,name:website_sale_campaign_vrtl.model_sale_cavarosa_import_wizard
+msgid "sale.cavarosa.import.wizard"
+msgstr "salt.cavarosa.import.guide"
+
+#. module: website_sale_campaign_vrtl
+#: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.popup_modal
+msgid "Är du under 20 år?"
+msgstr "Är du under 20 år?"

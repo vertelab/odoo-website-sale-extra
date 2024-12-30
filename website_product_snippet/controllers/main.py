@@ -30,6 +30,19 @@ _logger = logging.getLogger(__name__)
 
 class ProductSnippet(http.Controller):
 
+	# ~ @http.route('/shop', type='http', auth="public", website=True)
+	# ~ def shop_redirect(self, **kwargs):
+		# ~ return redirect('/campaign')
+		
+	# ~ @http.route('/shop', type='http', auth="public", website=True)
+	# ~ def shop_redirect(self, shop=None, **kw):
+		# ~ return redirect('/campaign')
+
+	@http.route(['/kalle'], type='http', auth="public", website=True)
+	def kalle(self, page=0, category=None, search='', ppg=False, **post):
+		return request.redirect('/contactus')
+
+
     @http.route(['/product_snippet/product_change'], type='json', auth="user", website=True)
     def product_change(self, product=None, **kw):
         product = request.env['product.template'].browse(int(product))
