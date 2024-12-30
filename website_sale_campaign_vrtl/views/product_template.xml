@@ -109,7 +109,11 @@
                 <div id="wrap">
                     <div class="mt64 mb64">
                         <h1 t-field="campaign.name" class="text-center"/>
-                        <h4 t-field="campaign.estimated_delivery" class="text-center text-muted"/>
+                        <t t-if="campaign.estimated_delivery">
+                            <h6 class="text-center text-muted">
+                             Estimated delivery date <span t-field="campaign.estimated_delivery" />
+                            </h6>
+                        </t>
                         <div t-field="campaign.website_description" class="text-center text-muted"/>
 
                         <section class="s_three_columns pt32 pb32">
