@@ -97,7 +97,7 @@ msgstr "Stad"
 #. module: website_sale_campaign_vrtl
 #: model_terms:ir.ui.view,arch_db:website_sale_campaign_vrtl.utm_campaign_view_form
 msgid "Clear Cart"
-msgstr "Tydlig vagn"
+msgstr "Töm Kundvagn"
 
 #. module: website_sale_campaign_vrtl
 #: model:ir.model,name:website_sale_campaign_vrtl.model_res_partner
