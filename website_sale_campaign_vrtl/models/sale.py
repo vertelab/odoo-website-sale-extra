@@ -73,6 +73,23 @@ class SaleOrder(models.Model):
 
     old_id = fields.Char(string="Old id for porting data")
 
+    def _create_payment_transaction(self, vals):
+        if any([not so.delivery_partner_shipping_id for so in self]):
+            raise ValidationError(_('You need to select a delivery option.'))
+        if not self.campaign_id:
+            raise ValidationError(_('Your order is not associated to a campaign. '
+                                    'Select items from the running campaign.'))
+
+        cart_products = self.order_line.mapped('product_id').mapped('product_tmpl_id').filtered(
+            lambda product: product.is_published)
+        campaign_real_products = self.campaign_id.product_ids
+
+        if self.order_line and date.today() > self.campaign_id.date_stop and all(
+                item in campaign_real_products for item in cart_products):
+            raise ValidationError(_('Your order is not associated to a campaign. '
+                                    'Select items from the running campaign.'))
+        return super()._create_payment_transaction(vals)
+
     def current_campaign(self):
         res = self.env['utm.campaign'].sudo().search([
             ('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())
