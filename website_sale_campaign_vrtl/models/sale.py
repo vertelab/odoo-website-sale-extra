@@ -29,7 +29,7 @@ from odoo.exceptions import AccessError, UserError, ValidationError
 _logger = logging.getLogger(__name__)
 
 
-class sale_order_line(models.Model):
+class SaleOrderLine(models.Model):
     _inherit = 'sale.order.line'
 
     partner = fields.Char(related='order_id.partner_id.name')
@@ -46,6 +46,7 @@ class sale_order_line(models.Model):
     order_name = fields.Char(related='order_id.name')
     mobile = fields.Char(related='order_id.partner_id.mobile')
     campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='utm.campaign', store=True)
+    # campaign_id = fields.Many2one(comodel_name='utm.campaign', store=True)
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
     @api.depends('product_id')
@@ -62,34 +63,34 @@ class sale_order_line(models.Model):
 
     def _carrier_info(self):
         for carrier in self:
-            #if carrier.order_id.carrier_id == carrier.env.ref('cavarosa_delivery.delivery_carrier'): #cavarosafack
-            #    carrier.carrier_info = carrier.order_id.carrier_id.name if carrier.order_id.carrier_id else '' + ': ' + carrier.order_id.cavarosa_box or ''
-            if carrier.order_id.carrier_id.pickup_location: #utlämningsställe
+            if carrier.order_id.carrier_id.pickup_location:  # utlämningsställe
                 carrier.carrier_info = carrier.order_id.carrier_id.name + ': ' + carrier.order_id.partner_shipping_id.name
-            else:   #hemleverans
+            else:   # hemleverans
                 carrier.carrier_info = carrier.order_id.carrier_id.name
 
+    def write(self, vals):
+        print("sale.order.line vals", vals)
+        return super().write(vals)
 
-class sale_order(models.Model):
+
+class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
     old_id = fields.Char(string="Old id for porting data")
 
-    def _create_payment_transaction(self, vals):
-        if any([not so.delivery_partner_shipping_id for so in self]):
-            raise ValidationError(_('You need to select a delivery option.'))
-        if not self.campaign_id:
-            raise ValidationError(_('Your order is not associated to a campaign. '
-                                    'Select items from the running campaign.'))
+    def current_campaign(self):
+        res = self.env['utm.campaign'].sudo().search([
+            ('date_start', '<=', fields.Date.today()), ('date_stop', '>=', fields.Date.today())
+        ],limit=1)
+        return res
 
-        cart_products = self.order_line.mapped('product_id').mapped('product_tmpl_id').filtered(
-            lambda product: product.is_published)
-        campaign_real_products = self.campaign_id.product_ids
+    def write(self, vals):
+        if not self.campaign_id and not vals.get('campaign_id'):
+            if campaign_id := self.current_campaign():
+                self.campaign_id = campaign_id.id
+        return super().write(vals)
 
-        if self.order_line and date.today() > self.campaign_id.date_stop and all(item in campaign_real_products for item in cart_products):
-            raise ValidationError(_('Your order is not associated to a campaign. '
-                                    'Select items from the running campaign.'))
-        return super()._create_payment_transaction(vals)
+
 
 
 
