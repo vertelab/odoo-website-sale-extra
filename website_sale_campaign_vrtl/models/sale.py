@@ -46,7 +46,6 @@ class SaleOrderLine(models.Model):
     order_name = fields.Char(related='order_id.name')
     mobile = fields.Char(related='order_id.partner_id.mobile')
     campaign_id = fields.Many2one(related='order_id.campaign_id', comodel_name='utm.campaign', store=True)
-    # campaign_id = fields.Many2one(comodel_name='utm.campaign', store=True)
     supplier_id = fields.Many2one(compute='_supplier_id', comodel_name='res.partner', store=True)
 
     @api.depends('product_id')
@@ -67,10 +66,6 @@ class SaleOrderLine(models.Model):
                 carrier.carrier_info = carrier.order_id.carrier_id.name + ': ' + carrier.order_id.partner_shipping_id.name
             else:   # hemleverans
                 carrier.carrier_info = carrier.order_id.carrier_id.name
-
-    def write(self, vals):
-        print("sale.order.line vals", vals)
-        return super().write(vals)
 
 
 class SaleOrder(models.Model):
