@@ -20,6 +20,8 @@
                     <page string="Webbeskrivning">
                         <label for="website_description"/>
                         <field name="website_description"/>
+                        <label for="website_short_description"/>
+                        <field name="website_short_description"/>
                     </page>
                 </page>
             </field>
