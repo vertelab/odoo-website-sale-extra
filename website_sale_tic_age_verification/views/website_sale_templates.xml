@@ -14,19 +14,9 @@
                         <h6 class="alert-heading fw-bolder mb-1">Age Verification Required</h6>
                         <p class="small mb-2">To comply with legal requirements, you must verify your age before you can complete your purchase.</p>
 
-                        <t t-if="is_public_user">
-                             <p class="small mb-0">Please <a t-attf-href="/web/login?redirect=#{request.httprequest.full_path}" class="fw-bold text-decoration-none">Login</a> or <a t-attf-href="/web/signup?redirect=#{request.httprequest.full_path}" class="fw-bold text-decoration-none">Sign Up</a> to continue.</p>
-                        </t>
-                        <t t-else="">
-                            <a role="button" class="btn btn-primary btn-sm" t-attf-href="/tic/verify-identity?redirect=#{request.httprequest.full_path}">
-                                <i class="fa fa-id-card me-2"/>Verify Age
-                            </a>
-                        </t>
-
-
                         <a role="button" class="btn btn-primary btn-sm" t-attf-href="/tic/verify-identity?redirect=#{request.httprequest.full_path}">
-                                <i class="fa fa-id-card me-2"/>Verify Age
-                            </a>
+                            <i class="fa fa-id-card me-2"/>Verify Age
+                        </a>
 
                         <div t-if="request.params.get('error')" class="alert alert-danger small mt-2 mb-0 p-2">
                             <i class="fa fa-exclamation-circle me-1"/>Verification failed. Please try again.
