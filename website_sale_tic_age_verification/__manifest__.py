@@ -15,6 +15,7 @@
     'depends': ['base_tic_identity', 'website_sale'],
     'data': [
         'views/website_sale_templates.xml',
+        'views/res_config_settings_views.xml',
     ],
     'auto_install': False,
 }

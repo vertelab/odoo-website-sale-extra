@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="res_config_settings_view_form" model="ir.ui.view">
+        <field name="name">res.config.settings.view.form.inherit.website.sale.tic</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="website_sale.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <setting id="website_checkout_registration" position="after">
+                <setting string="Age Verification" help="Minimum age required to complete a purchase">
+                    <div class="content-group">
+                        <div class="row mt16">
+                            <label class="o_light_label col-lg-3" string="Minimum Age" for="age_limit"/>
+                            <field name="age_limit"/>
+                        </div>
+                    </div>
+                </setting>
+            </setting>
+        </field>
+    </record>
+</odoo>
